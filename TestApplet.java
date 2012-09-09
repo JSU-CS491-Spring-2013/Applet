@@ -26,7 +26,7 @@ public class TestApplet extends Applet {
         this.setLayout(null);
         treeModel = makeTreeModel();
         jTreePanel = new JTreePanel(treeModel);
-        jTreePanel.setBounds(0, 0, 250, 700);
+        jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Which is correct?
         buttonPanel = new ButtonPanel(0);
         buttonPanel.setBounds(1050, 0, 150, 700);
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
@@ -51,22 +51,38 @@ public class TestApplet extends Applet {
      */
     public XMLTreeModel makeTreeModel() {
         try {
+            // These are the tools we need to build a Document.
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
 
+            // Create a Document based on the XML file the User provides and removes "extraneous" information.
+            // For example:  <book bookName="Luke 1"> is converted to null, null, "Luke 1"
             Document doc = db.parse("C:/Users/Tyler/Documents/NetBeansProjects/CS 491 Applet/Luke 1.xml");	//Put the URL in the parse method call
             doc.getDocumentElement().normalize();
+
+            // Point to the root element of the document portion of the Document.
             Node root = doc.getDocumentElement();
+
+            // Get a list of every <clause> in the Document.
             NodeList clause = doc.getElementsByTagName("clause");
+
+            // Unused variable.
             Node temp = clause.item(0);
+
+            // Create the root node and set it to the bookName tag.
             XMLTreeNode rootX = new XMLTreeNode(new Clause("root", ((Element) root).getAttribute("bookName").toString(), "", ""));
+            
+            // Add child nodes to the root node.
             makeNodes(rootX, root);
-            //System.out.println(((XMLTreeNode)rootX).toString());
-            //System.out.println(((XMLTreeNode)rootX).getChildCount());
-            /*for(int i=0; i<rootX.getChildCount(); i++){
-            System.out.println("\timer"+((XMLTreeNode)rootX).getChildAt(i).toString());
-            }*/
-            //printNodes(rootX);
+            
+            /*System.out.println(((XMLTreeNode) rootX).toString());
+            System.out.println(((XMLTreeNode) rootX).getChildCount());
+            for (int i = 0; i < rootX.getChildCount(); i++) {
+                System.out.println("\timer" + ((XMLTreeNode) rootX).getChildAt(i).toString());
+            }
+            printNodes(rootX);*/
+            
+            // Make the tree, and send it back.
             XMLTreeModel tree = new XMLTreeModel(rootX);
             return tree;
         } catch (Exception e) {
@@ -88,60 +104,73 @@ public class TestApplet extends Applet {
         verse = "";
         conj = "";
 
+        // Because a clause tag was given to this method, get the information it contains (conj and text)
         NodeList clauses = childElement.getChildNodes();
 
         //System.out.print(childElement.getFirstChild().getNodeName());
         for (int i = 0; i < clauses.getLength(); i++) {
+            
+            // Check if the text is empty. Why do they put a "1" in everything to check if it's empty?
+            // Wouldn't the String.isEmpty() method make more sense?
             String str = clauses.item(i).getTextContent().trim().concat("1");
             if (!str.equals("1")) {
+                
+                // If the conjunction tag is found, set conj to the conj name.
                 if (clauses.item(i).getNodeName().equals("conj") && clauses.item(i).getNodeType() == Node.ELEMENT_NODE) {
                     c = (Element) clauses.item(i);
                     Text x = (Text) c.getFirstChild();
                     conj = x.getNodeValue();
-
-                } else if (clauses.item(i).getNodeName().equals("text")) {
+                }
+                
+                // If the text tag is found, pull out the chapter, verse, and the actual text.
+                else if (clauses.item(i).getNodeName().equals("text")) {
                     d = (Element) clauses.item(i);
                     NamedNodeMap attr = d.getAttributes();
                     Text da = (Text) d.getFirstChild();
                     data = da.getNodeValue();
                     verse = attr.getNamedItem("verse").getNodeValue();
                     chapter = attr.getNamedItem("chapter").getNodeValue();
-
-                } else {
+                }
+                
+                // Unused else statement.
+                else {
                 }
             }
-
         }
 
         return new Clause(data, conj, chapter, verse);
     }
 
     /**
-    Navigates the Document and adds children to the 
+    Navigates the Document and adds children to the
      */
     public void makeNodes(XMLTreeNode r, Node parent) {
-        //get all the children of the current Document Node
+        // Get a list of all the children of the current Document Node
         NodeList childElements = parent.getChildNodes();
-        //Iterate through the children of the Document Node
+        
+        // Iterate through the children of the Document Node
         for (int i = 0; i < childElements.getLength(); i++) {
             Node child = childElements.item(i);
-            //get the value of the current child Node
+            
+            // [Unused] Get the value of the current child Node
             String s = child.getNodeValue();
-            //get the name of the current child Node
+            
+            // Get the name and content of the current child Node
             String cCheck = child.getNodeName();
-
             String str = child.getTextContent().trim().concat("1");
 
-            //if the current Node is not empty and is a clause
+            // If the current Node is not empty and is a clause, add its information
+            // Again with the "1" thing...
             if (!str.equals("1") && cCheck.equals("clause")) {
-                //make a new XMLTreeNode
+                // Make a new XMLTreeNode
                 XMLTreeNode childTreeNode = new XMLTreeNode(makeClause(child));
-                //add this new XMLTreeNode to the current XMLTreeNode parent
+                
+                // Add this new XMLTreeNode to the current XMLTreeNode parent.
                 r.add(childTreeNode);
-                //check to see if the current Document node has Children
+                
+                // Check to see if the current clause tag has any nested clause tags.
                 makeNodes(childTreeNode, child);
             }
-
         }
     }
 

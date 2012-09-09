@@ -18,7 +18,7 @@ public class JTreePanel extends JPanel {
         scrollPane = new JScrollPane(tree);
         this.add(scrollPane);
         this.setMaximumSize(new Dimension(200, 500));
-        scrollPane.setBounds(0, 0, 250, 720);
+        scrollPane.setBounds(0, 0, 250, 720);  // Redundant? Which is correct?
     }
 
     //method for getting the selected node
