@@ -180,7 +180,7 @@ public class ButtonPanel extends JPanel {
     Sets the position of each of the GUI elements based on the intial 
     x value.
      */
-    public void setPosition() {
+    private void setPosition() {
         sel.setBounds(x, 0, 150, 112);
         n.setBounds(x, 114, 150, 112);
         ok.setBounds(x, 228, 50, 30);
