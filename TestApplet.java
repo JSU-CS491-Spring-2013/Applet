@@ -1,9 +1,9 @@
 
 import java.applet.Applet;
-import java.awt.*;
+import java.awt.*; // Not used
 import java.awt.event.*;
 import javax.swing.*;
-import java.lang.*;
+import java.lang.*; // Not used
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 

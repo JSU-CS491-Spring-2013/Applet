@@ -15,23 +15,24 @@ public class ButtonPanel extends JPanel {
 
     public ClausePanel sel, n;
     private JButton remove, treeModel, group, split, edit, ok, cancel;
-    private int command, numSuper;
-    private JLabel selNode, blankNode;
+    private int command, numSuper; // numSuper is not used.
+    private JLabel selNode, blankNode; // Not used.
     public JComboBox superSize;
     private int x;
     private TestApplet myParent;
 
     /**
-    Constructor - builds a new ButtonPanel
-    @param int x is the starting x location for the ButtonPanel
+     * This builds a new ButtonPanel.
+     * @param x the starting x location for the ButtonPanel
+     * @param mp a reference to the parent TestApplet who created this
      */
     public ButtonPanel(int x, TestApplet mp) {
         this.x = x;
         this.setLayout(null);
-        command = -1;
+        command = -1; // Why?
         Clause temp = null;
-        sel = new ClausePanel(temp);
-        n = new ClausePanel(temp);
+        sel = new ClausePanel(temp); // Why?
+        n = new ClausePanel(temp); // Why?
         superSize = new JComboBox();
         remove = new JButton("remove");
         treeModel = new JButton("treeModel");
