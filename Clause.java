@@ -19,8 +19,8 @@ public class Clause {
     private String[] text;              // The word-wrapped version of the data
     private Rectangle big;              // The outline for Node data?
     private Rectangle small;            // The outline for chapter/verse?
-    private Point conjPoint;            // 
-    private final int CHAR_NUM = 36;    // 
+    private Point conjPoint;            // ?
+    private final int CHAR_NUM = 36;    // ?
 
     /**
      * Makes a new Clause object with x and y values set to 0.
