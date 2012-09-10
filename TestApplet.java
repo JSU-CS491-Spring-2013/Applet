@@ -2,6 +2,8 @@
 import java.applet.Applet;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
 import javax.xml.parsers.DocumentBuilder;
@@ -24,7 +26,7 @@ public class TestApplet extends Applet {
     private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
-    private Timer time;                 // the weirdest thing I've seen in a long while. See below.
+    // private Timer time;                 // the weirdest thing I've seen in a long while. See below.
 
     public void init() {
         this.setLayout(null);
@@ -39,16 +41,44 @@ public class TestApplet extends Applet {
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(251, 0, 798, 700);
         
+        nodePanel.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                buttonPanel.setSelected(nodePanel.getSelected());
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                
+            }
+        });
+        
         // I have clue why this is in here. If you remove this and just run the
         // setSelected method at the end (after the add statements), it will not work.
         int delay = 50;
-        time = new Timer(delay, new ActionListener() {
+        /*time = new Timer(delay, new ActionListener() {
 
             public void actionPerformed(ActionEvent timer) {
                 buttonPanel.setSelected(nodePanel.getSelected());
             }
         });
-        time.start();
+        time.start();*/
         
         // Add the components to the window.
         add(jTreePanel);

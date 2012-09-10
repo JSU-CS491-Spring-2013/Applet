@@ -1,6 +1,5 @@
 
 import java.awt.Dimension;
-import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -63,8 +62,8 @@ public class JTreePanel extends JPanel {
     }
     XMLTreeModel mod = new XMLTreeModel(root);
     
-    JFrame f = new JFrame("Test Clause Panel");
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    javax.swing.JFrame f = new javax.swing.JFrame("Test Clause Panel");
+    f.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
     f.getContentPane().add(new JTreePanel(mod));
     f.pack();
     f.setVisible(true);
