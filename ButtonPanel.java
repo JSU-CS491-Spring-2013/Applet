@@ -174,6 +174,22 @@ public class ButtonPanel extends JPanel {
         }
     }
     
+    public void setOtherSelected(XMLTreeNode selected) {
+        // Try to set the information based on the Node.
+        try {
+            toggleB(true); // Note that the buttons will not be turned on if this section fails.
+            n.setChap(selected.getChap());
+            n.setVrse(selected.getVrse());
+            n.setConj(selected.getConj());
+            n.setData(selected.getData());
+        } catch (NullPointerException edit) { // Insert blanks if it fails.
+            n.setChap(""); // These won't ever fire until setSelected is passed a null value
+            n.setVrse("");
+            n.setConj("");
+            n.setData("");
+        }
+    }
+    
     /**
      * Sets the position of each of the GUI elements based on the initial x value.
      */

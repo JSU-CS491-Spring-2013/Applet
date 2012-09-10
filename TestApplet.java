@@ -16,8 +16,10 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 /**
- * TestApplet reads an XML file and builds an XMLTreeModel. The XMLTreeModel is used
- * to build both a JTreePanel and a NodePanel. TestApplet also builds a, now exterior, ButtonPanel.
+ * TestApplet reads an XML file and builds an XMLTreeModel. The XMLTreeModel is
+ * used to build both a JTreePanel and a NodePanel. TestApplet also builds a,
+ * now exterior, ButtonPanel.
+ *
  * @author Tyler
  */
 public class TestApplet extends Applet {
@@ -27,11 +29,13 @@ public class TestApplet extends Applet {
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
     // private Timer time;                 // the weirdest thing I've seen in a long while. See below.
+    private XMLTreeNode beginSelection; // This will hold the first Node in a selection
+    private XMLTreeNode endSelection;   // This will hold the final Node in a selection
 
     public void init() {
         this.setLayout(null);
         treeModel = makeTreeModel();
-        
+
         // Make the panels.
         jTreePanel = new JTreePanel(treeModel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
@@ -40,46 +44,69 @@ public class TestApplet extends Applet {
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(251, 0, 798, 700);
-        
+
+        /*
+         * Okay. Where to begin. nodePanel is the big panel in the middle. It
+         * contains the "rectangles". :((( This is the MouseListener that
+         * listens if the mouse is clicked ANYWHERE in the entire panel. We are
+         * using their old code to determine which node was clicked.
+         */
         nodePanel.addMouseListener(new MouseListener() {
 
+            /**
+             * This fires when the User clicks anywhere in the middle panel.
+             */
             @Override
             public void mouseClicked(MouseEvent e) {
-                buttonPanel.setSelected(nodePanel.getSelected());
+                if (e.getButton() == MouseEvent.BUTTON1) {
+                    if (e.getModifiersEx() == 64) { // This will fire if Shift is held down while clicking.
+                        if (beginSelection != null) {
+                            endSelection = nodePanel.getSelected();
+                            buttonPanel.setOtherSelected(endSelection);
+                        } else {
+                            beginSelection = nodePanel.getSelected();
+                            buttonPanel.setSelected(beginSelection);
+                        }
+                    } else { // This will fire if no modifier buttons are held down while clicking.
+                        beginSelection = nodePanel.getSelected();
+
+                        buttonPanel.setSelected(beginSelection);
+                        if (nodePanel.getSelected() == null) { // If node node is clicked (empty space), clear the other node box as well.
+                            buttonPanel.setOtherSelected(beginSelection);
+                            endSelection = beginSelection;
+                        }
+                    }
+                }
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-                
+            public void mousePressed(MouseEvent e) { // Not needed.
             }
 
             @Override
-            public void mouseReleased(MouseEvent e) {
-                
+            public void mouseReleased(MouseEvent e) { // Not needed.
             }
 
             @Override
-            public void mouseEntered(MouseEvent e) {
-                
+            public void mouseEntered(MouseEvent e) { // Not needed.
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {
-                
+            public void mouseExited(MouseEvent e) { // Not needed.
             }
         });
-        
+
         // I have clue why this is in here. If you remove this and just run the
         // setSelected method at the end (after the add statements), it will not work.
         int delay = 50;
-        /*time = new Timer(delay, new ActionListener() {
+        /*
+         * time = new Timer(delay, new ActionListener() {
+         *
+         * public void actionPerformed(ActionEvent timer) {
+         * buttonPanel.setSelected(nodePanel.getSelected()); } });
+        time.start();
+         */
 
-            public void actionPerformed(ActionEvent timer) {
-                buttonPanel.setSelected(nodePanel.getSelected());
-            }
-        });
-        time.start();*/
-        
         // Add the components to the window.
         add(jTreePanel);
         add(buttonPanel);
@@ -88,6 +115,7 @@ public class TestApplet extends Applet {
 
     /**
      * Returns the panel that contains the tree.
+     *
      * @return the NodePanel used
      */
     public NodePanel getNodePanel() {
@@ -95,8 +123,9 @@ public class TestApplet extends Applet {
     }
 
     /**
-    Sets up the parser, gets the root and builds the XMLTreeModel
-    @return XMLTreeModel
+     * Sets up the parser, gets the root and builds the XMLTreeModel
+     *
+     * @return XMLTreeModel
      */
     public XMLTreeModel makeTreeModel() {
         try {
@@ -135,8 +164,9 @@ public class TestApplet extends Applet {
     }
 
     /**
-    Extracts the data from the Document Node to make a new Clause object
-    @return Clause
+     * Extracts the data from the Document Node to make a new Clause object
+     *
+     * @return Clause
      */
     public Clause makeClause(Node childElement) {
         //get data, attributes, conjuntion
@@ -181,7 +211,7 @@ public class TestApplet extends Applet {
     }
 
     /**
-    Navigates the Document and adds children to the
+     * Navigates the Document and adds children to the
      */
     public void makeNodes(XMLTreeNode r, Node parent) {
         // Get a list of all the children of the current Document Node
@@ -214,21 +244,19 @@ public class TestApplet extends Applet {
     }
 
     /**
-     * This method performs one of 5 functions. This method is a nightmare,
-     * and it should be split into the five separate functions if the rest
-     * of their code makes that possible.
-     * 
-     * 0: remove selected node
-     * 1: merge the selected node with the node right below it
-     * 2: group starting at the selected node
-     * 3: split the selected node 
-     * 4: set the data of the ClausePanel
-     * 
-     * @param co 
+     * This method performs one of 5 functions. This method is a nightmare, and
+     * it should be split into the five separate functions if the rest of their
+     * code makes that possible.
+     *
+     * 0: remove selected node 1: merge the selected node with the node right
+     * below it 2: group starting at the selected node 3: split the selected
+     * node 4: set the data of the ClausePanel
+     *
+     * @param co
      */
     public void performFunction(int co) {
         XMLTreeNode xtn = nodePanel.getSelected();
-        
+
         switch (co) {
             case 0: // remove selected node
                 treeModel.remove(xtn);
@@ -259,19 +287,19 @@ public class TestApplet extends Applet {
                 xtn.setData(buttonPanel.sel.getData());
                 break;
         }
-        
+
         // Refreshes the treeModel
         treeModel.reload();
-        
+
         // Reset the x and y values for the XMLTreeNodes
         treeModel.resetXY();
-        
+
         // Update the nodePanel
         nodePanel.setRoot((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
-        
+
         // Update the jTreePanel
         jTreePanel.setTreeModel(treeModel);
-        
+
         // Validate the GUI components in the JTreePanel
         jTreePanel.validate();
     }
