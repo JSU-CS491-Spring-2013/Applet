@@ -6,10 +6,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
 /**
-Provides the buttons and Text fields required to test core functions.
- * 
+ * Provides the buttons and Text fields required to test core functions.
  */
 public class ButtonPanel extends JPanel {
 
@@ -49,12 +47,13 @@ public class ButtonPanel extends JPanel {
         setAct();
         setPosition();
         toggleB(false);
-        
+
         myParent = mp;
     }
 
     /**
-    Toggle enable for the Buttons
+     * Toggle the enabled property for the buttons.
+     * @param t the value to assign to the enabled attribute of the buttons
      */
     public void toggleB(boolean t) {
         remove.setEnabled(t);
@@ -65,7 +64,7 @@ public class ButtonPanel extends JPanel {
     }
 
     /**
-    Sets the Action Listeners for each of the Buttons
+     * Sets the ActionListeners for each of the buttons.
      */
     public void setAct() {
         remove.setToolTipText("Remove Clause");
@@ -152,33 +151,31 @@ public class ButtonPanel extends JPanel {
     }
 
     /**
-    Sets the data for the Clause Panel based on the data from the selected XMLTreeNode
-    @param XMLTreeNode selected
+     * Sets the data for the Clause Panel based on the data from the selected XMLTreeNode.
+     * @param selected the XMLTreeNode used
      */
     public void setSelected(XMLTreeNode selected) {
-
+        // Try to set the information based on the Node.
         try {
-            toggleB(true);
+            toggleB(true); // Note that the buttons will not be turned on if this section fails.
             sel.setChap(selected.getChap());
             sel.setVrse(selected.getVrse());
             sel.setConj(selected.getConj());
             sel.setData(selected.getData());
-
-        } catch (NullPointerException edit) {
+        } catch (NullPointerException edit) { // Insert blanks if it fails.
             sel.setChap("");
             sel.setVrse("");
             sel.setConj("");
             sel.setData("");
-            n.setChap("");
+            n.setChap(""); // These won't ever fire until setSelected is passed a null value
             n.setVrse("");
             n.setConj("");
             n.setData("");
         }
     }
-
+    
     /**
-    Sets the position of each of the GUI elements based on the intial 
-    x value.
+     * Sets the position of each of the GUI elements based on the initial x value.
      */
     private void setPosition() {
         sel.setBounds(x, 0, 150, 112);
@@ -203,9 +200,9 @@ public class ButtonPanel extends JPanel {
         this.add(group);
         this.add(split);
     }
-
+    
     /**
-    Sets the Combo box with the correct number of Nodes to be grouped
+     * Sets the Combobox with the correct number of Nodes to be grouped.
      */
     public void setUpCombo() {
         XMLTreeNode parent = (XMLTreeNode) myParent.getNodePanel().getSelected().getParent();

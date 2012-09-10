@@ -43,7 +43,7 @@ public class ClausePanel extends JPanel {
         // All redundant statements were moved here
         constructorHelper();
     }
-    
+
     /**
      * GUI representation of a single Clause object
      * @param c the Clause to be represented
@@ -79,7 +79,7 @@ public class ClausePanel extends JPanel {
         col = new JLabel(":");
         sc = new JScrollPane(dataText);
         dataText.setLineWrap(true);
-        
+
         setPositions();
     }
 
@@ -197,8 +197,8 @@ public class ClausePanel extends JPanel {
     }
 
     /*public static void main(String[] args) {
-    JFrame f = new JFrame("Test Clause Panel");
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    javax.swing.JFrame f = new javax.swing.JFrame("Test Clause Panel");
+    f.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
     //ClausePanel c = new ClausePanel(new Clause("This is a test of the clause panel sdafasgasdfasfgsfdgsdfgasdfasdfasdfasdf alksdfjpoajdsf;alsjdf asdlkfjapsofjas;ldfk, aopfja;lskdjfoajsdf;lakjsdf;lkajsdf;lkjasdlfkj",
     //"inasmuch as", "1","100"));
     Clause cl = null;
