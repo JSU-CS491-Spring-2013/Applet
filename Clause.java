@@ -1,37 +1,34 @@
 
-/**
- *A Clause object composed of text, conjuncion, chapter, and verse.
- *
- */
-import java.awt.*;
+import java.awt.Point;
+import java.awt.Rectangle;
 
+/**
+ * A Clause object is composed of text, conjunction, chapter, and verse.
+ */
 public class Clause {
 
-    /**String data  	(text of the clause)
-     *String conj  	(conjunction of the clause)
-     *String chap  	(chapter)
-     *String vrse  	(verse)
-     *int x			(stores the starting X-value for drawing)
-     *int y			(stores the starting Y-value for drawing)
-    int h			(stored the height needed to display data)
-    int w			(stores the width)
-    int mid			(stores the mid-point of the Clause)
-    String[] text	(stores the word wrap version of the data)
-    Rectangle big	(outline for node data)
-    Rectangle smalll (outline for chapter/verse)
-     */
-    private String data, conj, chap, vrse;
-    private int x, y, h, w, mid;			//<-- x, y, h, w can be used to make a Rectangle, can use the check bounds method in GUI
-    private String[] text;
-    private Rectangle big, small;
-    private Point conjPoint;
-    private final int CHAR_NUM = 36;
+    private String data;                // The text of the Clause
+    private String conj;                // The conjunction of the Clause
+    private String chap;                // The chapter number of the Clause
+    private String vrse;                // The verse number of the Clause
+    private int x;                      // The starting x-value for drawing
+    private int y;                      // The starting y-value for drawing
+    private int h;                      // The height needed to display the data
+    private int w;                      // The width needed to display the data
+    private int mid;                    // The mid-point of the Clause?
+    private String[] text;              // The word-wrapped version of the data
+    private Rectangle big;              // The outline for Node data?
+    private Rectangle small;            // The outline for chapter/verse?
+    private Point conjPoint;            // 
+    private final int CHAR_NUM = 36;    // 
 
-    /**Constructor makes a new Clause object with x and y values set to 0
-     *@param d		text data of the Clause
-     *@param c		conjunction
-     *@param ch	chapter
-     *@param v		verse	  
+    /**
+     * Makes a new Clause object with x and y values set to 0.
+     *
+     * @param d the text data of the Clause
+     * @param c the conjunction of the Clause
+     * @param ch the chapter number of the Clause
+     * @param v the verse number of the Clause
      */
     public Clause(String d, String c, String ch, String v) {
         data = d;
@@ -47,10 +44,10 @@ public class Clause {
     }
 
     /**
-    Sets the deminsion for big, small, and sets the point for the conjunction
+     * Sets the dimension for big, small, and sets the point for the conjunction
      */
     public void makeBoxes() {
-        //big box is for the data
+        // <-- x, y, h, w are used to make a Rectangle for the data, can use the check bounds method in GUI
         big = new Rectangle(x, y, w, h);
 
         //small box is for chapter verse
@@ -61,15 +58,15 @@ public class Clause {
     }
 
     /**
-    Calculates the mid point of the data box
+     * Calculates the mid point of the data box
      */
     public void calMid() {
         mid = (y + (h + y)) / 2;
     }
 
     /**
-    Sets the word wrap String array. Each index of the array
-    are a seperate line.
+     * Sets the word wrap String array. Each index of the array are a seperate
+     * line.
      */
     public void setUpArray() {
         String[] temp = new String[data.length() / CHAR_NUM + 2];
@@ -115,8 +112,9 @@ public class Clause {
 
     //possible conjunction is left out of this 
     /**
-    Returns the XML of this Clause
-    @return result	String that has XML tags and clause data
+     * Returns the XML of this Clause
+     *
+     * @return result	String that has XML tags and clause data
      */
     public String toXML() {
         String result = "";
@@ -135,47 +133,66 @@ public class Clause {
     }
 
     //Getters
-    /**@return String text of the Clause*/
+    /**
+     * @return String text of the Clause
+     */
     public String getData() {
         return data;
     }
 
-    /**@return String conjunction of the Clause*/
+    /**
+     * @return String conjunction of the Clause
+     */
     public String getConj() {
         return conj;
     }
 
-    /**@return String chapter of the Clause*/
+    /**
+     * @return String chapter of the Clause
+     */
     public String getChap() {
         return chap;
     }
 
-    /**@return String verse of the Clause*/
+    /**
+     * @return String verse of the Clause
+     */
     public String getVrse() {
         return vrse;
     }
 
-    /**@return int x value of Clause*/
+    /**
+     * @return int x value of Clause
+     */
     public int getX() {
         return x;
     }
 
-    /**@return int y value of Clause*/
+    /**
+     * @return int y value of Clause
+     */
     public int getY() {
         return y;
     }
 
-    /**@return int h value of Clause*/
+    /**
+     * @return int h value of Clause
+     */
     public int getH() {
         return h;
     }
 
-    /**@return int mid value of Clause*/
+    /**
+     * @return int mid value of Clause
+     */
     public int getMid() {
         return mid;
     }
 
-    /**@return String[] word wrap version of data(each line is an index of the array is a single line)*/
+    /**
+     * @return String[] word wrap version of data(each line is an index of the
+     * array is a single line)
+     */
     public String[] getWordWrap() {
         return text;
     }
@@ -193,7 +210,9 @@ public class Clause {
     }
 
     //Setters
-    /**@param d	sets data equal to d, and recalculates height and word wrap*/
+    /**
+     * @param d	sets data equal to d, and recalculates height and word wrap
+     */
     public void setData(String d) {
         data = d;
         h = 0;
@@ -201,28 +220,38 @@ public class Clause {
         makeBoxes();
     }
 
-    /**@param c sets conj equal to c*/
+    /**
+     * @param c sets conj equal to c
+     */
     public void setConj(String c) {
         conj = c;
     }
 
-    /**@param c sets chap equal to c*/
+    /**
+     * @param c sets chap equal to c
+     */
     public void setChap(String c) {
         chap = c;
     }
 
-    /**@param v sets vrse equal to v*/
+    /**
+     * @param v sets vrse equal to v
+     */
     public void setVrse(String v) {
         vrse = v;
     }
 
-    /**@param i sets x equal to i*/
+    /**
+     * @param i sets x equal to i
+     */
     public void setX(int i) {
         x = i;
         makeBoxes();
     }
 
-    /**@param i sets y equal to i*/
+    /**
+     * @param i sets y equal to i
+     */
     public void setY(int i) {
         y = i;
         calMid();
@@ -230,11 +259,8 @@ public class Clause {
     }
     //For testing this class
 	/*
-    public static void main(String[] args)
-    {
-    Clause c = new Clause("This is sample text", "and", "1", "1");
-    System.out.println(c.toString() +"\n");
-    System.out.println(c.toXML());
-    }
+     * public static void main(String[] args) { Clause c = new Clause("This is
+     * sample text", "and", "1", "1"); System.out.println(c.toString() +"\n");
+     * System.out.println(c.toXML()); }
      */
 }

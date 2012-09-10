@@ -76,7 +76,10 @@ public class TestApplet extends Applet {
 
             // Create a Document based on the XML file the User provides and removes "extraneous" information.
             // For example:  <book bookName="Luke 1"> is converted to null, null, "Luke 1"
-            Document doc = db.parse("C:/Users/Tyler/Documents/NetBeansProjects/CS 491 Applet/Luke 1.xml");	//Put the URL in the parse method call
+            // Document doc = db.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");	//Put the URL in the parse method call
+            javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
+            chooseFile.showOpenDialog(null);
+            Document doc = db.parse(chooseFile.getSelectedFile());
             doc.getDocumentElement().normalize();
 
             // Point to the root element of the document portion of the Document.
