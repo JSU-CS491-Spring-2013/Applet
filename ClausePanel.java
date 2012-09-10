@@ -79,8 +79,7 @@ public class ClausePanel extends JPanel {
         col = new JLabel(":");
         sc = new JScrollPane(dataText);
         dataText.setLineWrap(true);
-
-        // All redundant statements were moved here
+        
         setPositions();
     }
 

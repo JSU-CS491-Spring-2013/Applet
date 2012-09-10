@@ -33,6 +33,7 @@ public class TestApplet extends Applet {
         
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
         
+        // Make 
         buttonPanel = new ButtonPanel(0, this);
         buttonPanel.setBounds(1050, 0, 150, 700);
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
