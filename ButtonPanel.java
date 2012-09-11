@@ -11,13 +11,22 @@ import javax.swing.JPanel;
  */
 public class ButtonPanel extends JPanel {
 
-    public ClausePanel sel, n;
-    private JButton remove, treeModel, group, split, edit, ok, cancel;
-    private int command, numSuper; // numSuper is not used.
-    private JLabel selNode, blankNode; // Not used.
-    public JComboBox superSize;
-    private int x;
-    private TestApplet myParent;
+    public ClausePanel sel;         // This is the top selection box. The first selection goes in here.
+    public ClausePanel n;           // This is the bottom selection box. The second selection goes in here.
+    private JButton remove;         // 
+    private JButton treeModel;      // 
+    private JButton group;          // 
+    private JButton split;          // 
+    private JButton edit;           // 
+    private JButton ok;             // 
+    private JButton cancel;         // 
+    private int command;            // 
+    private int numSuper;           // numSuper is not used.
+    private JLabel selNode;         // 
+    private JLabel blankNode;       // Not used.
+    public JComboBox superSize;     // 
+    private int x;                  // 
+    private TestApplet myParent;    // 
 
     /**
      * This builds a new ButtonPanel.
@@ -32,13 +41,13 @@ public class ButtonPanel extends JPanel {
         sel = new ClausePanel(temp); // Why?
         n = new ClausePanel(temp); // Why?
         superSize = new JComboBox();
-        remove = new JButton("remove");
-        treeModel = new JButton("treeModel");
-        group = new JButton("group");
-        split = new JButton("split");
-        edit = new JButton("edit");
-        ok = new JButton("Ok");
-        cancel = new JButton("cancel");
+        remove = new JButton("Remove");
+        treeModel = new JButton("Tree Model");
+        group = new JButton("Group");
+        split = new JButton("Split");
+        edit = new JButton("Edit");
+        ok = new JButton("Okay");
+        cancel = new JButton("Cancel");
 
         selNode = new JLabel("Selected Clause");
         blankNode = new JLabel("New Clause");
@@ -66,7 +75,7 @@ public class ButtonPanel extends JPanel {
     /**
      * Sets the ActionListeners for each of the buttons.
      */
-    public void setAct() {
+    private void setAct() {
         remove.setToolTipText("Remove Clause");
         remove.addActionListener(new ActionListener() {
 
@@ -196,14 +205,22 @@ public class ButtonPanel extends JPanel {
     private void setPosition() {
         sel.setBounds(x, 0, 150, 112);
         n.setBounds(x, 114, 150, 112);
-        ok.setBounds(x, 228, 50, 30);
-        cancel.setBounds(x + 60, 228, 50, 30);
+        ok.setBounds(x + 15, 228, 120, 30); // Buttons are 32 down on Y axis
+        cancel.setBounds(x + 15, 260, 120, 30);
+        treeModel.setBounds(x + 15, 292, 120, 30);
+        split.setBounds(x + 15, 324, 120, 30);
+        edit.setBounds(x + 15, 356, 120, 30);
+        remove.setBounds(x + 15, 388, 120, 30);
+        group.setBounds(x + 15, 420, 120, 30);
+        superSize.setBounds(x + 15, 452, 120, 30);
+        
+        /*cancel.setBounds(x + 60, 228, 50, 30);
         treeModel.setBounds(x, 260, 50, 30);
         split.setBounds(x + 60, 260, 50, 30);
         edit.setBounds(x, 292, 50, 30);
         remove.setBounds(x + 60, 292, 50, 30);
         group.setBounds(x, 324, 50, 30);
-        superSize.setBounds(x + 60, 324, 50, 30);
+        superSize.setBounds(x + 60, 324, 50, 30);*/
 
         this.add(sel);
         this.add(n);

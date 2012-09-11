@@ -59,6 +59,12 @@ public class TestApplet extends Applet {
                             beginSelection = nodePanel.getSelected();
                             buttonPanel.setSelected(beginSelection);
                         }
+                        
+                        if (nodePanel.getSelected() == null) { // If node node is clicked (empty space), clear the other node box as well.
+                            buttonPanel.setOtherSelected(beginSelection);
+                            endSelection = beginSelection;
+                            buttonPanel.toggleB(false);
+                        }
                     } else { // This will fire if no modifier buttons are held down while clicking.
                         beginSelection = nodePanel.getSelected();
 
@@ -66,6 +72,7 @@ public class TestApplet extends Applet {
                         if (nodePanel.getSelected() == null) { // If node node is clicked (empty space), clear the other node box as well.
                             buttonPanel.setOtherSelected(beginSelection);
                             endSelection = beginSelection;
+                            buttonPanel.toggleB(false);
                         }
                     }
                 }
