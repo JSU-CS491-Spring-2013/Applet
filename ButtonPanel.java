@@ -64,7 +64,7 @@ public class ButtonPanel extends JPanel {
      * Toggle the enabled property for the buttons.
      * @param t the value to assign to the enabled attribute of the buttons
      */
-    public void toggleB(boolean t) {
+    public final void toggleB(boolean t) {
         remove.setEnabled(t);
         treeModel.setEnabled(t);
         group.setEnabled(t);

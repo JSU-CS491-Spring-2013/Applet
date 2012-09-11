@@ -25,6 +25,16 @@ public class TestApplet extends Applet {
     private XMLTreeNode endSelection;   // This will hold the final Node in a selection
 
     public void init() {
+        /*try { // I want to add this code at some point. This will make it look much better, but we'll worry about making it pretty later.
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }*/
+        
         this.setLayout(null);
         treeModel = makeTreeModel();
 
