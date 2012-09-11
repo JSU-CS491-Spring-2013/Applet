@@ -1,3 +1,4 @@
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -9,12 +10,112 @@
  */
 public class BetterButtonPanel extends javax.swing.JPanel {
 
+    public ClausePanel sel;         // This is the top selection box. The first selection goes in here.
+    public ClausePanel n;           // This is the bottom selection box. The second selection goes in here. 
+    private int command;            // 
+    private int numSuper;           // 
+    private int x;                  // 
+    private TestApplet myParent;    //
+    
+    /**
+     * Toggle the enabled property for the buttons.
+     * @param t the value to assign to the enabled attribute of the buttons
+     */
+    public final void toggleB(boolean t) {
+        cmdEdit.setEnabled(t);
+        cmdGroup.setEnabled(t);
+        cmdRemove.setEnabled(t);
+        cmdSplit.setEnabled(t);
+        cmdTreeModel.setEnabled(t);
+    }
+    
     /**
      * Creates new form BetterButtonPanel
      */
-    public BetterButtonPanel() {
+    public BetterButtonPanel(int x, TestApplet mp) {
         initComponents();
+        
+        this.x = x;
+        command = -1; // Why?
+        Clause temp = null;
+        sel = new ClausePanel(temp); // Why?
+        n = new ClausePanel(temp); // Why?
+        
+        toggleB(false);
+
+        myParent = mp;
     }
+
+    /**
+     * Sets the Combobox with the correct number of Nodes to be grouped.
+     */
+    public void setUpCombo() {
+        XMLTreeNode parent = (XMLTreeNode) myParent.getNodePanel().getSelected().getParent();
+        int currentI = parent.getIndex(myParent.getNodePanel().getSelected()) + 1;
+        int totalC = parent.getChildCount();
+        for (int i = 0; i < totalC - currentI; i++) {
+            comSuperSize.addItem(new Integer(i + 1));
+        }
+    }
+    
+    public void setSelected(XMLTreeNode selected) {
+        // Try to set the information based on the Node.
+        try {
+            toggleB(true); // Note that the buttons will not be turned on if this section fails.
+            sel.setChap(selected.getChap());
+            sel.setVrse(selected.getVrse());
+            sel.setConj(selected.getConj());
+            sel.setData(selected.getData());
+        } catch (NullPointerException edit) { // Insert blanks if it fails.
+            sel.setChap("");
+            sel.setVrse("");
+            sel.setConj("");
+            sel.setData("");
+            n.setChap(""); // These won't ever fire until setSelected is passed a null value
+            n.setVrse("");
+            n.setConj("");
+            n.setData("");
+        }
+    }
+    
+    public void setOtherSelected(XMLTreeNode selected) {
+        // Try to set the information based on the Node.
+        try {
+            toggleB(true); // Note that the buttons will not be turned on if this section fails.
+            n.setChap(selected.getChap());
+            n.setVrse(selected.getVrse());
+            n.setConj(selected.getConj());
+            n.setData(selected.getData());
+        } catch (NullPointerException edit) { // Insert blanks if it fails.
+            n.setChap(""); // These won't ever fire until setSelected is passed a null value
+            n.setVrse("");
+            n.setConj("");
+            n.setData("");
+        }
+    }
+    
+    public int getSuperSizeSelectedIndex() {
+        return comSuperSize.getSelectedIndex();
+    }
+    
+    /*public static void main(String[] args) {
+        try { // I want to add this code at some point. This will make it look much better, but we'll worry about making it pretty later.
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        javax.swing.JFrame myFrame = new javax.swing.JFrame("Testing");
+        myFrame.setLayout(new java.awt.GridLayout(1, 1));
+        myFrame.add(new BetterButtonPanel());
+        myFrame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
+        myFrame.pack();
+        myFrame.setVisible(true);
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,6 +140,12 @@ public class BetterButtonPanel extends javax.swing.JPanel {
         txtLastText = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        cmdTreeModel = new javax.swing.JButton();
+        cmdSplit = new javax.swing.JButton();
+        cmdEdit = new javax.swing.JButton();
+        cmdRemove = new javax.swing.JButton();
+        cmdGroup = new javax.swing.JButton();
+        comSuperSize = new javax.swing.JComboBox();
 
         txtFirstChapter.setColumns(3);
 
@@ -68,6 +175,16 @@ public class BetterButtonPanel extends javax.swing.JPanel {
 
         jButton2.setText("Cancel");
 
+        cmdTreeModel.setText("Tree Model");
+
+        cmdSplit.setText("Split");
+
+        cmdEdit.setText("Edit");
+
+        cmdRemove.setText("Remove");
+
+        cmdGroup.setText("Group");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -77,30 +194,34 @@ public class BetterButtonPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(txtFirstChapter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(txtFirstVerse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(txtFirstConjunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jScrollPane1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtLastChapter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtLastVerse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtLastConjunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton2)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(txtFirstChapter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFirstVerse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtFirstConjunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtLastChapter, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtLastVerse, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtLastConjunction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(cmdGroup, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmdEdit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmdTreeModel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                            .addComponent(cmdSplit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmdRemove, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comSuperSize, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -126,10 +247,28 @@ public class BetterButtonPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmdTreeModel)
+                    .addComponent(cmdSplit))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmdEdit)
+                    .addComponent(cmdRemove))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmdGroup)
+                    .addComponent(comSuperSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cmdEdit;
+    private javax.swing.JButton cmdGroup;
+    private javax.swing.JButton cmdRemove;
+    private javax.swing.JButton cmdSplit;
+    private javax.swing.JButton cmdTreeModel;
+    private javax.swing.JComboBox comSuperSize;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

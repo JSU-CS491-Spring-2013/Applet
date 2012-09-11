@@ -17,7 +17,7 @@ import org.w3c.dom.*;
 public class TestApplet extends Applet {
 
     private JTreePanel jTreePanel;      // the panel on the left that does....what does that thing do?
-    private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons
+    private BetterButtonPanel buttonPanel;    // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
     // private Timer time;                 // the weirdest thing I've seen in a long while. See below.
@@ -41,8 +41,8 @@ public class TestApplet extends Applet {
         // Make the panels.
         jTreePanel = new JTreePanel(treeModel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
-        buttonPanel = new ButtonPanel(0, this);
-        buttonPanel.setBounds(1050, 0, 150, 700);
+        buttonPanel = new BetterButtonPanel(0, this);
+        buttonPanel.setBounds(1050, 0, 334, 700);
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(251, 0, 798, 700);
@@ -275,7 +275,7 @@ public class TestApplet extends Applet {
                 break;
             case 2: // group starting at the selected node
                 XMLTreeNode parent = (XMLTreeNode) xtn.getParent();
-                int value = buttonPanel.superSize.getSelectedIndex() + 1;
+                int value = buttonPanel.getSuperSizeSelectedIndex() + 1;
                 XMLTreeNode[] nArray = new XMLTreeNode[value + 1];
                 nArray[0] = xtn;
                 int startIndex = parent.getIndex(xtn);
