@@ -1,6 +1,6 @@
 
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 //Uncomment below for testing, needed for JTree
 //import javax.swing.*;

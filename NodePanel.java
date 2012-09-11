@@ -1,9 +1,10 @@
 
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import java.awt.geom.*;
-import java.util.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
+import javax.swing.JPanel;
 
 /**
 The NodePanel is used to visually represent an XMLTreeModel.
