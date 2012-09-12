@@ -44,11 +44,11 @@
                           <Component id="cmdGroup" alignment="0" max="32767" attributes="0"/>
                           <Component id="cmdEdit" alignment="0" max="32767" attributes="0"/>
                           <Component id="cmdTreeModel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jButton1" alignment="0" pref="110" max="32767" attributes="0"/>
+                          <Component id="cmdOkay" alignment="0" pref="110" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jButton2" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="cmdCancel" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="cmdSplit" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="cmdRemove" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="comSuperSize" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
@@ -82,8 +82,8 @@
               <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cmdOkay" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cmdCancel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -109,6 +109,9 @@
     <Component class="javax.swing.JTextField" name="txtFirstChapter">
       <Properties>
         <Property name="columns" type="int" value="2"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtFirstVerse"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
@@ -119,11 +122,17 @@
     <Component class="javax.swing.JTextField" name="txtFirstVerse">
       <Properties>
         <Property name="columns" type="int" value="2"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtFirstConjunction"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtFirstConjunction">
       <Properties>
         <Property name="columns" type="int" value="8"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtFirstText"/>
+        </Property>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -145,6 +154,9 @@
     <Component class="javax.swing.JTextField" name="txtLastChapter">
       <Properties>
         <Property name="columns" type="int" value="2"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtLastVerse"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
@@ -155,11 +167,17 @@
     <Component class="javax.swing.JTextField" name="txtLastVerse">
       <Properties>
         <Property name="columns" type="int" value="2"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtLastConjunction"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtLastConjunction">
       <Properties>
         <Property name="columns" type="int" value="8"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtLastText"/>
+        </Property>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
@@ -178,45 +196,69 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="cmdOkay">
       <Properties>
         <Property name="text" type="java.lang.String" value="Okay"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="cmdCancel"/>
+        </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="cmdCancel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancel"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="cmdTreeModel"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="cmdTreeModel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Tree Model"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="cmdSplit"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="cmdSplit">
       <Properties>
         <Property name="text" type="java.lang.String" value="Split"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="cmdEdit"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="cmdEdit">
       <Properties>
         <Property name="text" type="java.lang.String" value="Edit"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="cmdRemove"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="cmdRemove">
       <Properties>
         <Property name="text" type="java.lang.String" value="Remove"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="cmdGroup"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="cmdGroup">
       <Properties>
         <Property name="text" type="java.lang.String" value="Group"/>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="comSuperSize"/>
+        </Property>
       </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="comSuperSize">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
+        </Property>
+        <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="txtFirstChapter"/>
         </Property>
       </Properties>
     </Component>
