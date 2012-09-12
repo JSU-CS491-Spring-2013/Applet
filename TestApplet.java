@@ -17,7 +17,7 @@ import org.w3c.dom.*;
 public class TestApplet extends Applet {
 
     private JTreePanel jTreePanel;      // the panel on the left that does....what does that thing do?
-    private BetterButtonPanel buttonPanel;    // the panel on the right that contains the buttons
+    private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
     // private Timer time;                 // the weirdest thing I've seen in a long while. See below.
@@ -41,7 +41,7 @@ public class TestApplet extends Applet {
         // Make the panels.
         jTreePanel = new JTreePanel(treeModel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
-        buttonPanel = new BetterButtonPanel(0, this);
+        buttonPanel = new ButtonPanel(0, this);
         buttonPanel.setBounds(1050, 0, 256, 700);
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);

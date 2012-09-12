@@ -8,7 +8,7 @@
  *
  * @author tyler
  */
-public class BetterButtonPanel extends javax.swing.JPanel {
+public class ButtonPanel extends javax.swing.JPanel {
 
     //public ClausePanel sel;         // This is the top selection box. The first selection goes in here.
     //public ClausePanel n;           // This is the bottom selection box. The second selection goes in here. 
@@ -34,7 +34,7 @@ public class BetterButtonPanel extends javax.swing.JPanel {
     /**
      * Creates new form BetterButtonPanel
      */
-    public BetterButtonPanel(int x, TestApplet mp) {
+    public ButtonPanel(int x, TestApplet mp) {
         initComponents();
         
         this.x = x;
