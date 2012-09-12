@@ -11,8 +11,6 @@ import org.w3c.dom.*;
  * TestApplet reads an XML file and builds an XMLTreeModel. The XMLTreeModel is
  * used to build both a JTreePanel and a NodePanel. TestApplet also builds a,
  * now exterior, ButtonPanel.
- *
- * @author Tyler
  */
 public class TestApplet extends Applet {
 
@@ -40,7 +38,7 @@ public class TestApplet extends Applet {
         // Make the panels.
         jTreePanel = new JTreePanel(treeModel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
-        buttonPanel = new ButtonPanel(0, this);
+        buttonPanel = new ButtonPanel(this);
         buttonPanel.setBounds(1050, 0, 256, 700);
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
@@ -63,27 +61,29 @@ public class TestApplet extends Applet {
                     if (e.getModifiersEx() == 64) { // This will fire if Shift is held down while clicking.
                         if (beginSelection != null) {
                             endSelection = nodePanel.getSelected();
-                            buttonPanel.setOtherSelected(endSelection);
+                            buttonPanel.setLastNodeSelection(endSelection);
                         } else {
                             beginSelection = nodePanel.getSelected();
-                            buttonPanel.setSelected(beginSelection);
+                            buttonPanel.setFirstNodeSelection(beginSelection);
                         }
                         
                         if (nodePanel.getSelected() == null) { // If node node is clicked (empty space), clear the other node box as well.
-                            buttonPanel.setOtherSelected(beginSelection);
+                            buttonPanel.setLastNodeSelection(beginSelection);
                             endSelection = beginSelection;
-                            buttonPanel.toggleB(false);
+                            buttonPanel.setButtonsEnabled(false);
                         }
                     } else { // This will fire if no modifier buttons are held down while clicking.
                         beginSelection = nodePanel.getSelected();
 
-                        buttonPanel.setSelected(beginSelection);
+                        buttonPanel.setFirstNodeSelection(beginSelection);
                         if (nodePanel.getSelected() == null) { // If node node is clicked (empty space), clear the other node box as well.
-                            buttonPanel.setOtherSelected(beginSelection);
+                            buttonPanel.setLastNodeSelection(beginSelection);
                             endSelection = beginSelection;
-                            buttonPanel.toggleB(false);
+                            buttonPanel.setButtonsEnabled(false);
                         }
                     }
+                    
+                    buttonPanel.populateComboBox();
                 }
             }
 
@@ -263,7 +263,7 @@ public class TestApplet extends Applet {
                 break;
             case 2: // group starting at the selected node
                 XMLTreeNode parent = (XMLTreeNode) xtn.getParent();
-                int value = buttonPanel.getSuperSizeSelectedIndex() + 1;
+                int value = buttonPanel.getComboBoxSelectedIndex() + 1;
                 XMLTreeNode[] nArray = new XMLTreeNode[value + 1];
                 nArray[0] = xtn;
                 int startIndex = parent.getIndex(xtn);

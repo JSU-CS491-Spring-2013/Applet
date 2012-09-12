@@ -46,7 +46,7 @@ public class Clause {
     /**
      * Sets the dimension for big, small, and sets the point for the conjunction
      */
-    public void makeBoxes() {
+    private void makeBoxes() {
         // <-- x, y, h, w are used to make a Rectangle for the data, can use the check bounds method in GUI
         big = new Rectangle(x, y, w, h);
 
@@ -60,7 +60,7 @@ public class Clause {
     /**
      * Calculates the mid point of the data box
      */
-    public void calMid() {
+    private void calMid() {
         mid = (y + (h + y)) / 2;
     }
 
@@ -68,7 +68,7 @@ public class Clause {
      * Sets the word wrap String array. Each index of the array are a seperate
      * line.
      */
-    public void setUpArray() {
+    private void setUpArray() {
         String[] temp = new String[data.length() / CHAR_NUM + 2];
         for (int i = 0; i < temp.length; i++) {
             temp[i] = "";
@@ -109,10 +109,10 @@ public class Clause {
             text[i] = temp[i];
         }
     }
-
-    //possible conjunction is left out of this 
+    
     /**
-     * Returns the XML of this Clause
+     * Returns the XML of this Clause Possible conjunctions are not yet taken
+     * into account
      *
      * @return result	String that has XML tags and clause data
      */
@@ -122,6 +122,7 @@ public class Clause {
         return result;
     }
 
+    @Override
     public String toString() {
         if (data.equals("root")) {
             return conj;

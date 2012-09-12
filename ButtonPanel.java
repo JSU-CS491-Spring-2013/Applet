@@ -1,71 +1,60 @@
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
- * @author tyler
+ * This is the new ButtonPanel. It no longer contains two ClausePanels.
+ * The UI looks the same, but it was built differently. I used the NetBeans IDE
+ * GUI builder. The associated ButtonPanel.form is included.
  */
 public class ButtonPanel extends javax.swing.JPanel {
 
-    //public ClausePanel sel;         // This is the top selection box. The first selection goes in here.
-    //public ClausePanel n;           // This is the bottom selection box. The second selection goes in here. 
-    private int command;            // 
-    private int numSuper;           // 
-    private int x;                  // 
-    private TestApplet myParent;    //
-    private XMLTreeNode first;      // Holds the Node used in the first box
-    private XMLTreeNode last;       // Holds the Node used in the last box
+    private TestApplet myParent;                // This is the instance of TestApplet that created this ButtonPanel. Once we split that huge function, we should make those new methods static.
+    private XMLTreeNode firstNodeSelection;     // Holds the Node used in the firstNodeSelection box
+    private XMLTreeNode lastNodeSelection;      // Holds the Node used in the lastNodeSelection box
     
     /**
      * Toggle the enabled property for the buttons.
-     * @param t the value to assign to the enabled attribute of the buttons
+     * @param enabled the value to assign to the enabled attribute of the buttons
      */
-    public final void toggleB(boolean t) {
-        cmdEdit.setEnabled(t);
-        cmdGroup.setEnabled(t);
-        cmdRemove.setEnabled(t);
-        cmdSplit.setEnabled(t);
-        cmdTreeModel.setEnabled(t);
+    public final void setButtonsEnabled(boolean enabled) {
+        cmdEdit.setEnabled(enabled);
+        cmdGroup.setEnabled(enabled);
+        cmdRemove.setEnabled(enabled);
+        cmdSplit.setEnabled(enabled);
+        cmdTreeModel.setEnabled(enabled);
     }
     
     /**
-     * Creates new form BetterButtonPanel
+     * Creates new form ButtonPanel
      */
-    public ButtonPanel(int x, TestApplet mp) {
+    public ButtonPanel(TestApplet myParent) {
         initComponents();
         
-        this.x = x;
-        command = -1; // Why?
         Clause temp = null;
-        //sel = new ClausePanel(temp); // Why?
-        //n = new ClausePanel(temp); // Why?
-        
-        toggleB(false);
-
-        myParent = mp;
+        setButtonsEnabled(false);
+        this.myParent = myParent;
     }
 
     /**
-     * Sets the Combobox with the correct number of Nodes to be grouped.
+     * Sets the Combo Box with the correct number of Nodes to be grouped?
+     * That's what their comment said. In reality, it lists 1 through n where
+     * n is the total number of nodes minus the index of the node you select.
+     * The lower down the tree you select a node, the smaller n will be.
      */
-    public void setUpCombo() {
-        XMLTreeNode parent = (XMLTreeNode) myParent.getNodePanel().getSelected().getParent();
+    public void populateComboBox() {
+        comComboBox.removeAllItems(); // I added this. The previous would just keep adding them for forever.
+        XMLTreeNode parent = (XMLTreeNode) myParent.getNodePanel().getSelected().getParent(); // Gets the parent. You read from left to right just like normal. Nodes to the right are child nodes.
         int currentI = parent.getIndex(myParent.getNodePanel().getSelected()) + 1;
         int totalC = parent.getChildCount();
         for (int i = 0; i < totalC - currentI; i++) {
-            comSuperSize.addItem(new Integer(i + 1));
+            comComboBox.addItem(new Integer(i + 1));
         }
     }
     
-    public void setSelected(XMLTreeNode selected) {
+    public void setFirstNodeSelection(XMLTreeNode selected) {
         // Try to set the information based on the Node.
         try {
-            toggleB(true);
+            setButtonsEnabled(true);
             
-            first = selected;
+            firstNodeSelection = selected;
             txtFirstChapter.setText(selected.getChap());
             txtFirstVerse.setText(selected.getVrse());
             txtFirstConjunction.setText(selected.getConj());
@@ -83,10 +72,10 @@ public class ButtonPanel extends javax.swing.JPanel {
         }
     }
     
-    public void setOtherSelected(XMLTreeNode selected) {
+    public void setLastNodeSelection(XMLTreeNode selected) {
         // Try to set the information based on the Node.
         try {
-            toggleB(true); // Note that the buttons will not be turned on if this section fails.
+            setButtonsEnabled(true); // Note that the buttons will not be turned on if this section fails.
             txtLastChapter.setText(selected.getChap());
             txtLastVerse.setText(selected.getVrse());
             txtLastConjunction.setText(selected.getConj());
@@ -99,11 +88,11 @@ public class ButtonPanel extends javax.swing.JPanel {
         }
     }
     
-    public int getSuperSizeSelectedIndex() {
-        return comSuperSize.getSelectedIndex();
+    public int getComboBoxSelectedIndex() {
+        return comComboBox.getSelectedIndex();
     }
     
-    /*public static void main(String[] args) {
+    /*public static void main(String[] args) { // Testing code.
         try { // I want to add this code at some point. This will make it look much better, but we'll worry about making it pretty later.
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -150,7 +139,7 @@ public class ButtonPanel extends javax.swing.JPanel {
         cmdEdit = new javax.swing.JButton();
         cmdRemove = new javax.swing.JButton();
         cmdGroup = new javax.swing.JButton();
-        comSuperSize = new javax.swing.JComboBox();
+        comComboBox = new javax.swing.JComboBox();
 
         txtFirstChapter.setColumns(2);
         txtFirstChapter.setNextFocusableComponent(txtFirstVerse);
@@ -205,9 +194,9 @@ public class ButtonPanel extends javax.swing.JPanel {
         cmdRemove.setNextFocusableComponent(cmdGroup);
 
         cmdGroup.setText("Group");
-        cmdGroup.setNextFocusableComponent(comSuperSize);
+        cmdGroup.setNextFocusableComponent(comComboBox);
 
-        comSuperSize.setNextFocusableComponent(txtFirstChapter);
+        comComboBox.setNextFocusableComponent(txtFirstChapter);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -245,7 +234,7 @@ public class ButtonPanel extends javax.swing.JPanel {
                             .addComponent(cmdCancel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmdSplit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cmdRemove, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(comSuperSize, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(comComboBox, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -282,7 +271,7 @@ public class ButtonPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmdGroup)
-                    .addComponent(comSuperSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -295,7 +284,7 @@ public class ButtonPanel extends javax.swing.JPanel {
     private javax.swing.JButton cmdRemove;
     private javax.swing.JButton cmdSplit;
     private javax.swing.JButton cmdTreeModel;
-    private javax.swing.JComboBox comSuperSize;
+    private javax.swing.JComboBox comComboBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
