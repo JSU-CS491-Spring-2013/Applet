@@ -20,7 +20,6 @@ public class TestApplet extends Applet {
     private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
-    // private Timer time;                 // the weirdest thing I've seen in a long while. See below.
     private XMLTreeNode beginSelection; // This will hold the first Node in a selection
     private XMLTreeNode endSelection;   // This will hold the final Node in a selection
 
@@ -104,17 +103,6 @@ public class TestApplet extends Applet {
             public void mouseExited(MouseEvent e) { // Not needed.
             }
         });
-
-        // I have clue why this is in here. If you remove this and just run the
-        // setSelected method at the end (after the add statements), it will not work.
-        int delay = 50;
-        /*
-         * time = new Timer(delay, new ActionListener() {
-         *
-         * public void actionPerformed(ActionEvent timer) {
-         * buttonPanel.setSelected(nodePanel.getSelected()); } });
-        time.start();
-         */
 
         // Add the components to the window.
         add(jTreePanel);
