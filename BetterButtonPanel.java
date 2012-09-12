@@ -10,8 +10,8 @@
  */
 public class BetterButtonPanel extends javax.swing.JPanel {
 
-    public ClausePanel sel;         // This is the top selection box. The first selection goes in here.
-    public ClausePanel n;           // This is the bottom selection box. The second selection goes in here. 
+    //public ClausePanel sel;         // This is the top selection box. The first selection goes in here.
+    //public ClausePanel n;           // This is the bottom selection box. The second selection goes in here. 
     private int command;            // 
     private int numSuper;           // 
     private int x;                  // 
@@ -40,8 +40,8 @@ public class BetterButtonPanel extends javax.swing.JPanel {
         this.x = x;
         command = -1; // Why?
         Clause temp = null;
-        sel = new ClausePanel(temp); // Why?
-        n = new ClausePanel(temp); // Why?
+        //sel = new ClausePanel(temp); // Why?
+        //n = new ClausePanel(temp); // Why?
         
         toggleB(false);
 

@@ -264,7 +264,7 @@ public class TestApplet extends Applet {
      * @param co
      */
     public void performFunction(int co) {
-        XMLTreeNode xtn = nodePanel.getSelected();
+        /*XMLTreeNode xtn = nodePanel.getSelected();
 
         switch (co) {
             case 0: // remove selected node
@@ -310,6 +310,6 @@ public class TestApplet extends Applet {
         jTreePanel.setTreeModel(treeModel);
 
         // Validate the GUI components in the JTreePanel
-        jTreePanel.validate();
+        jTreePanel.validate();*/
     }
 }
