@@ -136,6 +136,7 @@
         <Component class="javax.swing.JTextArea" name="txtFirstText">
           <Properties>
             <Property name="columns" type="int" value="17"/>
+            <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
         </Component>
@@ -171,6 +172,7 @@
         <Component class="javax.swing.JTextArea" name="txtLastText">
           <Properties>
             <Property name="columns" type="int" value="17"/>
+            <Property name="lineWrap" type="boolean" value="true"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
         </Component>

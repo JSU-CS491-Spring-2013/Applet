@@ -16,6 +16,8 @@ public class BetterButtonPanel extends javax.swing.JPanel {
     private int numSuper;           // 
     private int x;                  // 
     private TestApplet myParent;    //
+    private XMLTreeNode first;      // Holds the Node used in the first box
+    private XMLTreeNode last;       // Holds the Node used in the last box
     
     /**
      * Toggle the enabled property for the buttons.
@@ -61,20 +63,23 @@ public class BetterButtonPanel extends javax.swing.JPanel {
     public void setSelected(XMLTreeNode selected) {
         // Try to set the information based on the Node.
         try {
-            toggleB(true); // Note that the buttons will not be turned on if this section fails.
-            sel.setChap(selected.getChap());
-            sel.setVrse(selected.getVrse());
-            sel.setConj(selected.getConj());
-            sel.setData(selected.getData());
+            toggleB(true);
+            
+            first = selected;
+            txtFirstChapter.setText(selected.getChap());
+            txtFirstVerse.setText(selected.getVrse());
+            txtFirstConjunction.setText(selected.getConj());
+            txtFirstText.setText(selected.getData());
         } catch (NullPointerException edit) { // Insert blanks if it fails.
-            sel.setChap("");
-            sel.setVrse("");
-            sel.setConj("");
-            sel.setData("");
-            n.setChap(""); // These won't ever fire until setSelected is passed a null value
-            n.setVrse("");
-            n.setConj("");
-            n.setData("");
+            txtFirstChapter.setText("");
+            txtFirstVerse.setText("");
+            txtFirstConjunction.setText("");
+            txtFirstText.setText("");
+            
+            txtLastChapter.setText("");
+            txtLastVerse.setText("");
+            txtLastConjunction.setText("");
+            txtLastText.setText("");
         }
     }
     
@@ -82,15 +87,15 @@ public class BetterButtonPanel extends javax.swing.JPanel {
         // Try to set the information based on the Node.
         try {
             toggleB(true); // Note that the buttons will not be turned on if this section fails.
-            n.setChap(selected.getChap());
-            n.setVrse(selected.getVrse());
-            n.setConj(selected.getConj());
-            n.setData(selected.getData());
+            txtLastChapter.setText(selected.getChap());
+            txtLastVerse.setText(selected.getVrse());
+            txtLastConjunction.setText(selected.getConj());
+            txtLastText.setText(selected.getData());
         } catch (NullPointerException edit) { // Insert blanks if it fails.
-            n.setChap(""); // These won't ever fire until setSelected is passed a null value
-            n.setVrse("");
-            n.setConj("");
-            n.setData("");
+            txtFirstChapter.setText("");
+            txtFirstVerse.setText("");
+            txtFirstConjunction.setText("");
+            txtFirstText.setText("");
         }
     }
     
@@ -156,6 +161,7 @@ public class BetterButtonPanel extends javax.swing.JPanel {
         txtFirstConjunction.setColumns(8);
 
         txtFirstText.setColumns(17);
+        txtFirstText.setLineWrap(true);
         txtFirstText.setRows(5);
         jScrollPane1.setViewportView(txtFirstText);
 
@@ -168,6 +174,7 @@ public class BetterButtonPanel extends javax.swing.JPanel {
         txtLastConjunction.setColumns(8);
 
         txtLastText.setColumns(17);
+        txtLastText.setLineWrap(true);
         txtLastText.setRows(5);
         jScrollPane2.setViewportView(txtLastText);
 
