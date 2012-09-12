@@ -17,10 +17,10 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane2" max="32767" attributes="0"/>
-                  <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
                       <Component id="txtFirstChapter" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -29,8 +29,8 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="txtFirstConjunction" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Component id="jScrollPane2" max="32767" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Component id="txtLastChapter" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
@@ -39,23 +39,16 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="txtLastConjunction" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="cmdGroup" alignment="0" max="32767" attributes="0"/>
-                          <Component id="cmdEdit" alignment="0" max="32767" attributes="0"/>
-                          <Component id="cmdTreeModel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="jButton1" alignment="0" pref="151" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="jButton2" pref="151" max="32767" attributes="0"/>
-                          <Component id="cmdSplit" max="32767" attributes="0"/>
-                          <Component id="cmdRemove" max="32767" attributes="0"/>
-                          <Component id="comSuperSize" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
+                  <Component id="jButton1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jButton2" alignment="0" max="32767" attributes="0"/>
+                  <Component id="cmdTreeModel" alignment="0" max="32767" attributes="0"/>
+                  <Component id="cmdSplit" alignment="0" max="32767" attributes="0"/>
+                  <Component id="cmdEdit" alignment="0" max="32767" attributes="0"/>
+                  <Component id="cmdRemove" alignment="0" max="32767" attributes="0"/>
+                  <Component id="cmdGroup" alignment="0" max="32767" attributes="0"/>
+                  <Component id="comSuperSize" alignment="0" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -81,25 +74,21 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cmdTreeModel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cmdSplit" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cmdEdit" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cmdRemove" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="cmdTreeModel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cmdGroup" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="comSuperSize" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="cmdSplit" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="cmdEdit" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="cmdRemove" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="cmdGroup" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="comSuperSize" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -108,7 +97,7 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="txtFirstChapter">
       <Properties>
-        <Property name="columns" type="int" value="3"/>
+        <Property name="columns" type="int" value="2"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
@@ -118,12 +107,12 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtFirstVerse">
       <Properties>
-        <Property name="columns" type="int" value="3"/>
+        <Property name="columns" type="int" value="2"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtFirstConjunction">
       <Properties>
-        <Property name="columns" type="int" value="12"/>
+        <Property name="columns" type="int" value="8"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -135,7 +124,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="txtFirstText">
           <Properties>
-            <Property name="columns" type="int" value="20"/>
+            <Property name="columns" type="int" value="17"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
         </Component>
@@ -143,7 +132,7 @@
     </Container>
     <Component class="javax.swing.JTextField" name="txtLastChapter">
       <Properties>
-        <Property name="columns" type="int" value="3"/>
+        <Property name="columns" type="int" value="2"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
@@ -153,12 +142,12 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtLastVerse">
       <Properties>
-        <Property name="columns" type="int" value="3"/>
+        <Property name="columns" type="int" value="2"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtLastConjunction">
       <Properties>
-        <Property name="columns" type="int" value="12"/>
+        <Property name="columns" type="int" value="8"/>
       </Properties>
     </Component>
     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
@@ -170,7 +159,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextArea" name="txtLastText">
           <Properties>
-            <Property name="columns" type="int" value="20"/>
+            <Property name="columns" type="int" value="17"/>
             <Property name="rows" type="int" value="5"/>
           </Properties>
         </Component>
