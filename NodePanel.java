@@ -64,6 +64,8 @@ public class NodePanel extends JPanel implements MouseListener {
         while (n.hasMoreElements()) {
             JTextArea temp = new JTextArea();
             JScrollPane pane = new JScrollPane();
+            JPanel myPanel = new JPanel();
+            myPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("1:1 Inasmuchas"));
             
             temp.setLineWrap(true);
             temp.setWrapStyleWord(true);
@@ -73,7 +75,12 @@ public class NodePanel extends JPanel implements MouseListener {
             temp.setBounds(curr.getX(), curr.getY(), 110, 75);
             pane.setViewportView(temp);
             pane.setBounds(curr.getX(), curr.getY(), 150, 75);
-            add(pane);
+            myPanel.setBounds(curr.getX() - 10, curr.getY() - 10, 170, 95);
+            
+            myPanel.setLayout(new GridLayout(1, 1));
+            myPanel.add(pane);
+            
+            add(myPanel);
         }
     }
     

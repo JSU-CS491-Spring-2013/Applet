@@ -68,9 +68,9 @@ public class XMLTreeModel extends DefaultTreeModel {
             calY(ro);
         } else {
             //heigth of the clause plus, small box, plus conj space
-            ro.setY(yMax + 20);
+            ro.setY(yMax + 40);
             // yMax += ro.getClause().getH() + 18 + 10;
-            yMax += 78;
+            yMax += 118;
         }
     }
 
