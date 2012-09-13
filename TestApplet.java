@@ -32,7 +32,7 @@ public class TestApplet extends Applet {
         } catch (Exception e) {
         }
         
-        this.setLayout(null);
+        this.setLayout(null); // This allows the setBounds method to work.
         treeModel = makeTreeModel();
 
         // Make the panels.
