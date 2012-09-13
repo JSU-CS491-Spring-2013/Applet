@@ -5,6 +5,8 @@ import java.awt.event.MouseListener;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
 The NodePanel is used to visually represent an XMLTreeModel.
@@ -39,6 +41,8 @@ public class NodePanel extends JPanel implements MouseListener {
         setBackground(Color.white);
         addMouseListener(this);
         hasChanged = false;
+        setLayout(null);
+        updateComponents();
     }
 
     /**
@@ -54,10 +58,29 @@ public class NodePanel extends JPanel implements MouseListener {
         this.repaint();
     }
 
+    private void updateComponents() {
+        Enumeration n = rootNode.preorderEnumeration();
+        
+        while (n.hasMoreElements()) {
+            JTextArea temp = new JTextArea();
+            JScrollPane pane = new JScrollPane();
+            
+            temp.setLineWrap(true);
+            temp.setWrapStyleWord(true);
+            
+            XMLTreeNode curr = (XMLTreeNode) n.nextElement();
+            temp.setText(curr.getData());
+            temp.setBounds(curr.getX(), curr.getY(), 110, 75);
+            pane.setViewportView(temp);
+            pane.setBounds(curr.getX(), curr.getY(), 150, 75);
+            add(pane);
+        }
+    }
+    
     /**
     Overrides the paintComponent method in the JPanel class
     @param Graphics g
-     */
+     * /
     @Override
     public void paintComponent(Graphics g) {
 
@@ -128,7 +151,7 @@ public class NodePanel extends JPanel implements MouseListener {
             }
         } catch (NoSuchElementException e) {
         }
-    }
+    }*/
 
     /**
     Returns the Selected Node
