@@ -21,6 +21,7 @@ public class NodePanel extends JPanel implements MouseListener {
      */
     XMLTreeNode rootNode;
     XMLTreeNode selectedNode;
+    XMLTreeNode otherSelectedNode;
     Rectangle tempRectangle;
     private final int stubLength = 10; //Stub
     private final int nodeWidth = 200; //Node width
@@ -57,6 +58,7 @@ public class NodePanel extends JPanel implements MouseListener {
     Overrides the paintComponent method in the JPanel class
     @param Graphics g
      */
+    @Override
     public void paintComponent(Graphics g) {
 
         super.paintComponent(g);//Always call this first
@@ -159,6 +161,7 @@ public class NodePanel extends JPanel implements MouseListener {
     MouseListener method used to listen for node selection
     @param MouseEvent e
      */
+    @Override
     public void mouseClicked(MouseEvent e) {
         hasChanged = true;
         Enumeration n = rootNode.preorderEnumeration();
@@ -181,15 +184,19 @@ public class NodePanel extends JPanel implements MouseListener {
     }
     //These methods are not used
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 
+    @Override
     public void mousePressed(MouseEvent e) {
     }
 
+    @Override
     public void mouseReleased(MouseEvent e) {
     }
     /*

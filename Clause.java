@@ -20,7 +20,7 @@ public class Clause {
     private Rectangle big;              // The outline for Node data?
     private Rectangle small;            // The outline for chapter/verse?
     private Point conjPoint;            // ?
-    private final int CHAR_NUM = 36;    // ?
+    private final int CHAR_NUM = 36;    // Is this the maximum characters you want in a line?
 
     /**
      * Makes a new Clause object with x and y values set to 0.
@@ -39,7 +39,7 @@ public class Clause {
         y = 0;
         w = 200;
         setUpArray();
-        calMid();
+        calculateMidPoint();
         makeBoxes();
     }
 
@@ -60,12 +60,12 @@ public class Clause {
     /**
      * Calculates the mid point of the data box
      */
-    private void calMid() {
+    private void calculateMidPoint() {
         mid = (y + (h + y)) / 2;
     }
 
     /**
-     * Sets the word wrap String array. Each index of the array are a seperate
+     * Sets the word wrap String array. Each index of the array are a separate
      * line.
      */
     private void setUpArray() {
@@ -105,9 +105,7 @@ public class Clause {
             }
         }
         text = new String[total];
-        for (int i = 0; i < text.length; i++) {
-            text[i] = temp[i];
-        }
+        System.arraycopy(temp, 0, text, 0, text.length);
     }
     
     /**
@@ -255,7 +253,7 @@ public class Clause {
      */
     public void setY(int i) {
         y = i;
-        calMid();
+        calculateMidPoint();
         makeBoxes();
     }
     //For testing this class
