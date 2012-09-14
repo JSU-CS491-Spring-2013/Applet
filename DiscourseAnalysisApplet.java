@@ -38,7 +38,10 @@ public class DiscourseAnalysisApplet extends Applet {
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(251, 0, 798, 700);
-        s.getVerticalScrollBar().setUnitIncrement(64); // Make scrolling faster
+        
+        // Make scrolling faster
+        s.getVerticalScrollBar().setUnitIncrement(64);
+        s.getHorizontalScrollBar().setUnitIncrement(32);
         jTreePanel = new JTreePanel(treeModel, nodePanel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
 
