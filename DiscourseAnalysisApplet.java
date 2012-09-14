@@ -6,11 +6,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.*;
 
 /**
- * TestApplet reads an XML file and builds an XMLTreeModel. The XMLTreeModel is
- * used to build both a JTreePanel and a NodePanel. TestApplet also builds a,
+ * DiscourseAnalysisApplet reads an XML file and builds an XMLTreeModel. The XMLTreeModel is
+ * used to build both a JTreePanel and a NodePanel. DiscourseAnalysisApplet also builds a,
  * now exterior, ButtonPanel.
  */
-public class TestApplet extends Applet {
+public class DiscourseAnalysisApplet extends Applet {
 
     private JTreePanel jTreePanel;      // the panel on the left that does....what does that thing do?
     private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons

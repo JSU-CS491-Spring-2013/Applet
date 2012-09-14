@@ -6,7 +6,7 @@
  */
 public class ButtonPanel extends javax.swing.JPanel {
 
-    private TestApplet myParent;                // This is the instance of TestApplet that created this ButtonPanel. Once we split that huge function, we should make those new methods static.
+    private DiscourseAnalysisApplet myParent;                // This is the instance of DiscourseAnalysisApplet that created this ButtonPanel. Once we split that huge function, we should make those new methods static.
     private XMLTreeNode firstNodeSelection;     // Holds the Node used in the firstNodeSelection box
     private XMLTreeNode lastNodeSelection;      // Holds the Node used in the lastNodeSelection box
 
@@ -27,7 +27,7 @@ public class ButtonPanel extends javax.swing.JPanel {
     /**
      * Creates new form ButtonPanel
      */
-    public ButtonPanel(TestApplet myParent) {
+    public ButtonPanel(DiscourseAnalysisApplet myParent) {
         initComponents();
 
         Clause temp = null;
