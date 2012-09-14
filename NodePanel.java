@@ -33,8 +33,9 @@ public class NodePanel extends JPanel {
     public NodePanel(XMLTreeNode ro, int x, int y) {
         rootNode = ro;
         setPreferredSize(new Dimension(x, y));
-        setBackground(Color.white);
-        //addMouseListener(this);
+        
+        // Make that background easier on the eyes.
+        setBackground(new java.awt.Color(240, 240, 240));
         hasChanged = false;
         setLayout(null);
         updateComponents();
