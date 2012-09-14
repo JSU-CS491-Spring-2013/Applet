@@ -84,6 +84,7 @@ public class NodePanel extends JPanel implements MouseListener {
             
             XMLTreeNode curr = (XMLTreeNode) n.nextElement();
             Clause temp = curr.getClause();
+            temp.updateClauseBounds();
             add(temp);
         }
     }

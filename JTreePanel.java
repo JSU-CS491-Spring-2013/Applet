@@ -1,5 +1,7 @@
 
 import java.awt.Dimension;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -8,20 +10,50 @@ public class JTreePanel extends JPanel {
 
     JScrollPane scrollPane;
     JTree tree;
+    NodePanel nodePanel;
 
     /**
      * Create a panel and populate it with the given tree.
      * @param model the XMLTreeModel that is used
      */
-    public JTreePanel(XMLTreeModel model) {
+    public JTreePanel(XMLTreeModel model, final NodePanel nodePanel) {
+        this.nodePanel = nodePanel;
         this.setLayout(null);
         tree = new JTree(model);
         scrollPane = new JScrollPane(tree);
         this.add(scrollPane);
         this.setMaximumSize(new Dimension(200, 500));
         scrollPane.setBounds(0, 0, 250, 720);  // Redundant? Which is correct?
+
+        tree.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println("You clicked me!");
+                Clause temp = getSelectedNode().getClause();
+                temp.setEnabled(true);
+                temp.requestFocus();
+                nodePanel.scrollRectToVisible(temp.getBounds());
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
     }
-    
+
     /**
      * Returns the Node that is selected in this panel.
      * @return the selected Node
@@ -30,7 +62,7 @@ public class JTreePanel extends JPanel {
         //Get the selected node from the JTree, return null if nothing is selected.
         return (XMLTreeNode) tree.getLeadSelectionPath().getLastPathComponent();
     }
-    
+
     /**
      * Reset the tree.
      * @param mod the XMLTreeModel used to make the new tree

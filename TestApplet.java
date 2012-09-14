@@ -36,13 +36,13 @@ public class TestApplet extends Applet {
         treeModel = makeTreeModel();
 
         // Make the panels.
-        jTreePanel = new JTreePanel(treeModel);
-        jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
         buttonPanel = new ButtonPanel(this);
         buttonPanel.setBounds(1050, 0, 256, 700);
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(251, 0, 798, 700);
+        jTreePanel = new JTreePanel(treeModel, nodePanel);
+        jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
 
         /*
          * Okay. Where to begin. nodePanel is the big panel in the middle. It

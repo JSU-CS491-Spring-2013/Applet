@@ -51,7 +51,7 @@ public class Clause extends JPanel {
         w = 200;
         setUpArray();
         calculateMidPoint();
-        makeBoxes();
+        // makeBoxes();
         
         if (chap.isEmpty() || vrse.isEmpty()) {
             setBorder(javax.swing.BorderFactory.createTitledBorder(conj));
@@ -116,13 +116,16 @@ public class Clause extends JPanel {
         });
     }
 
-    private void updateClauseBounds() {
+    /**
+     * This repositions the Clause in the NodePanel. This is called after updating.
+     */
+    public void updateClauseBounds() {
         setBounds(x, y, 260, 95);
     }
     
     /**
      * Sets the dimension for big, small, and sets the point for the conjunction
-     */
+     * /
     private void makeBoxes() {
         // <-- x, y, h, w are used to make a Rectangle for the data, can use the check bounds method in GUI
         big = new Rectangle(x, y, w, h);
@@ -132,7 +135,7 @@ public class Clause extends JPanel {
 
         //ConjPoint is the start point for displaying the Conjuntion
         conjPoint = new Point(5 + (x + (w + x)) / 2, y - 5);
-    }
+    }*/
 
     /**
      * Calculates the mid point of the data box
@@ -293,7 +296,7 @@ public class Clause extends JPanel {
         data = d;
         h = 0;
         setUpArray();
-        makeBoxes();
+        //makeBoxes();
     }
 
     /**
@@ -322,8 +325,8 @@ public class Clause extends JPanel {
      */
     public void setX(int i) {
         x = i;
-        makeBoxes();
-        updateClauseBounds();
+        //makeBoxes();
+        //updateClauseBounds();
     }
 
     /**
@@ -332,8 +335,8 @@ public class Clause extends JPanel {
     public void setY(int i) {
         y = i;
         calculateMidPoint();
-        makeBoxes();
-        updateClauseBounds();
+        //makeBoxes();
+        //updateClauseBounds();
     }
     //For testing this class
 	/*
