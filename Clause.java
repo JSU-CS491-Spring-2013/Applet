@@ -1,11 +1,15 @@
 
+import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
  * A Clause object is composed of text, conjunction, chapter, and verse.
  */
-public class Clause {
+public class Clause extends JPanel {
 
     private String data;                // The text of the Clause
     private String conj;                // The conjunction of the Clause
@@ -21,6 +25,8 @@ public class Clause {
     private Rectangle small;            // The outline for chapter/verse?
     private Point conjPoint;            // ?
     private final int CHAR_NUM = 36;    // Is this the maximum characters you want in a line?
+    private JTextArea myTextArea;       // This is where I will show my data.
+    private JScrollPane myScrollPane;   // This allows the User to scroll through the text area.
 
     /**
      * Makes a new Clause object with x and y values set to 0.
@@ -31,6 +37,7 @@ public class Clause {
      * @param v the verse number of the Clause
      */
     public Clause(String d, String c, String ch, String v) {
+        super();
         data = d;
         conj = c;
         chap = ch;
@@ -41,8 +48,35 @@ public class Clause {
         setUpArray();
         calculateMidPoint();
         makeBoxes();
+        
+        if (chap.isEmpty() || vrse.isEmpty()) {
+            setBorder(javax.swing.BorderFactory.createTitledBorder(conj));
+        } else {
+            setBorder(javax.swing.BorderFactory.createTitledBorder(chap + ":" + vrse + " " + conj));
+        }
+        
+        // Set my text box up
+        myTextArea = new JTextArea();
+        myTextArea.setLineWrap(true);
+        myTextArea.setWrapStyleWord(true);
+        myTextArea.setText(data);
+        
+        // Add scroll abilities to the text box
+        myScrollPane = new JScrollPane();
+        myScrollPane.setViewportView(myTextArea);
+        
+        // Add the scroll pane (with the text area inside) to the Clause
+        setLayout(new GridLayout(1, 1));
+        add(myScrollPane);
+        
+        // The text area should start disabled.
+        myTextArea.setEnabled(false);
     }
 
+    private void updateClauseBounds() {
+        setBounds(x, y, 260, 95);
+    }
+    
     /**
      * Sets the dimension for big, small, and sets the point for the conjunction
      */
@@ -246,6 +280,7 @@ public class Clause {
     public void setX(int i) {
         x = i;
         makeBoxes();
+        updateClauseBounds();
     }
 
     /**
@@ -255,6 +290,7 @@ public class Clause {
         y = i;
         calculateMidPoint();
         makeBoxes();
+        updateClauseBounds();
     }
     //For testing this class
 	/*

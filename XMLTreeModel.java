@@ -11,8 +11,8 @@ for the easy manipulation of the TreeModel data and its nodes.
  */
 public class XMLTreeModel extends DefaultTreeModel {
 
-    private final int NODE_WIDTH = 200;
-    private final int BUF_SPACE = 20;
+    private final int NODE_WIDTH = 260;
+    private final int BUF_SPACE = 80;
     /**
     Constructor creates a new XMLTreeModel
     @param root sets the root of this model

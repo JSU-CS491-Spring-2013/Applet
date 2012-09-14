@@ -62,25 +62,29 @@ public class NodePanel extends JPanel implements MouseListener {
         Enumeration n = rootNode.preorderEnumeration();
         
         while (n.hasMoreElements()) {
-            JTextArea temp = new JTextArea();
+            /*XMLTreeNode curr = (XMLTreeNode) n.nextElement();
+            JTextArea tempTextArea = new JTextArea();
             JScrollPane pane = new JScrollPane();
             JPanel myPanel = new JPanel();
-            myPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("1:1 Inasmuchas"));
-            
-            temp.setLineWrap(true);
-            temp.setWrapStyleWord(true);
-            
-            XMLTreeNode curr = (XMLTreeNode) n.nextElement();
-            temp.setText(curr.getData());
-            temp.setBounds(curr.getX(), curr.getY(), 110, 75);
-            pane.setViewportView(temp);
-            pane.setBounds(curr.getX(), curr.getY(), 150, 75);
-            myPanel.setBounds(curr.getX() - 10, curr.getY() - 10, 170, 95);
+            myPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(curr.getChap() + ":" + curr.getVrse() + " " + curr.getConj()));
+            tempTextArea.setLineWrap(true);
+            tempTextArea.setWrapStyleWord(true);
+
+            tempTextArea.setText(curr.getData());
+            // tempTextArea.setBounds(curr.getX(), curr.getY(), 200, 75);
+            pane.setViewportView(tempTextArea);
+            //pane.setBounds(curr.getX() + 10, curr.getY() + 10, 150, 75);
+            myPanel.setBounds(curr.getX(), curr.getY(), 260, 95);
             
             myPanel.setLayout(new GridLayout(1, 1));
             myPanel.add(pane);
-            
+            tempTextArea.setEnabled(false);
             add(myPanel);
+            */
+            
+            XMLTreeNode curr = (XMLTreeNode) n.nextElement();
+            Clause temp = curr.getClause();
+            add(temp);
         }
     }
     
