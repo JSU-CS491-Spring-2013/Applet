@@ -35,8 +35,7 @@ public class JTreePanel extends JPanel {
             public void mousePressed(MouseEvent e) {
                 System.out.println("You clicked me!");
                 Clause temp = getSelectedNode().getClause();
-                temp.setEnabled(true);
-                temp.requestFocus();
+                temp.enableTextArea();
                 nodePanel.scrollRectToVisible(temp.getBounds());
             }
 

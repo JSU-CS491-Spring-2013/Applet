@@ -32,6 +32,11 @@ public class Clause extends JPanel {
     private JTextArea myTextArea;       // This is where I will show my data.
     private JScrollPane myScrollPane;   // This allows the User to scroll through the text area.
 
+    public void enableTextArea() {
+        myTextArea.setEnabled(true);
+        myTextArea.requestFocus();
+    }
+    
     /**
      * Makes a new Clause object with x and y values set to 0.
      *
@@ -85,8 +90,7 @@ public class Clause extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                myTextArea.setEnabled(true);
-                myTextArea.requestFocus();
+                enableTextArea();
             }
 
             @Override
