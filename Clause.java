@@ -2,6 +2,10 @@
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -71,6 +75,45 @@ public class Clause extends JPanel {
         
         // The text area should start disabled.
         myTextArea.setEnabled(false);
+        
+        // Add click to enable on the text areas.
+        myTextArea.addMouseListener(new MouseListener() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                myTextArea.setEnabled(true);
+                myTextArea.requestFocus();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+        
+        // When focus is lost, disable the text area.
+        myTextArea.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                myTextArea.setEnabled(false);
+            }
+        });
     }
 
     private void updateClauseBounds() {
