@@ -36,7 +36,7 @@ public class Clause extends JPanel {
         myTextArea.setEnabled(true);
         myTextArea.requestFocus();
     }
-    
+
     /**
      * Makes a new Clause object with x and y values set to 0.
      *
@@ -57,30 +57,30 @@ public class Clause extends JPanel {
         setUpArray();
         calculateMidPoint();
         // makeBoxes();
-        
+
         if (chap.isEmpty() || vrse.isEmpty()) {
             setBorder(javax.swing.BorderFactory.createTitledBorder(conj));
         } else {
             setBorder(javax.swing.BorderFactory.createTitledBorder(chap + ":" + vrse + " " + conj));
         }
-        
+
         // Set my text box up
         myTextArea = new JTextArea();
         myTextArea.setLineWrap(true);
         myTextArea.setWrapStyleWord(true);
         myTextArea.setText(data);
-        
+
         // Add scroll abilities to the text box
         myScrollPane = new JScrollPane();
         myScrollPane.setViewportView(myTextArea);
-        
+
         // Add the scroll pane (with the text area inside) to the Clause
         setLayout(new GridLayout(1, 1));
         add(myScrollPane);
-        
+
         // The text area should start disabled.
         myTextArea.setEnabled(false);
-        
+
         // Add click to enable on the text areas.
         myTextArea.addMouseListener(new MouseListener() {
 
@@ -105,7 +105,7 @@ public class Clause extends JPanel {
             public void mouseExited(MouseEvent e) {
             }
         });
-        
+
         // When focus is lost, disable the text area.
         myTextArea.addFocusListener(new FocusListener() {
 
@@ -126,21 +126,20 @@ public class Clause extends JPanel {
     public void updateClauseBounds() {
         setBounds(x, y, 260, 95);
     }
-    
+
     /**
      * Sets the dimension for big, small, and sets the point for the conjunction
      * /
     private void makeBoxes() {
-        // <-- x, y, h, w are used to make a Rectangle for the data, can use the check bounds method in GUI
-        big = new Rectangle(x, y, w, h);
-
-        //small box is for chapter verse
-        small = new Rectangle(x, y - 12, 50, 12);
-
-        //ConjPoint is the start point for displaying the Conjuntion
-        conjPoint = new Point(5 + (x + (w + x)) / 2, y - 5);
+    // <-- x, y, h, w are used to make a Rectangle for the data, can use the check bounds method in GUI
+    big = new Rectangle(x, y, w, h);
+    
+    //small box is for chapter verse
+    small = new Rectangle(x, y - 12, 50, 12);
+    
+    //ConjPoint is the start point for displaying the Conjuntion
+    conjPoint = new Point(5 + (x + (w + x)) / 2, y - 5);
     }*/
-
     /**
      * Calculates the mid point of the data box
      */
@@ -191,7 +190,7 @@ public class Clause extends JPanel {
         text = new String[total];
         System.arraycopy(temp, 0, text, 0, text.length);
     }
-    
+
     /**
      * Returns the XML of this Clause Possible conjunctions are not yet taken
      * into account

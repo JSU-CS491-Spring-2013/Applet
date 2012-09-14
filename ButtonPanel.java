@@ -66,7 +66,7 @@ public class ButtonPanel extends javax.swing.JPanel {
         try {
             setButtonsEnabled(true);
             firstNodeSelection = selected;
-            
+
             // Populate the top box with the Node's information.
             txtFirstChapter.setText(selected.getChap());
             txtFirstVerse.setText(selected.getVrse());
@@ -95,7 +95,7 @@ public class ButtonPanel extends javax.swing.JPanel {
         try {
             setButtonsEnabled(true); // Note that the buttons will not be turned on if this section fails.
             lastNodeSelection = selected;
-            
+
             // Populate the botton box with the Node's information.
             txtLastChapter.setText(selected.getChap());
             txtLastVerse.setText(selected.getVrse());

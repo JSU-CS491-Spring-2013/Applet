@@ -58,7 +58,7 @@ public class NodePanel extends JPanel {
      */
     private void updateComponents() {
         Enumeration n = rootNode.preorderEnumeration(); // Get a list of Nodes.
-        
+
         while (n.hasMoreElements()) {
             XMLTreeNode curr = (XMLTreeNode) n.nextElement();
             Clause temp = curr.getClause();
@@ -93,7 +93,6 @@ public class NodePanel extends JPanel {
     public boolean isChanged() {
         return hasChanged;
     }
-    
     /*
     public static void main(String[] args)
     {

@@ -16,8 +16,6 @@ public class TestApplet extends Applet {
     private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
-    private XMLTreeNode beginSelection; // This will hold the first Node in a selection
-    private XMLTreeNode endSelection;   // This will hold the final Node in a selection
 
     @Override
     public void init() {
@@ -193,7 +191,6 @@ public class TestApplet extends Applet {
      */
     public void performFunction(int co) {
         /*XMLTreeNode xtn = nodePanel.getSelected();
-        
         switch (co) {
         case 0: // remove selected node
         treeModel.remove(xtn);
