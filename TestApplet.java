@@ -1,7 +1,5 @@
 
 import java.applet.Applet;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.JScrollPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -32,7 +30,7 @@ public class TestApplet extends Applet {
             }
         } catch (Exception e) {
         }
-        
+
         this.setLayout(null); // This allows the setBounds method to work.
         treeModel = makeTreeModel();
 
@@ -45,66 +43,6 @@ public class TestApplet extends Applet {
         s.getVerticalScrollBar().setUnitIncrement(64); // Make scrolling faster
         jTreePanel = new JTreePanel(treeModel, nodePanel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
-
-        /*
-         * Okay. Where to begin. nodePanel is the big panel in the middle. It
-         * contains the "rectangles". :((( This is the MouseListener that
-         * listens if the mouse is clicked ANYWHERE in the entire panel. We are
-         * using their old code to determine which node was clicked.
-         */
-        nodePanel.addMouseListener(new MouseListener() {
-
-            /**
-             * This fires when the User clicks anywhere in the middle panel.
-             */
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    if (e.getModifiersEx() == 64) { // This will fire if Shift is held down while clicking.
-                        if (beginSelection != null) {
-                            endSelection = nodePanel.getSelected();
-                            buttonPanel.setLastNodeSelection(endSelection);
-                        } else {
-                            beginSelection = nodePanel.getSelected();
-                            buttonPanel.setFirstNodeSelection(beginSelection);
-                        }
-                        
-                        if (nodePanel.getSelected() == null) { // If node node is clicked (empty space), clear the other node box as well.
-                            buttonPanel.setLastNodeSelection(beginSelection);
-                            endSelection = beginSelection;
-                            buttonPanel.setButtonsEnabled(false);
-                        }
-                    } else { // This will fire if no modifier buttons are held down while clicking.
-                        beginSelection = nodePanel.getSelected();
-
-                        buttonPanel.setFirstNodeSelection(beginSelection);
-                        if (nodePanel.getSelected() == null) { // If node node is clicked (empty space), clear the other node box as well.
-                            buttonPanel.setLastNodeSelection(beginSelection);
-                            endSelection = beginSelection;
-                            buttonPanel.setButtonsEnabled(false);
-                        }
-                    }
-                    
-                    buttonPanel.populateComboBox();
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) { // Not needed.
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) { // Not needed.
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) { // Not needed.
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) { // Not needed.
-            }
-        });
 
         // Add the components to the window.
         add(jTreePanel);
@@ -255,50 +193,50 @@ public class TestApplet extends Applet {
      */
     public void performFunction(int co) {
         /*XMLTreeNode xtn = nodePanel.getSelected();
-
+        
         switch (co) {
-            case 0: // remove selected node
-                treeModel.remove(xtn);
-                break;
-            case 1: // merge the selected node with the node right below it
-                treeModel.merge(xtn, buttonPanel.n.getConj(), buttonPanel.n.getData(), true);
-                break;
-            case 2: // group starting at the selected node
-                XMLTreeNode parent = (XMLTreeNode) xtn.getParent();
-                int value = buttonPanel.getComboBoxSelectedIndex() + 1;
-                XMLTreeNode[] nArray = new XMLTreeNode[value + 1];
-                nArray[0] = xtn;
-                int startIndex = parent.getIndex(xtn);
-                for (int i = 1; i < nArray.length; i++) {
-                    nArray[i] = (XMLTreeNode) treeModel.getChild(parent, startIndex + (i));
-                }
-                XMLTreeNode data = new XMLTreeNode(new Clause(buttonPanel.n.getData(), buttonPanel.n.getConj(), buttonPanel.n.getChap(), buttonPanel.n.getVrse()));
-                treeModel.groupNodes(data, nArray);
-
-                break;
-            case 3: // split the selected node
-                treeModel.split(xtn, buttonPanel.sel.getData(), buttonPanel.n.getData(), buttonPanel.n.getConj());
-                break;
-            case 4: // set the data of the ClausePanel
-                xtn.setChap(buttonPanel.sel.getChap());
-                xtn.setVrse(buttonPanel.sel.getVrse());
-                xtn.setConj(buttonPanel.sel.getConj());
-                xtn.setData(buttonPanel.sel.getData());
-                break;
+        case 0: // remove selected node
+        treeModel.remove(xtn);
+        break;
+        case 1: // merge the selected node with the node right below it
+        treeModel.merge(xtn, buttonPanel.n.getConj(), buttonPanel.n.getData(), true);
+        break;
+        case 2: // group starting at the selected node
+        XMLTreeNode parent = (XMLTreeNode) xtn.getParent();
+        int value = buttonPanel.getComboBoxSelectedIndex() + 1;
+        XMLTreeNode[] nArray = new XMLTreeNode[value + 1];
+        nArray[0] = xtn;
+        int startIndex = parent.getIndex(xtn);
+        for (int i = 1; i < nArray.length; i++) {
+        nArray[i] = (XMLTreeNode) treeModel.getChild(parent, startIndex + (i));
         }
-
+        XMLTreeNode data = new XMLTreeNode(new Clause(buttonPanel.n.getData(), buttonPanel.n.getConj(), buttonPanel.n.getChap(), buttonPanel.n.getVrse()));
+        treeModel.groupNodes(data, nArray);
+        
+        break;
+        case 3: // split the selected node
+        treeModel.split(xtn, buttonPanel.sel.getData(), buttonPanel.n.getData(), buttonPanel.n.getConj());
+        break;
+        case 4: // set the data of the ClausePanel
+        xtn.setChap(buttonPanel.sel.getChap());
+        xtn.setVrse(buttonPanel.sel.getVrse());
+        xtn.setConj(buttonPanel.sel.getConj());
+        xtn.setData(buttonPanel.sel.getData());
+        break;
+        }
+        
         // Refreshes the treeModel
         treeModel.reload();
-
+        
         // Reset the x and y values for the XMLTreeNodes
         treeModel.resetXY();
-
+        
         // Update the nodePanel
         nodePanel.setRoot((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
-
+        
         // Update the jTreePanel
         jTreePanel.setTreeModel(treeModel);
-
+        
         // Validate the GUI components in the JTreePanel
         jTreePanel.validate();*/
     }
