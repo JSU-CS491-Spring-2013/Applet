@@ -21,8 +21,9 @@ public class TestApplet extends Applet {
     private XMLTreeNode beginSelection; // This will hold the first Node in a selection
     private XMLTreeNode endSelection;   // This will hold the final Node in a selection
 
+    @Override
     public void init() {
-        try { // I want to add this code at some point. This will make it look much better, but we'll worry about making it pretty later.
+        try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -41,6 +42,7 @@ public class TestApplet extends Applet {
         nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(251, 0, 798, 700);
+        s.getVerticalScrollBar().setUnitIncrement(64); // Make scrolling faster
         jTreePanel = new JTreePanel(treeModel, nodePanel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
 

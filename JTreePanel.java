@@ -33,7 +33,6 @@ public class JTreePanel extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                System.out.println("You clicked me!");
                 Clause temp = getSelectedNode().getClause();
                 temp.enableTextArea();
                 nodePanel.scrollRectToVisible(temp.getBounds());
