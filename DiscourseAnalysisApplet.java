@@ -16,6 +16,7 @@ public class DiscourseAnalysisApplet extends Applet {
     private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
+    private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
 
     @Override
     public void init() {
@@ -49,6 +50,12 @@ public class DiscourseAnalysisApplet extends Applet {
         add(jTreePanel);
         add(buttonPanel);
         add(s);
+        
+        // If the dialog box is still there, get rid of it.
+        if (myProgress != null) {
+            myProgress.dispose();
+            myProgress = null;
+        }
     }
 
     /**
@@ -76,6 +83,10 @@ public class DiscourseAnalysisApplet extends Applet {
             // Document doc = db.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");	//Put the URL in the parse method call
             javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
             chooseFile.showOpenDialog(null);
+            
+            // Create my JDialog that displays the progress bar.
+            myProgress = new ProgressBarDialogBox(null, false);
+            
             Document doc = db.parse(chooseFile.getSelectedFile());
             doc.getDocumentElement().normalize();
 

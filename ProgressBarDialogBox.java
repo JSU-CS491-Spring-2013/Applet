@@ -15,6 +15,7 @@ public class ProgressBarDialogBox extends javax.swing.JDialog {
     public ProgressBarDialogBox(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setVisible(true);
     }
 
     /**
@@ -28,9 +29,9 @@ public class ProgressBarDialogBox extends javax.swing.JDialog {
 
         proBar = new javax.swing.JProgressBar();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Loading file...");
         setLocationByPlatform(true);
-        setModal(true);
         setResizable(false);
 
         proBar.setFocusable(false);
