@@ -102,7 +102,7 @@ public class DiscourseAnalysisApplet extends Applet {
             
             // Get the time after the calculations are done, and display how many milliseconds the calculations took.
             Calendar after = Calendar.getInstance();
-            System.out.println("Milliseconds to make tree:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+            System.out.println("Milliseconds to make tree using org.w3c.dom parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
             
             return tree;
         } catch (Exception e) {
