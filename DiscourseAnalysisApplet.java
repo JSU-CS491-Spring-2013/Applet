@@ -89,10 +89,11 @@ public class DiscourseAnalysisApplet extends Applet {
             SAXParser saxParser = factory.newSAXParser();
             XMLReader xmlReader = saxParser.getXMLReader();
             xmlReader.setContentHandler(new XMLHandler());
-            xmlReader.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");
             
             // Get the time after the User selects the XML file, but before any calculations start.
             Calendar before = Calendar.getInstance();
+            
+            xmlReader.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");
             
             /*Document doc = db.parse(chooseFile.getSelectedFile());
             doc.getDocumentElement().normalize();
