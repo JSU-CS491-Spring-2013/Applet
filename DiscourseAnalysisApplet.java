@@ -4,7 +4,10 @@ import java.util.Calendar;
 import javax.swing.JScrollPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.*;
+import org.xml.sax.XMLReader;
 
 /**
  * DiscourseAnalysisApplet reads an XML file and builds an XMLTreeModel. The XMLTreeModel is
@@ -51,6 +54,8 @@ public class DiscourseAnalysisApplet extends Applet {
         add(buttonPanel);
         add(s);
     }
+    
+    public static XMLTreeNode root;
 
     /**
      * Returns the panel that contains the tree.
@@ -68,9 +73,10 @@ public class DiscourseAnalysisApplet extends Applet {
      */
     public XMLTreeModel makeTreeModel() {
         try {
+            /*
             // These are the tools we need to build a Document.
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            DocumentBuilder db = dbf.newDocumentBuilder();*/
 
             // Create a Document based on the XML file the User provides and removes "extraneous" information.
             // For example:  <book bookName="Luke 1"> is converted to null, null, "Luke 1"
@@ -78,10 +84,17 @@ public class DiscourseAnalysisApplet extends Applet {
             javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
             chooseFile.showOpenDialog(null);
             
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            SAXParser saxParser = factory.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+            xmlReader.setContentHandler(new XMLHandler());
+            xmlReader.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");
+            
             // Get the time after the User selects the XML file, but before any calculations start.
             Calendar before = Calendar.getInstance();
             
-            Document doc = db.parse(chooseFile.getSelectedFile());
+            /*Document doc = db.parse(chooseFile.getSelectedFile());
             doc.getDocumentElement().normalize();
 
             // Point to the root element of the document portion of the Document.
@@ -95,10 +108,10 @@ public class DiscourseAnalysisApplet extends Applet {
             XMLTreeNode rootX = new XMLTreeNode(new Clause("root", ((Element) root).getAttribute("bookName").toString(), "", ""));
 
             // Add child nodes to the root node.
-            makeNodes(rootX, root);
+            makeNodes(rootX, root);*/
 
             // Make the tree, and send it back.
-            XMLTreeModel tree = new XMLTreeModel(rootX);
+            XMLTreeModel tree = new XMLTreeModel(root);
             
             // Get the time after the calculations are done, and display how many milliseconds the calculations took.
             Calendar after = Calendar.getInstance();

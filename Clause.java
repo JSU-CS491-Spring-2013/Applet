@@ -51,6 +51,15 @@ public class Clause extends JPanel {
         conj = c;
         chap = ch;
         vrse = v;
+        
+        finishStartup();
+    }
+    
+    public Clause() {
+        super();
+    }
+    
+    public final void finishStartup() {
         x = 0;
         y = 0;
         w = 200;
