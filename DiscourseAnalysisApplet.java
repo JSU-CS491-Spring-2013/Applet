@@ -10,9 +10,9 @@ import org.w3c.dom.*;
 import org.xml.sax.XMLReader;
 
 /**
- * DiscourseAnalysisApplet reads an XML file and builds an XMLTreeModel. The XMLTreeModel is
- * used to build both a JTreePanel and a NodePanel. DiscourseAnalysisApplet also builds a,
- * now exterior, ButtonPanel.
+ * DiscourseAnalysisApplet reads an XML file and builds an XMLTreeModel. The
+ * XMLTreeModel is used to build both a JTreePanel and a NodePanel.
+ * DiscourseAnalysisApplet also builds a, now exterior, ButtonPanel.
  */
 public class DiscourseAnalysisApplet extends Applet {
 
@@ -23,6 +23,8 @@ public class DiscourseAnalysisApplet extends Applet {
 
     @Override
     public void init() {
+        Calendar before = Calendar.getInstance();
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -39,10 +41,10 @@ public class DiscourseAnalysisApplet extends Applet {
         // Make the panels.
         buttonPanel = new ButtonPanel(this);
         buttonPanel.setBounds(1050, 0, 256, 700);
-        nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
+        nodePanel = new NodePanel(root, treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(251, 0, 798, 700);
-        
+
         // Make scrolling faster
         s.getVerticalScrollBar().setUnitIncrement(64);
         s.getHorizontalScrollBar().setUnitIncrement(32);
@@ -53,8 +55,10 @@ public class DiscourseAnalysisApplet extends Applet {
         add(jTreePanel);
         add(buttonPanel);
         add(s);
+        
+        Calendar after = Calendar.getInstance();
+        System.out.println("Total Milliseconds:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
     }
-    
     public static XMLTreeNode root;
 
     /**
@@ -74,51 +78,51 @@ public class DiscourseAnalysisApplet extends Applet {
     public XMLTreeModel makeTreeModel() {
         try {
             /*
-            // These are the tools we need to build a Document.
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();*/
+             // These are the tools we need to build a Document.
+             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+             DocumentBuilder db = dbf.newDocumentBuilder();*/
 
             // Create a Document based on the XML file the User provides and removes "extraneous" information.
             // For example:  <book bookName="Luke 1"> is converted to null, null, "Luke 1"
             // Document doc = db.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");	//Put the URL in the parse method call
             javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
             chooseFile.showOpenDialog(null);
-            
+
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             SAXParser saxParser = factory.newSAXParser();
             XMLReader xmlReader = saxParser.getXMLReader();
             xmlReader.setContentHandler(new XMLHandler());
-            
+
             // Get the time after the User selects the XML file, but before any calculations start.
             Calendar before = Calendar.getInstance();
-            
+
             xmlReader.parse(chooseFile.getSelectedFile().toString());
-            
+
             /*Document doc = db.parse(chooseFile.getSelectedFile());
-            doc.getDocumentElement().normalize();
+             doc.getDocumentElement().normalize();
 
-            // Point to the root element of the document portion of the Document.
-            Node root = doc.getDocumentElement();
+             // Point to the root element of the document portion of the Document.
+             Node root = doc.getDocumentElement();
 
-            // Get a list of every <clause> in the Document. These are never used, though.
-            NodeList clause = doc.getElementsByTagName("clause");
-            Node temp = clause.item(0);
+             // Get a list of every <clause> in the Document. These are never used, though.
+             NodeList clause = doc.getElementsByTagName("clause");
+             Node temp = clause.item(0);
 
-            // Create the root node and set it to the bookName tag.
-            XMLTreeNode rootX = new XMLTreeNode(new Clause("root", ((Element) root).getAttribute("bookName").toString(), "", ""));
+             // Create the root node and set it to the bookName tag.
+             XMLTreeNode rootX = new XMLTreeNode(new Clause("root", ((Element) root).getAttribute("bookName").toString(), "", ""));
 
-            // Add child nodes to the root node.
-            makeNodes(rootX, root);*/
+             // Add child nodes to the root node.
+             makeNodes(rootX, root);*/
 
             // Get the time after the calculations are done, and display how many milliseconds the calculations took.
             Calendar after = Calendar.getInstance();
-            
+
             // Make the tree, and send it back.
             XMLTreeModel tree = new XMLTreeModel(root);
-            
+
             System.out.println("Milliseconds to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
-            
+
             return tree;
         } catch (Exception e) {
             e.printStackTrace();
@@ -219,50 +223,50 @@ public class DiscourseAnalysisApplet extends Applet {
      */
     public void performFunction(int co) {
         /*XMLTreeNode xtn = nodePanel.getSelected();
-        switch (co) {
-        case 0: // remove selected node
-        treeModel.remove(xtn);
-        break;
-        case 1: // merge the selected node with the node right below it
-        treeModel.merge(xtn, buttonPanel.n.getConj(), buttonPanel.n.getData(), true);
-        break;
-        case 2: // group starting at the selected node
-        XMLTreeNode parent = (XMLTreeNode) xtn.getParent();
-        int value = buttonPanel.getComboBoxSelectedIndex() + 1;
-        XMLTreeNode[] nArray = new XMLTreeNode[value + 1];
-        nArray[0] = xtn;
-        int startIndex = parent.getIndex(xtn);
-        for (int i = 1; i < nArray.length; i++) {
-        nArray[i] = (XMLTreeNode) treeModel.getChild(parent, startIndex + (i));
-        }
-        XMLTreeNode data = new XMLTreeNode(new Clause(buttonPanel.n.getData(), buttonPanel.n.getConj(), buttonPanel.n.getChap(), buttonPanel.n.getVrse()));
-        treeModel.groupNodes(data, nArray);
+         switch (co) {
+         case 0: // remove selected node
+         treeModel.remove(xtn);
+         break;
+         case 1: // merge the selected node with the node right below it
+         treeModel.merge(xtn, buttonPanel.n.getConj(), buttonPanel.n.getData(), true);
+         break;
+         case 2: // group starting at the selected node
+         XMLTreeNode parent = (XMLTreeNode) xtn.getParent();
+         int value = buttonPanel.getComboBoxSelectedIndex() + 1;
+         XMLTreeNode[] nArray = new XMLTreeNode[value + 1];
+         nArray[0] = xtn;
+         int startIndex = parent.getIndex(xtn);
+         for (int i = 1; i < nArray.length; i++) {
+         nArray[i] = (XMLTreeNode) treeModel.getChild(parent, startIndex + (i));
+         }
+         XMLTreeNode data = new XMLTreeNode(new Clause(buttonPanel.n.getData(), buttonPanel.n.getConj(), buttonPanel.n.getChap(), buttonPanel.n.getVrse()));
+         treeModel.groupNodes(data, nArray);
         
-        break;
-        case 3: // split the selected node
-        treeModel.split(xtn, buttonPanel.sel.getData(), buttonPanel.n.getData(), buttonPanel.n.getConj());
-        break;
-        case 4: // set the data of the ClausePanel
-        xtn.setChap(buttonPanel.sel.getChap());
-        xtn.setVrse(buttonPanel.sel.getVrse());
-        xtn.setConj(buttonPanel.sel.getConj());
-        xtn.setData(buttonPanel.sel.getData());
-        break;
-        }
+         break;
+         case 3: // split the selected node
+         treeModel.split(xtn, buttonPanel.sel.getData(), buttonPanel.n.getData(), buttonPanel.n.getConj());
+         break;
+         case 4: // set the data of the ClausePanel
+         xtn.setChap(buttonPanel.sel.getChap());
+         xtn.setVrse(buttonPanel.sel.getVrse());
+         xtn.setConj(buttonPanel.sel.getConj());
+         xtn.setData(buttonPanel.sel.getData());
+         break;
+         }
         
-        // Refreshes the treeModel
-        treeModel.reload();
+         // Refreshes the treeModel
+         treeModel.reload();
         
-        // Reset the x and y values for the XMLTreeNodes
-        treeModel.resetXY();
+         // Reset the x and y values for the XMLTreeNodes
+         treeModel.resetXY();
         
-        // Update the nodePanel
-        nodePanel.setRoot((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
+         // Update the nodePanel
+         nodePanel.setRoot((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
         
-        // Update the jTreePanel
-        jTreePanel.setTreeModel(treeModel);
+         // Update the jTreePanel
+         jTreePanel.setTreeModel(treeModel);
         
-        // Validate the GUI components in the JTreePanel
-        jTreePanel.validate();*/
+         // Validate the GUI components in the JTreePanel
+         jTreePanel.validate();*/
     }
 }
