@@ -1,5 +1,6 @@
 
 import java.applet.Applet;
+import java.util.Calendar;
 import javax.swing.JScrollPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -76,6 +77,10 @@ public class DiscourseAnalysisApplet extends Applet {
             // Document doc = db.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");	//Put the URL in the parse method call
             javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
             chooseFile.showOpenDialog(null);
+            
+            // Get the time after the User selects the XML file, but before any calculations start.
+            Calendar before = Calendar.getInstance();
+            
             Document doc = db.parse(chooseFile.getSelectedFile());
             doc.getDocumentElement().normalize();
 
@@ -94,6 +99,11 @@ public class DiscourseAnalysisApplet extends Applet {
 
             // Make the tree, and send it back.
             XMLTreeModel tree = new XMLTreeModel(rootX);
+            
+            // Get the time after the calculations are done, and display how many milliseconds the calculations took.
+            Calendar after = Calendar.getInstance();
+            System.out.println("Milliseconds to make tree:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+            
             return tree;
         } catch (Exception e) {
             e.printStackTrace();
