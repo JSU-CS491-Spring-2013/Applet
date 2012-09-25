@@ -93,7 +93,7 @@ public class DiscourseAnalysisApplet extends Applet {
             // Get the time after the User selects the XML file, but before any calculations start.
             Calendar before = Calendar.getInstance();
             
-            xmlReader.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");
+            xmlReader.parse(chooseFile.getSelectedFile().toString());
             
             /*Document doc = db.parse(chooseFile.getSelectedFile());
             doc.getDocumentElement().normalize();
@@ -111,11 +111,12 @@ public class DiscourseAnalysisApplet extends Applet {
             // Add child nodes to the root node.
             makeNodes(rootX, root);*/
 
+            // Get the time after the calculations are done, and display how many milliseconds the calculations took.
+            Calendar after = Calendar.getInstance();
+            
             // Make the tree, and send it back.
             XMLTreeModel tree = new XMLTreeModel(root);
             
-            // Get the time after the calculations are done, and display how many milliseconds the calculations took.
-            Calendar after = Calendar.getInstance();
             System.out.println("Milliseconds to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
             
             return tree;
