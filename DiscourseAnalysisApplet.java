@@ -21,10 +21,11 @@ public class DiscourseAnalysisApplet extends Applet {
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
 
+    // DEBUG INFORMATION - DELETE LATER
+    Calendar before;
+    
     @Override
     public void init() {
-        Calendar before = Calendar.getInstance();
-
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -56,8 +57,9 @@ public class DiscourseAnalysisApplet extends Applet {
         add(buttonPanel);
         add(s);
         
+        // DEBUG INFORMATION - DELETE LATER
         Calendar after = Calendar.getInstance();
-        System.out.println("Total Milliseconds:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+        System.out.println("Total number of milliseconds since XML file was given:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
     }
     public static XMLTreeNode root;
 
@@ -94,8 +96,8 @@ public class DiscourseAnalysisApplet extends Applet {
             XMLReader xmlReader = saxParser.getXMLReader();
             xmlReader.setContentHandler(new XMLHandler());
 
-            // Get the time after the User selects the XML file, but before any calculations start.
-            Calendar before = Calendar.getInstance();
+            // DEBUG INFORMATION - DELETE LATER
+            before = Calendar.getInstance();
 
             xmlReader.parse(chooseFile.getSelectedFile().toString());
 
@@ -115,13 +117,14 @@ public class DiscourseAnalysisApplet extends Applet {
              // Add child nodes to the root node.
              makeNodes(rootX, root);*/
 
-            // Get the time after the calculations are done, and display how many milliseconds the calculations took.
+            // DEBUG INFORMATION - DELETE LATER
             Calendar after = Calendar.getInstance();
 
             // Make the tree, and send it back.
             XMLTreeModel tree = new XMLTreeModel(root);
 
-            System.out.println("Milliseconds to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+            // DEBUG INFORMATION - DELETE LATER
+            System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
 
             return tree;
         } catch (Exception e) {
