@@ -79,17 +79,11 @@ public class DiscourseAnalysisApplet extends Applet {
      */
     public XMLTreeModel makeTreeModel() {
         try {
-            /*
-             // These are the tools we need to build a Document.
-             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-             DocumentBuilder db = dbf.newDocumentBuilder();*/
-
-            // Create a Document based on the XML file the User provides and removes "extraneous" information.
-            // For example:  <book bookName="Luke 1"> is converted to null, null, "Luke 1"
-            // Document doc = db.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");	//Put the URL in the parse method call
+            // Give the User the ability to choose which XML file he/she wants to use.
             javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
             chooseFile.showOpenDialog(null);
 
+            // Create a SAX parser, and parse the XML file the User provided.
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             SAXParser saxParser = factory.newSAXParser();
@@ -99,23 +93,8 @@ public class DiscourseAnalysisApplet extends Applet {
             // DEBUG INFORMATION - DELETE LATER
             before = Calendar.getInstance();
 
+            // After this method finishes, the static field, root, will contain the root node of the tree.
             xmlReader.parse(chooseFile.getSelectedFile().toString());
-
-            /*Document doc = db.parse(chooseFile.getSelectedFile());
-             doc.getDocumentElement().normalize();
-
-             // Point to the root element of the document portion of the Document.
-             Node root = doc.getDocumentElement();
-
-             // Get a list of every <clause> in the Document. These are never used, though.
-             NodeList clause = doc.getElementsByTagName("clause");
-             Node temp = clause.item(0);
-
-             // Create the root node and set it to the bookName tag.
-             XMLTreeNode rootX = new XMLTreeNode(new Clause("root", ((Element) root).getAttribute("bookName").toString(), "", ""));
-
-             // Add child nodes to the root node.
-             makeNodes(rootX, root);*/
 
             // DEBUG INFORMATION - DELETE LATER
             Calendar after = Calendar.getInstance();
