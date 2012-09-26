@@ -18,6 +18,7 @@ public class DiscourseAnalysisApplet extends Applet {
     private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
+    private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
 
     // DEBUG INFORMATION - DELETE LATER
     Calendar before;
@@ -58,6 +59,12 @@ public class DiscourseAnalysisApplet extends Applet {
         // DEBUG INFORMATION - DELETE LATER
         Calendar after = Calendar.getInstance();
         System.out.println("Total number of milliseconds since XML file was given:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+
+		// If the dialog box is still there, get rid of it.
+        if (myProgress != null) {
+            myProgress.dispose();
+            myProgress = null;
+        }
     }
     public static XMLTreeNode root;
 
@@ -80,6 +87,9 @@ public class DiscourseAnalysisApplet extends Applet {
             // Give the User the ability to choose which XML file he/she wants to use.
             javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
             chooseFile.showOpenDialog(null);
+            
+            // Create my JDialog that displays the progress bar.
+            myProgress = new ProgressBarDialogBox(null, false);
 
             // Create a SAX parser, and parse the XML file the User provided.
             SAXParserFactory factory = SAXParserFactory.newInstance();
