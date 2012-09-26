@@ -2,14 +2,15 @@
 import java.applet.Applet;
 import java.util.Calendar;
 import javax.swing.JScrollPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.*;
+import org.xml.sax.XMLReader;
 
 /**
- * DiscourseAnalysisApplet reads an XML file and builds an XMLTreeModel. The XMLTreeModel is
- * used to build both a JTreePanel and a NodePanel. DiscourseAnalysisApplet also builds a,
- * now exterior, ButtonPanel.
+ * DiscourseAnalysisApplet reads an XML file and builds an XMLTreeModel. The
+ * XMLTreeModel is used to build both a JTreePanel and a NodePanel.
+ * DiscourseAnalysisApplet also builds a, now exterior, ButtonPanel.
  */
 public class DiscourseAnalysisApplet extends Applet {
 
@@ -18,6 +19,9 @@ public class DiscourseAnalysisApplet extends Applet {
     private XMLTreeModel treeModel;     // the tree that contains all data?
     private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
 
+    // DEBUG INFORMATION - DELETE LATER
+    Calendar before;
+    
     @Override
     public void init() {
         try {
@@ -36,10 +40,10 @@ public class DiscourseAnalysisApplet extends Applet {
         // Make the panels.
         buttonPanel = new ButtonPanel(this);
         buttonPanel.setBounds(1050, 0, 256, 700);
-        nodePanel = new NodePanel((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
+        nodePanel = new NodePanel(root, treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(251, 0, 798, 700);
-        
+
         // Make scrolling faster
         s.getVerticalScrollBar().setUnitIncrement(64);
         s.getHorizontalScrollBar().setUnitIncrement(32);
@@ -50,7 +54,12 @@ public class DiscourseAnalysisApplet extends Applet {
         add(jTreePanel);
         add(buttonPanel);
         add(s);
+        
+        // DEBUG INFORMATION - DELETE LATER
+        Calendar after = Calendar.getInstance();
+        System.out.println("Total number of milliseconds since XML file was given:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
     }
+    public static XMLTreeNode root;
 
     /**
      * Returns the panel that contains the tree.
@@ -68,42 +77,32 @@ public class DiscourseAnalysisApplet extends Applet {
      */
     public XMLTreeModel makeTreeModel() {
         try {
-            // These are the tools we need to build a Document.
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-
-            // Create a Document based on the XML file the User provides and removes "extraneous" information.
-            // For example:  <book bookName="Luke 1"> is converted to null, null, "Luke 1"
-            // Document doc = db.parse("/home/tyler/NetBeansProjects/CS 491 Applet/Luke 1.xml");	//Put the URL in the parse method call
+            // Give the User the ability to choose which XML file he/she wants to use.
             javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
             chooseFile.showOpenDialog(null);
-            
-            // Get the time after the User selects the XML file, but before any calculations start.
-            Calendar before = Calendar.getInstance();
-            
-            Document doc = db.parse(chooseFile.getSelectedFile());
-            doc.getDocumentElement().normalize();
 
-            // Point to the root element of the document portion of the Document.
-            Node root = doc.getDocumentElement();
+            // Create a SAX parser, and parse the XML file the User provided.
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            SAXParser saxParser = factory.newSAXParser();
+            XMLReader xmlReader = saxParser.getXMLReader();
+            xmlReader.setContentHandler(new XMLHandler());
 
-            // Get a list of every <clause> in the Document. These are never used, though.
-            NodeList clause = doc.getElementsByTagName("clause");
-            Node temp = clause.item(0);
+            // DEBUG INFORMATION - DELETE LATER
+            before = Calendar.getInstance();
 
-            // Create the root node and set it to the bookName tag.
-            XMLTreeNode rootX = new XMLTreeNode(new Clause("root", ((Element) root).getAttribute("bookName").toString(), "", ""));
+            // After this method finishes, the static field, root, will contain the root node of the tree.
+            xmlReader.parse(chooseFile.getSelectedFile().toString());
 
-            // Add child nodes to the root node.
-            makeNodes(rootX, root);
+            // DEBUG INFORMATION - DELETE LATER
+            Calendar after = Calendar.getInstance();
 
             // Make the tree, and send it back.
-            XMLTreeModel tree = new XMLTreeModel(rootX);
-            
-            // Get the time after the calculations are done, and display how many milliseconds the calculations took.
-            Calendar after = Calendar.getInstance();
-            System.out.println("Milliseconds to make tree using org.w3c.dom parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
-            
+            XMLTreeModel tree = new XMLTreeModel(root);
+
+            // DEBUG INFORMATION - DELETE LATER
+            System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+
             return tree;
         } catch (Exception e) {
             e.printStackTrace();
