@@ -53,7 +53,42 @@ public class NodePanel extends JPanel {
         setPreferredSize(new Dimension(x, y));
         this.repaint();
     }
-
+    
+    /**
+     * Draw the lines.
+     * @param g 
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        Enumeration n = rootNode.preorderEnumeration(); // Get a list of Nodes.
+        while (n.hasMoreElements()) {
+            XMLTreeNode curr = (XMLTreeNode) n.nextElement();
+            curr.getX();
+            curr.getY();
+            
+            // If the node has children
+            if (curr.getDepth() > 0) {
+                g.drawLine(curr.getX() + 260, curr.getY() + 48, curr.getX() + 300, curr.getY() + 48);
+                
+                // Get the first and last children.
+                XMLTreeNode first = (XMLTreeNode) curr.getFirstChild();
+                XMLTreeNode last = (XMLTreeNode) curr.getLastChild();
+                
+                // If they aren't the same thing, draw a line between them.
+                if (first != last) {
+                    g.drawLine(first.getX() - 40, first.getY() + 48, last.getX() - 40, last.getY() + 48);
+                }
+            }
+   
+            // If the node is a child
+            if (!curr.isRoot()) {
+                g.drawLine(curr.getX(), curr.getY() + 48, curr.getX() - 40, curr.getY() + 48);
+            }
+        }
+    }
+    
     /**
      * This adds the Clauses to the NodePanel (the one in the middle).
      */
