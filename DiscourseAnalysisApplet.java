@@ -2,8 +2,6 @@
 import java.applet.Applet;
 import java.util.Calendar;
 import javax.swing.JScrollPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.*;
