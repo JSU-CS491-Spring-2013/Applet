@@ -104,7 +104,7 @@ public class Clause extends JPanel {
             public void mousePressed(MouseEvent e) {
                 enableTextArea();
                 
-                DiscourseAnalysisApplet.buttonPanel.setBounds(x + 260, y, 249, 135);
+                DiscourseAnalysisApplet.buttonPanel.setBounds(x + 260, y, 249, 150);
                 DiscourseAnalysisApplet.buttonPanel.setEnabled(true);
                 DiscourseAnalysisApplet.buttonPanel.setVisible(true);
             }

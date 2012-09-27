@@ -40,7 +40,7 @@ public class DiscourseAnalysisApplet extends Applet {
 
         // Make the panels.
         buttonPanel = new ButtonPanel();
-        buttonPanel.setBounds(10, 10, 249, 135);
+        buttonPanel.setBounds(10, 10, 249, 150);
         buttonPanel.setEnabled(false);
         buttonPanel.setVisible(false);
         nodePanel = new NodePanel(root, treeModel.getXMax(), treeModel.getYMax());
