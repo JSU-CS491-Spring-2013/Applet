@@ -17,7 +17,7 @@ public class DiscourseAnalysisApplet extends Applet {
     private JTreePanel jTreePanel;              // the panel on the left that does....what does that thing do?
     private ButtonPanel buttonPanel;            // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;             // the tree that contains all data?
-    private NodePanel nodePanel;                // the main panel (in the middle) that contains the tree
+    public static NodePanel nodePanel;          // the main panel (in the middle) that contains the tree
     private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
 
     // DEBUG INFORMATION - DELETE LATER
@@ -39,7 +39,7 @@ public class DiscourseAnalysisApplet extends Applet {
         treeModel = makeTreeModel();
 
         // Make the panels.
-        buttonPanel = new ButtonPanel(this);
+        buttonPanel = new ButtonPanel();
         buttonPanel.setBounds(1050, 0, 256, 700);
         nodePanel = new NodePanel(root, treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);

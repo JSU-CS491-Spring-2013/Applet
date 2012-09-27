@@ -6,7 +6,6 @@
  */
 public class ButtonPanel extends javax.swing.JPanel {
 
-    private DiscourseAnalysisApplet myParent;                // This is the instance of DiscourseAnalysisApplet that created this ButtonPanel. Once we split that huge function, we should make those new methods static.
     private XMLTreeNode firstNodeSelection;     // Holds the Node used in the firstNodeSelection box
     private XMLTreeNode lastNodeSelection;      // Holds the Node used in the lastNodeSelection box
 
@@ -27,12 +26,11 @@ public class ButtonPanel extends javax.swing.JPanel {
     /**
      * Creates new form ButtonPanel
      */
-    public ButtonPanel(DiscourseAnalysisApplet myParent) {
+    public ButtonPanel() {
         initComponents();
 
         Clause temp = null;
         setButtonsEnabled(false);
-        this.myParent = myParent;
     }
 
     /**
@@ -45,8 +43,8 @@ public class ButtonPanel extends javax.swing.JPanel {
         comComboBox.removeAllItems(); // I added this. The previous would just keep adding them for forever.
 
         try {
-            XMLTreeNode parent = (XMLTreeNode) myParent.getNodePanel().getSelected().getParent(); // Gets the parent. You read from left to right just like normal. Nodes to the right are child nodes.
-            int currentI = parent.getIndex(myParent.getNodePanel().getSelected()) + 1;
+            XMLTreeNode parent = (XMLTreeNode) DiscourseAnalysisApplet.nodePanel.getSelected().getParent(); // Gets the parent. You read from left to right just like normal. Nodes to the right are child nodes.
+            int currentI = parent.getIndex(DiscourseAnalysisApplet.nodePanel.getSelected()) + 1;
             int totalC = parent.getChildCount();
             for (int i = 0; i < totalC - currentI; i++) {
                 comComboBox.addItem(new Integer(i + 1));
