@@ -86,8 +86,8 @@ public class Clause extends JPanel {
         // The text area should start disabled.
         myTextArea.setEnabled(false);
 
-        // Add click to enable on the text areas.
-        myTextArea.addMouseListener(new MouseListener() {
+        // Create the MouseListener that will be used to listen for User Input.
+        MouseListener ml = new MouseListener() {
 
             /**
              * Not needed, but must be present.
@@ -124,7 +124,11 @@ public class Clause extends JPanel {
             @Override
             public void mouseExited(MouseEvent e) {
             }
-        });
+        };
+        
+        // Add click to enable on the text area and panel.
+        addMouseListener(ml);
+        myTextArea.addMouseListener(ml);
 
         // When focus is lost, disable the text area.
         myTextArea.addFocusListener(new FocusListener() {
