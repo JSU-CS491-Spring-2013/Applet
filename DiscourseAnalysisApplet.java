@@ -25,7 +25,7 @@ public class DiscourseAnalysisApplet extends Applet {
     
     @Override
     public void init() {
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -33,7 +33,7 @@ public class DiscourseAnalysisApplet extends Applet {
                 }
             }
         } catch (Exception e) {
-        }
+        }*/
 
         this.setLayout(null); // This allows the setBounds method to work.
         treeModel = makeTreeModel();

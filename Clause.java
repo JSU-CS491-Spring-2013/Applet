@@ -23,7 +23,6 @@ public class Clause extends JPanel {
     private int y;                      // The starting y-value for drawing
     private int h;                      // The height needed to display the data
     private int w;                      // The width needed to display the data
-    private int mid;                    // The mid-point of the Clause?
     private String[] text;              // The word-wrapped version of the data
     private Rectangle big;              // The outline for Node data?
     private Rectangle small;            // The outline for chapter/verse?
@@ -63,9 +62,6 @@ public class Clause extends JPanel {
         x = 0;
         y = 0;
         w = 200;
-        setUpArray();
-        calculateMidPoint();
-        // makeBoxes();
 
         if (chap.isEmpty() || vrse.isEmpty()) {
             setBorder(javax.swing.BorderFactory.createTitledBorder(conj));
@@ -134,70 +130,6 @@ public class Clause extends JPanel {
      */
     public void updateClauseBounds() {
         setBounds(x, y, 260, 95);
-    }
-
-    /**
-     * Sets the dimension for big, small, and sets the point for the conjunction
-     * /
-    private void makeBoxes() {
-    // <-- x, y, h, w are used to make a Rectangle for the data, can use the check bounds method in GUI
-    big = new Rectangle(x, y, w, h);
-    
-    //small box is for chapter verse
-    small = new Rectangle(x, y - 12, 50, 12);
-    
-    //ConjPoint is the start point for displaying the Conjuntion
-    conjPoint = new Point(5 + (x + (w + x)) / 2, y - 5);
-    }*/
-    /**
-     * Calculates the mid point of the data box
-     */
-    private void calculateMidPoint() {
-        mid = (y + (h + y)) / 2;
-    }
-
-    /**
-     * Sets the word wrap String array. Each index of the array are a separate
-     * line.
-     */
-    private void setUpArray() {
-        String[] temp = new String[data.length() / CHAR_NUM + 2];
-        for (int i = 0; i < temp.length; i++) {
-            temp[i] = "";
-        }
-
-        if (data.length() > CHAR_NUM) {
-            char[] q = data.toCharArray();
-            int startSub = 0;
-            int endSub = 0;
-            for (int i = 0; i < temp.length; i++) {
-                for (int j = endSub + CHAR_NUM; j >= 0; j--) {
-                    try {
-                        if (q[j] == ' ' && j > endSub) {
-                            endSub = j + 1;
-                        }
-                    } catch (ArrayIndexOutOfBoundsException ohNo) {
-                        endSub = q.length;
-                    }
-                }
-
-                temp[i] = data.substring(startSub, endSub);
-                startSub = endSub;
-            }
-        } else {
-            temp[0] = data;
-            h = h + 9;
-        }
-        //Increment
-        int total = 0;
-        for (int i = 0; i < temp.length; i++) {
-            if (!temp[i].equals("")) {
-                h += 18;
-                total++;
-            }
-        }
-        text = new String[total];
-        System.arraycopy(temp, 0, text, 0, text.length);
     }
 
     /**
@@ -274,13 +206,6 @@ public class Clause extends JPanel {
     }
 
     /**
-     * @return int mid value of Clause
-     */
-    public int getMid() {
-        return mid;
-    }
-
-    /**
      * @return String[] word wrap version of data(each line is an index of the
      * array is a single line)
      */
@@ -307,8 +232,6 @@ public class Clause extends JPanel {
     public void setData(String d) {
         data = d;
         h = 0;
-        setUpArray();
-        //makeBoxes();
     }
 
     /**
@@ -346,9 +269,6 @@ public class Clause extends JPanel {
      */
     public void setY(int i) {
         y = i;
-        calculateMidPoint();
-        //makeBoxes();
-        //updateClauseBounds();
     }
     //For testing this class
 	/*
