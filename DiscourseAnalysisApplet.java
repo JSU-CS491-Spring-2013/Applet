@@ -14,10 +14,10 @@ import org.xml.sax.XMLReader;
  */
 public class DiscourseAnalysisApplet extends Applet {
 
-    private JTreePanel jTreePanel;      // the panel on the left that does....what does that thing do?
-    private ButtonPanel buttonPanel;    // the panel on the right that contains the buttons
-    private XMLTreeModel treeModel;     // the tree that contains all data?
-    private NodePanel nodePanel;        // the main panel (in the middle) that contains the tree
+    private JTreePanel jTreePanel;              // the panel on the left that does....what does that thing do?
+    private ButtonPanel buttonPanel;            // the panel on the right that contains the buttons
+    private XMLTreeModel treeModel;             // the tree that contains all data?
+    private NodePanel nodePanel;                // the main panel (in the middle) that contains the tree
     private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
 
     // DEBUG INFORMATION - DELETE LATER
@@ -43,7 +43,7 @@ public class DiscourseAnalysisApplet extends Applet {
         buttonPanel.setBounds(1050, 0, 256, 700);
         nodePanel = new NodePanel(root, treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
-        s.setBounds(251, 0, 798, 700);
+        s.setBounds(250, 0, 1000, 700);
 
         // Make scrolling faster
         s.getVerticalScrollBar().setUnitIncrement(64);
@@ -53,14 +53,14 @@ public class DiscourseAnalysisApplet extends Applet {
 
         // Add the components to the window.
         add(jTreePanel);
-        add(buttonPanel);
+        //add(buttonPanel);
         add(s);
         
         // DEBUG INFORMATION - DELETE LATER
         Calendar after = Calendar.getInstance();
         System.out.println("Total number of milliseconds since XML file was given:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
 
-		// If the dialog box is still there, get rid of it.
+        // If the dialog box is still there, get rid of it.
         if (myProgress != null) {
             myProgress.dispose();
             myProgress = null;

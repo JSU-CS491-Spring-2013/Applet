@@ -21,6 +21,7 @@ public class Clause extends JPanel {
     private int y;                      // The starting y-value for drawing
     private JTextArea myTextArea;       // This is where I will show my data.
     private JScrollPane myScrollPane;   // This allows the User to scroll through the text area.
+    private NodePanel myNodePanel;      // This is the NodePanel this Clause is on.
 
     /**
      * This method is called whenever this Clause's text area needs to accept User input.

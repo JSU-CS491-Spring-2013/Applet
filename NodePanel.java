@@ -25,7 +25,8 @@ public class NodePanel extends JPanel {
     private final int stubLength = 10; //Stub
     private final int nodeWidth = 200; //Node width
     private boolean hasChanged;
-
+    private boolean buttonPanelShown;   // hold whether a ButtonPanel is active on the panel
+    
     /**
     Contructor Creates the NodePanel
     @param XMLTreeNode ro	sets the rootNode
@@ -70,6 +71,14 @@ public class NodePanel extends JPanel {
         addMouseListener(ml);
     }
 
+    /**
+     * This returns the status of whether a ButtonPanel is being shown on the NodePanel.
+     * @return true if there is an active ButtonPanel, false otherwise
+     */
+    public boolean isButtonPanelShown() {
+        return buttonPanelShown;
+    }
+    
     /**
     sets the rootNode for this panel
     @param XMLTreeNode rootNode
