@@ -56,64 +56,6 @@ public class ButtonPanel extends javax.swing.JPanel {
     }
 
     /**
-     * Logically sets the first Node selected, and displays its information in
-     * the top box.
-     *
-     * @param selected the Node to be selected
-     */
-    public void setFirstNodeSelection(XMLTreeNode selected) {
-        // Try to set the information based on the Node.
-        try {
-            setButtonsEnabled(true);
-            firstNodeSelection = selected;
-
-            // Populate the top box with the Node's information.
-            txtFirstChapter.setText(selected.getChap());
-            txtFirstVerse.setText(selected.getVrse());
-            txtFirstConjunction.setText(selected.getConj());
-            txtFirstText.setText(selected.getData());
-        } catch (NullPointerException edit) { // Insert blanks if it fails.
-            txtFirstChapter.setText("");
-            txtFirstVerse.setText("");
-            txtFirstConjunction.setText("");
-            txtFirstText.setText("");
-            txtLastChapter.setText("");
-            txtLastVerse.setText("");
-            txtLastConjunction.setText("");
-            txtLastText.setText("");
-        }
-    }
-
-    /**
-     * Logically sets the last Node selected, and displays its information in
-     * the bottom box.
-     *
-     * @param selected the Node to be selected
-     */
-    public void setLastNodeSelection(XMLTreeNode selected) {
-        // Try to set the information based on the Node.
-        try {
-            setButtonsEnabled(true); // Note that the buttons will not be turned on if this section fails.
-            lastNodeSelection = selected;
-
-            // Populate the botton box with the Node's information.
-            txtLastChapter.setText(selected.getChap());
-            txtLastVerse.setText(selected.getVrse());
-            txtLastConjunction.setText(selected.getConj());
-            txtLastText.setText(selected.getData());
-        } catch (NullPointerException edit) { // Insert blanks if it fails.
-            txtFirstChapter.setText("");
-            txtFirstVerse.setText("");
-            txtFirstConjunction.setText("");
-            txtFirstText.setText("");
-            txtLastChapter.setText("");
-            txtLastVerse.setText("");
-            txtLastConjunction.setText("");
-            txtLastText.setText("");
-        }
-    }
-
-    /**
      * Returns the Node represented in the top box.
      *
      * @return the Node in the top box
