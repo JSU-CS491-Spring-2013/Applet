@@ -119,6 +119,11 @@ public class ButtonPanel extends javax.swing.JPanel {
 
         cmdCancel.setText("Cancel");
         cmdCancel.setNextFocusableComponent(cmdTreeModel);
+        cmdCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdCancelActionPerformed(evt);
+            }
+        });
 
         cmdTreeModel.setText("Tree Model");
         cmdTreeModel.setNextFocusableComponent(cmdSplit);
@@ -176,6 +181,12 @@ public class ButtonPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
+        setEnabled(false);
+        setVisible(false);
+    }//GEN-LAST:event_cmdCancelActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdCancel;
     private javax.swing.JButton cmdEdit;

@@ -15,7 +15,7 @@ import org.xml.sax.XMLReader;
 public class DiscourseAnalysisApplet extends Applet {
 
     private JTreePanel jTreePanel;              // the panel on the left that does....what does that thing do?
-    private ButtonPanel buttonPanel;            // the panel on the right that contains the buttons
+    public static ButtonPanel buttonPanel;            // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;             // the tree that contains all data?
     public static NodePanel nodePanel;          // the main panel (in the middle) that contains the tree
     private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
@@ -40,7 +40,9 @@ public class DiscourseAnalysisApplet extends Applet {
 
         // Make the panels.
         buttonPanel = new ButtonPanel();
-        buttonPanel.setBounds(1050, 0, 256, 700);
+        buttonPanel.setBounds(10, 10, 249, 135);
+        buttonPanel.setEnabled(false);
+        buttonPanel.setVisible(false);
         nodePanel = new NodePanel(root, treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
         s.setBounds(250, 0, 1000, 700);
@@ -51,6 +53,8 @@ public class DiscourseAnalysisApplet extends Applet {
         jTreePanel = new JTreePanel(treeModel, nodePanel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
 
+        nodePanel.add(buttonPanel);
+        
         // Add the components to the window.
         add(jTreePanel);
         //add(buttonPanel);
