@@ -21,7 +21,7 @@ public class XMLHandler extends DefaultHandler {
         text = "";
 
         // Make the root node, and add it to the stack.
-        Clause temp = new Clause("", "Luke", "", "");
+        Clause temp = new Clause("root", "Luke", "", "");
         root = new XMLTreeNode(temp);
         stack.add(root);
     }

@@ -1,7 +1,5 @@
 
 import java.awt.GridLayout;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
@@ -11,7 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 /**
- * A Clause object is composed of text, conjunction, chapter, and verse.
+ * A Clause object is composed of text, conjunction, chapter, and verse. It is also a JPanel with a JTextArea in it.
  */
 public class Clause extends JPanel {
 
@@ -21,16 +19,12 @@ public class Clause extends JPanel {
     private String vrse;                // The verse number of the Clause
     private int x;                      // The starting x-value for drawing
     private int y;                      // The starting y-value for drawing
-    private int h;                      // The height needed to display the data
-    private int w;                      // The width needed to display the data
-    private String[] text;              // The word-wrapped version of the data
-    private Rectangle big;              // The outline for Node data?
-    private Rectangle small;            // The outline for chapter/verse?
-    private Point conjPoint;            // ?
-    private final int CHAR_NUM = 36;    // Is this the maximum characters you want in a line?
     private JTextArea myTextArea;       // This is where I will show my data.
     private JScrollPane myScrollPane;   // This allows the User to scroll through the text area.
 
+    /**
+     * This method is called whenever this Clause's text area needs to accept User input.
+     */
     public void enableTextArea() {
         myTextArea.setEnabled(true);
         myTextArea.requestFocus();
@@ -50,19 +44,25 @@ public class Clause extends JPanel {
         conj = c;
         chap = ch;
         vrse = v;
-        
+
         finishStartup();
     }
-    
+
+    /**
+     * An empty constructor. This is used by XMLHandler to make a Clause even when it hasn't finished collecting all of the data.
+     */
     public Clause() {
         super();
     }
-    
+
+    /**
+     * This is the method that finishes the process of creating a Clause. This should only be called once all data has been filled in.
+     */
     public final void finishStartup() {
         x = 0;
         y = 0;
-        w = 200;
 
+        // Set the title of the JPanel
         if (chap.isEmpty() || vrse.isEmpty()) {
             setBorder(javax.swing.BorderFactory.createTitledBorder(conj));
         } else {
@@ -89,23 +89,38 @@ public class Clause extends JPanel {
         // Add click to enable on the text areas.
         myTextArea.addMouseListener(new MouseListener() {
 
+            /**
+             * Not needed, but must be present.
+             */
             @Override
             public void mouseClicked(MouseEvent e) {
             }
 
+            /**
+             * When the text area is "pressed", enable it and give it focus.
+             */
             @Override
             public void mousePressed(MouseEvent e) {
                 enableTextArea();
             }
 
+            /**
+             * Not needed, but must be present.
+             */
             @Override
             public void mouseReleased(MouseEvent e) {
             }
 
+            /**
+             * Not needed, but must be present.
+             */
             @Override
             public void mouseEntered(MouseEvent e) {
             }
 
+            /**
+             * Not needed, but must be present.
+             */
             @Override
             public void mouseExited(MouseEvent e) {
             }
@@ -114,10 +129,16 @@ public class Clause extends JPanel {
         // When focus is lost, disable the text area.
         myTextArea.addFocusListener(new FocusListener() {
 
+            /**
+             * Not needed, but must be present.
+             */
             @Override
             public void focusGained(FocusEvent e) {
             }
 
+            /**
+             * When focus is lost, disable the text area.
+             */
             @Override
             public void focusLost(FocusEvent e) {
                 myTextArea.setEnabled(false);
@@ -133,10 +154,10 @@ public class Clause extends JPanel {
     }
 
     /**
-     * Returns the XML of this Clause Possible conjunctions are not yet taken
-     * into account
+     * Returns the XML of this Clause. Possible conjunctions are not yet taken
+     * into account.
      *
-     * @return result	String that has XML tags and clause data
+     * @return result a String that has XML tags and clause data
      */
     public String toXML() {
         String result = "";
@@ -144,6 +165,10 @@ public class Clause extends JPanel {
         return result;
     }
 
+    /**
+     * This returns the string representation of the Clause.
+     * @return a String representing the Clause
+     */
     @Override
     public String toString() {
         if (data.equals("root")) {
@@ -155,7 +180,6 @@ public class Clause extends JPanel {
         }
     }
 
-    //Getters
     /**
      * @return String text of the Clause
      */
@@ -187,6 +211,7 @@ public class Clause extends JPanel {
     /**
      * @return int x value of Clause
      */
+    @Override
     public int getX() {
         return x;
     }
@@ -194,44 +219,16 @@ public class Clause extends JPanel {
     /**
      * @return int y value of Clause
      */
+    @Override
     public int getY() {
         return y;
     }
 
     /**
-     * @return int h value of Clause
-     */
-    public int getH() {
-        return h;
-    }
-
-    /**
-     * @return String[] word wrap version of data(each line is an index of the
-     * array is a single line)
-     */
-    public String[] getWordWrap() {
-        return text;
-    }
-
-    public Rectangle getBig() {
-        return big;
-    }
-
-    public Rectangle getSmall() {
-        return small;
-    }
-
-    public Point getP() {
-        return conjPoint;
-    }
-
-    //Setters
-    /**
-     * @param d	sets data equal to d, and recalculates height and word wrap
+     * @param d	sets data equal to d
      */
     public void setData(String d) {
         data = d;
-        h = 0;
     }
 
     /**
@@ -260,8 +257,6 @@ public class Clause extends JPanel {
      */
     public void setX(int i) {
         x = i;
-        //makeBoxes();
-        //updateClauseBounds();
     }
 
     /**
@@ -270,10 +265,4 @@ public class Clause extends JPanel {
     public void setY(int i) {
         y = i;
     }
-    //For testing this class
-	/*
-     * public static void main(String[] args) { Clause c = new Clause("This is
-     * sample text", "and", "1", "1"); System.out.println(c.toString() +"\n");
-     * System.out.println(c.toXML()); }
-     */
 }

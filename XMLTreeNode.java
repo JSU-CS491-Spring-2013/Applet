@@ -53,11 +53,6 @@ public class XMLTreeNode extends DefaultMutableTreeNode {
         return clause.getY();
     }
 
-    /**@return String[] word wrap version from the Clause stored in this node(each line is an index of the array is a single line)*/
-    public String[] getWordWrap() {
-        return clause.getWordWrap();
-    }
-
     //Setters
     /**@param c sets the Clause Object in this XMLTreeNode equal to c */
     public void setClause(Clause c) {
