@@ -3,14 +3,14 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Enumeration;
-import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
 
 /**
 The NodePanel is used to visually represent an XMLTreeModel.
 This class also provides a MouseListener to keep track of which node 
 has been selected.
  */
-public class NodePanel extends JPanel {
+public class NodePanel extends JLayeredPane {
 
     /**
     XMLTreeNode rootNode		Is the root of the TreeModel

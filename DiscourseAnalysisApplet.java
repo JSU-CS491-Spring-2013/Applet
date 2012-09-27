@@ -1,6 +1,7 @@
 
 import java.applet.Applet;
 import java.util.Calendar;
+import javax.swing.JLayeredPane;
 import javax.swing.JScrollPane;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -53,7 +54,7 @@ public class DiscourseAnalysisApplet extends Applet {
         jTreePanel = new JTreePanel(treeModel, nodePanel);
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
 
-        nodePanel.add(buttonPanel);
+        nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
         
         // Add the components to the window.
         add(jTreePanel);
