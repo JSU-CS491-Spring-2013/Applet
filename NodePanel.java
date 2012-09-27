@@ -65,8 +65,6 @@ public class NodePanel extends JPanel {
         Enumeration n = rootNode.preorderEnumeration(); // Get a list of Nodes.
         while (n.hasMoreElements()) {
             XMLTreeNode curr = (XMLTreeNode) n.nextElement();
-            curr.getX();
-            curr.getY();
             
             // If the node has children
             if (curr.getDepth() > 0) {
