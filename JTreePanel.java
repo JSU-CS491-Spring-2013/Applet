@@ -33,11 +33,19 @@ public class JTreePanel extends JPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                Clause temp = getSelectedNode().getClause();
-                temp.enableTextArea(); // enable and focus the text area
-                nodePanel.scrollRectToVisible(temp.getBounds()); // scroll to the component
-                
-                DiscourseAnalysisApplet.nodePanel.showButtonPanel(temp.getX(), temp.getY()); // show the buttonpanel next to it
+                try {
+                    Clause temp = getSelectedNode().getClause();
+
+                    boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
+
+                    DiscourseAnalysisApplet.nodePanel.showButtonPanel(temp.getX(), temp.getY()); // show the buttonpanel next to it
+
+                    if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
+                        temp.enableTextArea(); // enable and focus
+                        nodePanel.scrollRectToVisible(temp.getBounds()); // scroll to the component
+                    }
+                } catch (Exception ex) { // this will throw if you click a folder, so do nothing
+                }
             }
 
             @Override

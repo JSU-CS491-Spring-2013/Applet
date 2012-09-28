@@ -27,8 +27,10 @@ public class Clause extends JPanel {
      * This method is called whenever this Clause's text area needs to accept User input.
      */
     public void enableTextArea() {
-        myTextArea.setEnabled(true);
-        myTextArea.requestFocus();
+        if (DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
+            myTextArea.setEnabled(true);
+            myTextArea.requestFocus();
+        }
     }
 
     /**
@@ -102,9 +104,13 @@ public class Clause extends JPanel {
              */
             @Override
             public void mousePressed(MouseEvent e) {
-                enableTextArea(); // enable and focus
+                boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
                 
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
+                
+                if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
+                    enableTextArea(); // enable and focus
+                }
             }
 
             /**
@@ -128,7 +134,7 @@ public class Clause extends JPanel {
             public void mouseExited(MouseEvent e) {
             }
         };
-        
+
         // Add click to enable on the text area and panel.
         addMouseListener(ml);
         myTextArea.addMouseListener(ml);
@@ -141,7 +147,7 @@ public class Clause extends JPanel {
              */
             @Override
             public void focusGained(FocusEvent e) {
-                DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it - redundant, but safe
+                // DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it - redundant, but safe
             }
 
             /**

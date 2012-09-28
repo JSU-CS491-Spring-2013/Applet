@@ -26,7 +26,7 @@ public class NodePanel extends JLayeredPane {
     private final int nodeWidth = 200; //Node width
     private boolean hasChanged;
     private boolean buttonPanelShown;   // hold whether a ButtonPanel is active on the panel
-    
+
     /**
     Contructor Creates the NodePanel
     @param XMLTreeNode ro	sets the rootNode
@@ -35,14 +35,15 @@ public class NodePanel extends JLayeredPane {
      */
     public NodePanel(XMLTreeNode ro, int x, int y) {
         rootNode = ro;
+        buttonPanelShown = false;
         setPreferredSize(new Dimension(x, y));
-        
+
         // Make that background easier on the eyes.
         // setBackground(Color.WHITE);
         hasChanged = false;
         setLayout(null);
         updateComponents();
-        
+
         MouseListener ml = new MouseListener() {
 
             @Override
@@ -65,9 +66,8 @@ public class NodePanel extends JLayeredPane {
             @Override
             public void mouseExited(MouseEvent e) {
             }
-            
         };
-        
+
         addMouseListener(ml);
     }
 
@@ -78,23 +78,29 @@ public class NodePanel extends JLayeredPane {
     public boolean isButtonPanelShown() {
         return buttonPanelShown;
     }
-    
+
     public void showButtonPanel(int x, int y) {
-        if (x + 260 + 249 <= 1000) {
-            DiscourseAnalysisApplet.buttonPanel.setBounds(x + 260, y, 249, 150);
-        } else {
-            DiscourseAnalysisApplet.buttonPanel.setBounds(x - 249, y, 249, 150);
+        if (!isButtonPanelShown()) {
+            if (x + 260 + 249 <= 1000) {
+                DiscourseAnalysisApplet.buttonPanel.setBounds(x + 260, y, 249, 150);
+            } else {
+                DiscourseAnalysisApplet.buttonPanel.setBounds(x - 249, y, 249, 150);
+            }
+
+            DiscourseAnalysisApplet.buttonPanel.setEnabled(true);
+            DiscourseAnalysisApplet.buttonPanel.setVisible(true);
+
+            buttonPanelShown = true;
         }
-        
-        DiscourseAnalysisApplet.buttonPanel.setEnabled(true);
-        DiscourseAnalysisApplet.buttonPanel.setVisible(true);
     }
-    
+
     public void hideButtonPanel() {
         DiscourseAnalysisApplet.buttonPanel.setEnabled(false);
         DiscourseAnalysisApplet.buttonPanel.setVisible(false);
+        buttonPanelShown = false;
+        requestFocus();
     }
-    
+
     /**
     sets the rootNode for this panel
     @param XMLTreeNode rootNode
@@ -107,7 +113,7 @@ public class NodePanel extends JLayeredPane {
         setPreferredSize(new Dimension(x, y));
         this.repaint();
     }
-    
+
     /**
      * Draw the lines.
      * @param g 
@@ -115,32 +121,32 @@ public class NodePanel extends JLayeredPane {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        
+
         Enumeration n = rootNode.preorderEnumeration(); // Get a list of Nodes.
         while (n.hasMoreElements()) {
             XMLTreeNode curr = (XMLTreeNode) n.nextElement();
-            
+
             // If the node has children
             if (curr.getDepth() > 0) {
                 g.drawLine(curr.getX() + 260, curr.getY() + 48, curr.getX() + 300, curr.getY() + 48);
-                
+
                 // Get the first and last children.
                 XMLTreeNode first = (XMLTreeNode) curr.getFirstChild();
                 XMLTreeNode last = (XMLTreeNode) curr.getLastChild();
-                
+
                 // If they aren't the same thing, draw a line between them.
                 if (first != last) {
                     g.drawLine(first.getX() - 40, first.getY() + 48, last.getX() - 40, last.getY() + 48);
                 }
             }
-   
+
             // If the node is a child
             if (!curr.isRoot()) {
                 g.drawLine(curr.getX(), curr.getY() + 48, curr.getX() - 40, curr.getY() + 48);
             }
         }
     }
-    
+
     /**
      * This adds the Clauses to the NodePanel (the one in the middle).
      */
