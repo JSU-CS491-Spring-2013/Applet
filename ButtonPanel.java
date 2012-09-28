@@ -115,11 +115,19 @@ public class ButtonPanel extends javax.swing.JPanel {
         comComboBox = new javax.swing.JComboBox();
 
         setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        setFocusable(false);
 
         cmdOkay.setText("Okay");
+        cmdOkay.setFocusable(false);
         cmdOkay.setNextFocusableComponent(cmdCancel);
+        cmdOkay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdOkayActionPerformed(evt);
+            }
+        });
 
         cmdCancel.setText("Cancel");
+        cmdCancel.setFocusable(false);
         cmdCancel.setNextFocusableComponent(cmdTreeModel);
         cmdCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,19 +136,26 @@ public class ButtonPanel extends javax.swing.JPanel {
         });
 
         cmdTreeModel.setText("Tree Model");
+        cmdTreeModel.setFocusable(false);
         cmdTreeModel.setNextFocusableComponent(cmdSplit);
 
         cmdSplit.setText("Split");
+        cmdSplit.setFocusable(false);
         cmdSplit.setNextFocusableComponent(cmdEdit);
 
         cmdEdit.setText("Edit");
+        cmdEdit.setFocusable(false);
         cmdEdit.setNextFocusableComponent(cmdRemove);
 
         cmdRemove.setText("Remove");
+        cmdRemove.setFocusable(false);
         cmdRemove.setNextFocusableComponent(cmdGroup);
 
         cmdGroup.setText("Group");
+        cmdGroup.setFocusable(false);
         cmdGroup.setNextFocusableComponent(comComboBox);
+
+        comComboBox.setFocusable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -185,9 +200,12 @@ public class ButtonPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
-        setEnabled(false);
-        setVisible(false);
+        DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
     }//GEN-LAST:event_cmdCancelActionPerformed
+
+    private void cmdOkayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkayActionPerformed
+        DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
+    }//GEN-LAST:event_cmdOkayActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdCancel;

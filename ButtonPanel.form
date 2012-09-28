@@ -7,6 +7,7 @@
         <BevelBorder/>
       </Border>
     </Property>
+    <Property name="focusable" type="boolean" value="false"/>
   </Properties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -74,14 +75,19 @@
     <Component class="javax.swing.JButton" name="cmdOkay">
       <Properties>
         <Property name="text" type="java.lang.String" value="Okay"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="cmdCancel"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmdOkayActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="cmdCancel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancel"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="cmdTreeModel"/>
         </Property>
@@ -93,6 +99,7 @@
     <Component class="javax.swing.JButton" name="cmdTreeModel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Tree Model"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="cmdSplit"/>
         </Property>
@@ -101,6 +108,7 @@
     <Component class="javax.swing.JButton" name="cmdSplit">
       <Properties>
         <Property name="text" type="java.lang.String" value="Split"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="cmdEdit"/>
         </Property>
@@ -109,6 +117,7 @@
     <Component class="javax.swing.JButton" name="cmdEdit">
       <Properties>
         <Property name="text" type="java.lang.String" value="Edit"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="cmdRemove"/>
         </Property>
@@ -117,6 +126,7 @@
     <Component class="javax.swing.JButton" name="cmdRemove">
       <Properties>
         <Property name="text" type="java.lang.String" value="Remove"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="cmdGroup"/>
         </Property>
@@ -125,6 +135,7 @@
     <Component class="javax.swing.JButton" name="cmdGroup">
       <Properties>
         <Property name="text" type="java.lang.String" value="Group"/>
+        <Property name="focusable" type="boolean" value="false"/>
         <Property name="nextFocusableComponent" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
           <ComponentRef name="comComboBox"/>
         </Property>
@@ -135,6 +146,7 @@
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
         </Property>
+        <Property name="focusable" type="boolean" value="false"/>
       </Properties>
     </Component>
   </SubComponents>

@@ -102,11 +102,9 @@ public class Clause extends JPanel {
              */
             @Override
             public void mousePressed(MouseEvent e) {
-                enableTextArea();
+                enableTextArea(); // enable and focus
                 
-                DiscourseAnalysisApplet.buttonPanel.setBounds(x + 260, y, 249, 150);
-                DiscourseAnalysisApplet.buttonPanel.setEnabled(true);
-                DiscourseAnalysisApplet.buttonPanel.setVisible(true);
+                DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
             }
 
             /**
@@ -143,6 +141,7 @@ public class Clause extends JPanel {
              */
             @Override
             public void focusGained(FocusEvent e) {
+                DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it - redundant, but safe
             }
 
             /**
@@ -151,6 +150,7 @@ public class Clause extends JPanel {
             @Override
             public void focusLost(FocusEvent e) {
                 myTextArea.setEnabled(false);
+                DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
             }
         });
     }

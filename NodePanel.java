@@ -38,7 +38,7 @@ public class NodePanel extends JLayeredPane {
         setPreferredSize(new Dimension(x, y));
         
         // Make that background easier on the eyes.
-        setBackground(new java.awt.Color(240, 240, 240));
+        // setBackground(Color.WHITE);
         hasChanged = false;
         setLayout(null);
         updateComponents();
@@ -77,6 +77,22 @@ public class NodePanel extends JLayeredPane {
      */
     public boolean isButtonPanelShown() {
         return buttonPanelShown;
+    }
+    
+    public void showButtonPanel(int x, int y) {
+        if (x + 260 + 249 <= 1000) {
+            DiscourseAnalysisApplet.buttonPanel.setBounds(x + 260, y, 249, 150);
+        } else {
+            DiscourseAnalysisApplet.buttonPanel.setBounds(x - 249, y, 249, 150);
+        }
+        
+        DiscourseAnalysisApplet.buttonPanel.setEnabled(true);
+        DiscourseAnalysisApplet.buttonPanel.setVisible(true);
+    }
+    
+    public void hideButtonPanel() {
+        DiscourseAnalysisApplet.buttonPanel.setEnabled(false);
+        DiscourseAnalysisApplet.buttonPanel.setVisible(false);
     }
     
     /**
