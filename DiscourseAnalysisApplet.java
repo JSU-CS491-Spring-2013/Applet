@@ -117,7 +117,10 @@ public class DiscourseAnalysisApplet extends Applet {
 
             // DEBUG INFORMATION - DELETE LATER
             System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
-            XMLConverter xml = new XMLConverter("C:\\Users\\DerekZul\\Documents\\Awesome.xml", tree);
+            String newFileName = chooseFile.getSelectedFile().toString();
+            newFileName = newFileName.substring(0, newFileName.length() - 4);
+            newFileName += " - Modified.xml";
+            XMLConverter xml = new XMLConverter(newFileName, tree);
             return tree;
         } catch (Exception e) {
             e.printStackTrace();
