@@ -2,24 +2,27 @@
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-//Uncomment below for testing, needed for JTree
-//import javax.swing.*;
-//import java.awt.*;
 /**
 XMLTreeModel extends DefaultTreeModel, it contains methods that allow
 for the easy manipulation of the TreeModel data and its nodes. 
+ */
+
+/**
+ * XMLTreeModel extends DefaultTreeModel, it contains methods that allow
+ * for the easy manipulation of the TreeModel data and its nodes. 
  */
 public class XMLTreeModel extends DefaultTreeModel {
 
     private final int NODE_WIDTH = 260;
     private final int BUF_SPACE = 80;
-    /**
-    Constructor creates a new XMLTreeModel
-    @param root sets the root of this model
-     */
+    
     XMLTreeNode r;
     private int xMax, yMax;
 
+    /**
+     * Constructor creates a new XMLTreeModel.
+     * @param root sets the root of this model
+     */
     public XMLTreeModel(XMLTreeNode root) {
         super(root);
         r = root;
@@ -31,7 +34,7 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     /**
-    Resets the x and y values for the root node
+     * Resets the x and y values for the root node
      */
     public void resetXY() {
         yMax = 0;
@@ -40,7 +43,7 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     /**
-    Sets the X value for each XMLTreeNode in this TreeModel
+     * Sets the X value for each XMLTreeNode in this TreeModel
      */
     private void setX(XMLTreeNode ro) {
         //The root is set to 0
@@ -57,7 +60,7 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     /**
-    Sets the y value for each leaf XMLTreeNode in this TreeModel
+     * Sets the y value for each leaf XMLTreeNode in this TreeModel
      */
     private void setY(XMLTreeNode ro) {
         //go to children first
@@ -75,7 +78,7 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     /**
-    Calculates the y value for non-leaf XMLTreeNodes	
+     * Calculates the y value for non-leaf XMLTreeNodes	
      */
     public void calY(XMLTreeNode ro) {
         int fC = ((XMLTreeNode) ro.getFirstChild()).getY();
@@ -84,8 +87,8 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     /**
-    @param newNode		the new parent node of all the nodes contained in groupNodes[]
-    @param groupNodes	an array of the nodes that are to grouped and made children of the newNode
+     * @param newNode		the new parent node of all the nodes contained in groupNodes[]
+     * @param groupNodes	an array of the nodes that are to grouped and made children of the newNode
      */
     public void groupNodes(XMLTreeNode newNode, XMLTreeNode[] groupNodes) {
         //Still need to get the right attributes for the newNode,
@@ -112,11 +115,11 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     /**Splits a single node into two separate nodes by creating a new XMLTreeNode with the same chapter
-    and verse as the selectedNode, and inserting the new node into the selectedNode's parent.
-    @param selectedNode		original node that will be split
-    @param dataSelected		the data for the selectedNode after the split has occured
-    @param newData			the data for the new XMLTreeNode
-    @param newConj			the conjunction for the new XMLTreeNode
+     * and verse as the selectedNode, and inserting the new node into the selectedNode's parent.
+     * @param selectedNode		original node that will be split
+     * @param dataSelected		the data for the selectedNode after the split has occured
+     * @param newData			the data for the new XMLTreeNode
+     * @param newConj			the conjunction for the new XMLTreeNode
      */
     public void split(XMLTreeNode selectedNode, String dataSelected, String newData, String newConj) {
         //make new node using the same chapter and verse as the selected node, but
@@ -136,8 +139,8 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     /**Removes the selected node only if it is not a leaf node without deleting the children of the selected node.
-    Note: If you want to delete a leaf node, use the merge method
-    @param selectedNode		the node that will be removed
+     * Note: If you want to delete a leaf node, use the merge method
+     * @param selectedNode		the node that will be removed
      */
     public void remove(XMLTreeNode selectedNode) {
         //Not sure if we should allow the user to delete a leaf node
@@ -169,11 +172,11 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     /**Based on the boolean flag 'mergeDown' this method will merge the selectedNode with the node right before or right after it.
-    Note: Chapter and verse of the merged node will be the same as the selectedNode
-    @param selectedNode		node to be merged
-    @param conj				the desired conjuction of the merged nodes
-    @param newData				the desired data of the merged nodes
-    @param mergeDown		if true: will merge the selectedNode with the one right below it, else: will merge with the one right above the selectedNode
+     * Note: Chapter and verse of the merged node will be the same as the selectedNode
+     * @param selectedNode		node to be merged
+     * @param conj				the desired conjuction of the merged nodes
+     * @param newData				the desired data of the merged nodes
+     * @param mergeDown		if true: will merge the selectedNode with the one right below it, else: will merge with the one right above the selectedNode
      */
     public void merge(XMLTreeNode selectedNode, String conj, String newData, boolean mergeDown) {//This method assumes that the chapter and verse of the 2 nodes are the same
 
@@ -204,38 +207,50 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
 
     //Getters: for getting the information from the Clause object of the selected XMLTreeNode
-    /**@param sNode selected node
-    @return the data from the Clause object stored in the selected XMLTreeNode */
+    /**
+     * @param sNode selected node
+     * @return the data from the Clause object stored in the selected XMLTreeNode
+     */
     public String getNodeData(XMLTreeNode sNode) {
         return sNode.getData();
     }
 
-    /**@param sNode selected node
-    @return the conjunction from the Clause object stored in the selected XMLTreeNode */
+    /**
+     * @param sNode selected node
+     * @return the conjunction from the Clause object stored in the selected XMLTreeNode
+     */
     public String getNodeConj(XMLTreeNode sNode) {
         return sNode.getConj();
     }
 
-    /**@param sNode selected node
-    @return the chapter from the Clause object stored in the selected XMLTreeNode */
+    /**
+     * @param sNode selected node
+     * @return the chapter from the Clause object stored in the selected XMLTreeNode
+     */
     public String getNodeChap(XMLTreeNode sNode) {
         return sNode.getChap();
     }
 
-    /**@param sNode selected node
-    @return the verse from the Clause object stored in the selected XMLTreeNode */
+    /**
+     * @param sNode selected node
+     * @return the verse from the Clause object stored in the selected XMLTreeNode
+     */
     public String getNodeVrse(XMLTreeNode sNode) {
         return sNode.getVrse();
     }
 
-    /**@param sNode selected node
-    @return the x value from the Clause object stored in the selected XMLTreeNode */
+    /**
+     * @param sNode selected node
+     * @return the x value from the Clause object stored in the selected XMLTreeNode
+     */
     public int getNodeX(XMLTreeNode sNode) {
         return sNode.getX();
     }
 
-    /**@param sNode selected node
-    @return the y value from the Clause object stored in the selected XMLTreeNode */
+    /**
+     * @param sNode selected node
+     * @return the y value from the Clause object stored in the selected XMLTreeNode
+     */
     public int getNodeY(XMLTreeNode sNode) {
         return sNode.getY();
     }
@@ -249,93 +264,51 @@ public class XMLTreeModel extends DefaultTreeModel {
     }
     //Setters: for setting the information from the Clause object of the selected XMLTreeNode
 
-    /**@param sNode selected node
-    @param info	sets the data in the Clause object stored in the selected XMLTreeNode equal to info */
+    /**
+     * @param sNode selected node
+     * @param info	sets the data in the Clause object stored in the selected XMLTreeNode equal to info
+     */
     public void setNodeData(XMLTreeNode sNode, String info) {
         sNode.setData(info);
     }
 
-    /**@param sNode selected node
-    @param info	sets the conjunction in the Clause object stored in the selected XMLTreeNode equal to info */
+    /**
+     * @param sNode selected node
+     * @param info	sets the conjunction in the Clause object stored in the selected XMLTreeNode equal to info
+     */
     public void setNodeConj(XMLTreeNode sNode, String info) {
         sNode.setData(info);
     }
 
-    /**@param sNode selected node
-    @param info	sets the chapter in the Clause object stored in the selected XMLTreeNode equal to info */
+    /**
+     * @param sNode selected node
+     * @param info	sets the chapter in the Clause object stored in the selected XMLTreeNode equal to info
+     */
     public void setNodeChap(XMLTreeNode sNode, String info) {
         sNode.setData(info);
     }
 
-    /**@param sNode selected node
-    @param info	sets the verse in the Clause object stored in the selected XMLTreeNode equal to info */
+    /**
+     * @param sNode selected node
+     * @param info	sets the verse in the Clause object stored in the selected XMLTreeNode equal to info
+     */
     public void setNodeVrse(XMLTreeNode sNode, String info) {
         sNode.setData(info);
     }
 
-    /**@param sNode selected node
-    @param info	sets the value of x in the Clause object stored in the selected XMLTreeNode equal to info */
+    /**
+     * @param sNode selected node
+     * @param info	sets the value of x in the Clause object stored in the selected XMLTreeNode equal to info
+     */
     public void setNodeX(XMLTreeNode sNode, int info) {
         sNode.setX(info);
     }
 
-    /**@param sNode selected node
-    @param info	sets the value of y in the Clause object stored in the selected XMLTreeNode equal to info */
+    /**
+     * @param sNode selected node
+     * @param info	sets the value of y in the Clause object stored in the selected XMLTreeNode equal to info
+     */
     public void setNodeY(XMLTreeNode sNode, int info) {
         sNode.setY(info);
-    }
-
-    //For Testing this class
-    public static void main(String[] args) {
-        //Hard-coded XMLTreeModel using XMLTreeNodes
-        XMLTreeNode root = new XMLTreeNode(new Clause("This is root", "None", "1", "1"));
-        XMLTreeNode child1 = new XMLTreeNode(new Clause("This is child1", "and", "1", "2"));
-        XMLTreeNode child2 = new XMLTreeNode(new Clause("This is child2", "but", "1", "3"));
-        XMLTreeNode n = new XMLTreeNode(new Clause("This is newNode used by group method", "and", "1", "4"));
-        XMLTreeNode child3 = new XMLTreeNode(new Clause("This is child3", "but", "1", "5"));
-        XMLTreeNode child4 = new XMLTreeNode(new Clause("This is child4, and extra stuff to test the split method", "but", "1", "6"));
-        root.add(child1);
-        root.add(child2);
-        root.add(child3);
-        root.add(child4);
-        XMLTreeModel test = new XMLTreeModel(root);
-        System.out.println("-----Node Values----");
-        System.out.println("X: " + root.getX() + " Y: " + root.getY());
-        System.out.println("X: " + child1.getX() + " Y: " + child1.getY());
-        System.out.println("X: " + child2.getX() + " Y: " + child2.getY());
-        System.out.println("X: " + child3.getX() + " Y: " + child3.getY());
-//-------------------------------------------------------
-//------To Test the Group method use this ---------------
-
-        //XMLTreeNode[] gr = new XMLTreeNode[2];
-        //gr[0] = child1;
-        //gr[1] = child2;
-        //test.groupNodes(n, gr);
-
-//-------------------------------------------------------
-
-
-//-------------------------------------------------------
-//------To Test the Split method use this ---------------
-        //test.split(child4, "This is child4", "extra stuff to test the split method", "and");		
-//-------------------------------------------------------
-
-//-------------------------------------------------------
-//------To Test the Remove method, uncomment the Group 
-//------Method, and uncomment code below-----------------
-        //test.remove(n);
-//-------------------------------------------------------
-
-
-//-------------------------------------------------------
-//------To Test the Merge method uncomment code below----
-        //test.merge(child1, "and", "This is child1 This is child2", true);
-//-------------------------------------------------------
-        // JFrame f = new JFrame("Please work :)");
-        // f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // JTree t = new JTree(test);
-        // f.add(t);
-        // f.pack();
-        // f.setVisible(true);
     }
 }

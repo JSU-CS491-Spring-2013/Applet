@@ -79,23 +79,7 @@ public class ButtonPanel extends javax.swing.JPanel {
     public int getComboBoxSelectedIndex() {
         return comComboBox.getSelectedIndex();
     }
-
-    /*
-     * public static void main(String[] args) { // Testing code. try { // I want
-     * to add this code at some point. This will make it look much better, but
-     * we'll worry about making it pretty later. for
-     * (javax.swing.UIManager.LookAndFeelInfo info :
-     * javax.swing.UIManager.getInstalledLookAndFeels()) { if
-     * ("Nimbus".equals(info.getName())) {
-     * javax.swing.UIManager.setLookAndFeel(info.getClassName()); break; } } }
-     * catch (Exception e) { }
-     *
-     * javax.swing.JFrame myFrame = new javax.swing.JFrame("Testing");
-     * myFrame.setLayout(new java.awt.GridLayout(1, 1)); myFrame.add(new
-     * BetterButtonPanel());
-     * myFrame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-     * myFrame.pack(); myFrame.setVisible(true); }
-     */
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

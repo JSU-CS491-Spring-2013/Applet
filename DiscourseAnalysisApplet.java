@@ -58,7 +58,6 @@ public class DiscourseAnalysisApplet extends Applet {
         
         // Add the components to the window.
         add(jTreePanel);
-        //add(buttonPanel);
         add(s);
         
         // DEBUG INFORMATION - DELETE LATER

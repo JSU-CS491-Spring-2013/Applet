@@ -10,141 +10,104 @@
 import java.io.*;
 import java.util.Enumeration;
 
-
 public class XMLConverter {
-    
-    public XMLConverter (){}
-    
-    public XMLConverter (String fp, XMLTreeModel temp){
-        File xmlfile= new File(fp);
-        XMLTreeNode root=(XMLTreeNode) temp.getRoot();
-        BufferedWriter writer = null;
-        String xmlcode = "<?xml version=\"1.0\" ?>";
-        try{
-            writer = new BufferedWriter(new FileWriter(xmlfile));
-            //consider writing recursive function                      
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        } 
 
-        //this is the bit where you write your XML to the file
+    /**
+     * Empty Constructor. Is this ever used?
+     */
+    public XMLConverter() {
+    }
+
+    /**
+     * This is the Default Constructor. It sets up everything needed to write the tree to an XML file.
+     * @param fp a String containing the filepath of the XML file.
+     * @param temp the XMLTreeModel containing the tree
+     */
+    public XMLConverter(String fp, XMLTreeModel temp) {
+        File xmlfile = new File(fp); // Open up a File object that will be written to later. Why is this a space in memory?
+        XMLTreeNode root = (XMLTreeNode) temp.getRoot(); // Get the root node of the tree.
+        BufferedWriter writer = null; // Why = null;?
+        String xmlcode = "<?xml version=\"1.0\" ?>"; // Why is this a space in memory?
         try {
-            writer.write(xmlcode);
-            nodeCycle(writer, root);
-            writer.write("</book>");
-            System.out.println("I fired.");
+            writer = new BufferedWriter(new FileWriter(xmlfile)); // Create our BufferedWriter using the File.
+            // Consider writing recursive function?                      
+        } catch (IOException e) {
+            e.printStackTrace(); // You will want to remove this now.
         }
-        catch(IOException e) {
-            e.printStackTrace();
+
+        // This is the bit (a 1 or 0? Did you mean block?) where you write your XML to the file.
+        try {
+            writer.write(xmlcode); // This should contain the string literal "<?xml version=\"1.0\" ?>".
+            nodeCycle(writer, root); // Magic? Also, overwritable method calls in constructors are a bad idea. nodeCycle needs to be final.
+            writer.write("</book>"); // At the end, close the book tag.
+        } catch (IOException e) {
+            e.printStackTrace(); // You will want to remove this now.
         }
-        
-        
-        
+
+        // Why is this in a separate try-catch block?
         try {
             writer.close();
+        } catch (IOException e) {
+            e.printStackTrace(); // You will want to remove this now.
         }
-        catch(IOException e) {
-            e.printStackTrace();
-        }
-        
-      
-    
     }
-    
-    public void nodeCycle(BufferedWriter w, XMLTreeNode temp){
-        
+
+    public void nodeCycle(BufferedWriter w, XMLTreeNode temp) { // Consider making me final.
         try {
-            if(temp.getChildCount() > 0){ //if the passed node has children 
-                Clause c = new Clause(); //temporary clause to hold data from the node passed in.
-                c = temp.getClause(); //assigning the values of the passed node to c
-                System.out.print("DEPTH OF " + c.getChap().toString() + " IS : " + temp.getChildCount());//testing to see how many children if more then 0
-                if(c.getData().toString().equals("root")){//this will only ever happen when the root node is passed in to set the book in XML
-                    w.write("<book bookName=\"" + c.getConj().toString() + "\">\n");//initial book XML tag
-                    //System.out.print("<book bookName=\"" + c.getConj().toString() + "\">");
-                }
-                else{
-                    //System prints are for debugging
-                    /*System.out.print("<clause>\n");
-                    System.out.print("<conj>" + c.getConj().toString() + "</conj>\n");
-                    System.out.print("<text verse=\"" + c.getVrse() + "\" chapter=\"" + c.getChap().toString() + "\">\n");
-                    System.out.print(c.getData().toString() + "\n");
-                    System.out.print("</text>\n");*/
-                    
-                    //Writing XML tags and the data for them to the file.
+            if (temp.getChildCount() > 0) { // If the passed node has children
+                // Consider combining these two statements into Clause c = temp.getClause();
+                Clause c = new Clause(); // Temporary clause to hold data from the node passed in.
+                c = temp.getClause(); // Assigning the values of the passed node to c
+                
+                if (c.getData().toString().equals("root")) { // This will only ever happen when the root node is passed in to set the book in XML
+                    w.write("<book bookName=\"" + c.getConj().toString() + "\">\n"); // Initial book XML tag
+                } else {
+                    // Write XML tags and data to the file.
                     w.write("<clause>\n");
                     w.write("<conj>" + c.getConj().toString() + "</conj>\n");
                     w.write("<text verse=\"" + c.getVrse() + "\" chapter=\"" + c.getChap().toString() + "\">\n");
                     w.write(c.getData().toString() + "\n");
                     w.write("</text>\n");
                 }
-                   
-                 
+
+
                 Enumeration e = temp.breadthFirstEnumeration(); // Get a list of Nodes.
-                try {//catching element exceptions
-                    //While having children begin recursive function call.
-                    while(e.nextElement() != null){//so it has children, go through each of them
-                        XMLTreeNode curr = (XMLTreeNode) e.nextElement(); //getting the next node
-                        nodeCycle(w, curr);
+                try { // Catch element exceptions
+                    // While having children begin recursive function call.
+                    // Enumerate through the children 
+                    while (e.nextElement() != null) { // Pass each child to the "writer". This line is wrong. You are losing nodes here, and switching to e.hasMoreElements() gave a StackOverflowError.
+                        XMLTreeNode curr = (XMLTreeNode) e.nextElement(); // Get the next node.
+                        nodeCycle(w, curr); // Begin again.
                     }
-                } catch (Exception ex) { }
-                
-                //If this is the not the root node will end the clause (this is here due to possible nested nodes)
-                if(!c.getData().toString().equals("root")){
-                    w.write("</clause>");
-                    //System for debugging
-                    //System.out.print("</clause>");
+                } catch (Exception ex) {
                 }
-                          
-            }
-            
-            else{
-                //Temp Clause to temporarily store information
+
+                // If this is not the root node, this will end the clause (this is here due to possible nested nodes)
+                if (!c.getData().toString().equals("root")) {
+                    w.write("</clause>");
+                }
+
+            } else { // Else there are no children.
+                // Temp Clause to temporarily store information. Again, merge these into one statement.
                 Clause c = new Clause();
                 c = temp.getClause();
-                
-                //If the node passed in is the root of the tree passed in
-                if(c.getData().toString().equals("root")){
+
+                // If the node passed in is the root of the tree, this will execute.
+                if (c.getData().toString().equals("root")) {
                     w.write("<book bookName=\"" + c.getData().toString() + "\">");
-                    //System print outs for debugging.
-                    //System.out.print("<book bookName=\"" + c.getConj().toString() + "\">");
                 }
-                //System print for debugging.
-                /*System.out.print("<clause>\n");
-                System.out.print("<conj>" + c.getConj().toString() + "</conj>\n");
-                System.out.print("<text verse=\"" + c.getVrse() + "\" chapter=\"" + c.getChap().toString() + "\">\n");
-                System.out.print(c.getData().toString() + "\n");
-                System.out.print("</text>\n");
-                System.out.print("</clause>\n");*/
-                
-                
-                //Printing to the XML file
+
+                // Print to the XML file.
                 w.write("<clause>\n");
                 w.write("<conj>" + c.getConj().toString() + "</conj>\n");
                 w.write("<text verse=\"" + c.getVrse() + "\" chapter=\"" + c.getChap().toString() + "\">\n");
                 w.write(c.getData().toString() + "\n");
                 w.write("</text>\n");
                 w.write("</clause>\n");
-            }           
+            }
+        } catch (IOException e) {
+            e.printStackTrace(); // You will want to remove this now.
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        } 
-       
-    }
-    /*
-    //Testing purposes, uncomment to self test as a file on its own.
-    public static void main(String[] args){
-        XMLConverter m = new XMLConverter();
-        String tempd = "Blah";
-        String tempc = "and";
-        String tempch = "3";
-        String tempv = "2.2";
-        Clause c = new Clause(tempd, tempc, tempch, tempv);
-        XMLTreeNode temp = new XMLTreeNode(c);
-       // XMLTreeModel b = new XMLTreeModel(temp);
-        //XMLTreeNode treeNode = new XMLTreeNode();
-        //m = new XMLConverter("C:\\Users\\DerekZul\\Documents\\Awesome.xml", temp);
-    }*/
 
+    }
 }

@@ -31,6 +31,9 @@ public class JTreePanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
             }
 
+            /**
+             * Pressing the mouse button displays the ButtonPanel next to the Clause.
+             */
             @Override
             public void mousePressed(MouseEvent e) {
                 try {
@@ -93,19 +96,4 @@ public class JTreePanel extends JPanel {
     public int getSelectedIndex() {
         return tree.getLeadSelectionRow();
     }
-
-    /*public static void main(String[] args) {
-    XMLTreeNode root = new XMLTreeNode(new Clause("this is the root", "and", "1", "0"));
-    for (int i = 0; i < 40; i++) {
-    XMLTreeNode temp = new XMLTreeNode(new Clause("This is child asd;lfkjasdflk;jasd;flkjasf;lkjads;" + Integer.toString(i + 1), "and", "1", Integer.toString(i + 1)));
-    root.add(temp);
-    }
-    XMLTreeModel mod = new XMLTreeModel(root);
-    
-    javax.swing.JFrame f = new javax.swing.JFrame("Test Clause Panel");
-    f.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-    f.getContentPane().add(new JTreePanel(mod));
-    f.pack();
-    f.setVisible(true);
-    }*/
 }

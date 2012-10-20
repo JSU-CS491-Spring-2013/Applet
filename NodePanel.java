@@ -6,43 +6,34 @@ import java.util.Enumeration;
 import javax.swing.JLayeredPane;
 
 /**
-The NodePanel is used to visually represent an XMLTreeModel.
-This class also provides a MouseListener to keep track of which node 
-has been selected.
+ * The NodePanel is used to visually represent an XMLTreeModel.
+ * This class also provides a MouseListener to keep track of which node 
+ * has been selected.
  */
 public class NodePanel extends JLayeredPane {
-
-    /**
-    XMLTreeNode rootNode		Is the root of the TreeModel
-    XMLTreeNode selected Node	Is the selected Node
-    Rectangle tempRectangle		The rectangle used to show the selectedNode	
-    
-     */
     XMLTreeNode rootNode;
     XMLTreeNode selectedNode;
     XMLTreeNode otherSelectedNode;
     Rectangle tempRectangle;
-    private final int stubLength = 10; //Stub
-    private final int nodeWidth = 200; //Node width
-    private boolean hasChanged;
+    private final int stubLength = 10;  //Stub
+    private final int nodeWidth = 200;  //Node width
+    private boolean hasChanged;         // I'm not sure why this is here.
     private boolean buttonPanelShown;   // hold whether a ButtonPanel is active on the panel
-
+    
     /**
-    Contructor Creates the NodePanel
-    @param XMLTreeNode ro	sets the rootNode
-    @param int x			sets the x dimension for this panel
-    @param int y			sets the y dimension for this panel
+     * Creates the NodePanel.
+     * @param ro sets the root node
+     * @param x sets the x dimension for this panel
+     * @param y sets the y dimension for this panel
      */
     public NodePanel(XMLTreeNode ro, int x, int y) {
         rootNode = ro;
         buttonPanelShown = false;
         setPreferredSize(new Dimension(x, y));
-
-        // Make that background easier on the eyes.
-        // setBackground(Color.WHITE);
+        
         hasChanged = false;
         setLayout(null);
-        updateComponents();
+        updateComponents(); // Reposition the Clauses.
 
         MouseListener ml = new MouseListener() {
 
@@ -79,11 +70,16 @@ public class NodePanel extends JLayeredPane {
         return buttonPanelShown;
     }
 
+    /**
+     * Displays the ButtonPanel next to the Clause.
+     * @param x the x-coordinate of where to display the ButtonPanel
+     * @param y the y-coordinate of where to display the ButtonPanel
+     */
     public void showButtonPanel(int x, int y) {
-        if (!isButtonPanelShown()) {
-            if (x + 260 + 249 <= 1000) {
+        if (!isButtonPanelShown()) { // Only display it if it is currently hidden.
+            if (x + 260 + 249 <= 1000) { // If there is enough room on the right, display the ButtonPanel to the right of the Clause.
                 DiscourseAnalysisApplet.buttonPanel.setBounds(x + 260, y, 249, 150);
-            } else {
+            } else { // If there isn't enough room on the right, display the ButtonPanel to the left of the Clause.
                 DiscourseAnalysisApplet.buttonPanel.setBounds(x - 249, y, 249, 150);
             }
 
@@ -94,6 +90,9 @@ public class NodePanel extends JLayeredPane {
         }
     }
 
+    /**
+     * Hides the ButtonPanel on the NodePanel.
+     */
     public void hideButtonPanel() {
         DiscourseAnalysisApplet.buttonPanel.setEnabled(false);
         DiscourseAnalysisApplet.buttonPanel.setVisible(false);
@@ -106,6 +105,13 @@ public class NodePanel extends JLayeredPane {
     @param XMLTreeNode rootNode
     @param int x
     @param int y
+     */
+    
+    /**
+     * Sets the root node for this Panel.
+     * @param rootNode the node to be set as root
+     * @param x the x-coordinate of this Clause
+     * @param y the y-coordinate of this Clause
      */
     public void setRoot(XMLTreeNode rootNode, int x, int y) {
         this.rootNode = rootNode;
@@ -148,7 +154,7 @@ public class NodePanel extends JLayeredPane {
     }
 
     /**
-     * This adds the Clauses to the NodePanel (the one in the middle).
+     * This adds the Clauses to the NodePanel.
      */
     private void updateComponents() {
         Enumeration n = rootNode.preorderEnumeration(); // Get a list of Nodes.
@@ -187,46 +193,4 @@ public class NodePanel extends JLayeredPane {
     public boolean isChanged() {
         return hasChanged;
     }
-    /*
-    public static void main(String[] args)
-    {
-    System.out.println("Hello");
-    XMLTreeNode te = new XMLTreeNode(new Clause("root", "Luke", "",""));
-    
-    XMLTreeNode[] level1 = new XMLTreeNode[10];
-    for(int i = 0; i < level1.length; i++)
-    {
-    Integer x = new Integer(i+1);
-    level1[i] = new XMLTreeNode(new Clause("This is child "+x.toString(), "and", "1", x.toString()));
-    te.add(level1[i]);
-    }
-    
-    for(int i = 0; i < 5; i++)
-    {
-    Integer x = new Integer(i+1);
-    level1[0].add(new XMLTreeNode(new Clause("This is child "+x.toString()+" more stuff to push it to the next line", "and", "1", x.toString())));
-    }
-    
-    XMLTreeModel test = new XMLTreeModel(te);
-    NodePanel n = new NodePanel(te, test.getXMax(), test.getYMax());
-    JScrollPane p = new JScrollPane(n);
-    p.setPreferredSize(new Dimension(450,450));
-    p.setBounds(0, 0, 450, 450);
-    
-    JFrame f = new JFrame("Test Clause Panel");
-    f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    f.setLayout(null);
-    f.getContentPane().add(p);
-    f.pack();
-    f.setSize(500,500);
-    f.setVisible(true);
-    
-    Scanner scan = new Scanner(System.in);
-    String stubLength = scan.next();
-    test.remove(level1[0]);
-    test.reload();
-    test.resetXY();
-    n.setRoot((XMLTreeNode)test.getRoot(), test.getXMax(), test.getYMax());
-    }
-     */
 }
