@@ -66,17 +66,18 @@ public class XMLConverter {
                     w.write("</text>\n");
                 }
                 
-                Enumeration e = temp.breadthFirstEnumeration(); // Get a list of Nodes.
-                
+                //Enumeration e = temp.breadthFirstEnumeration(); // Get a list of Nodes.
+                Enumeration e = temp.children();
                 try { // Catch element exceptions
                     // While having children begin recursive function call.
                     // Enumerate through the children 
                     XMLTreeNode curr = null;
-                    curr = (XMLTreeNode)e.nextElement();
-                    while ((curr = (XMLTreeNode)e.nextElement()) != null) { // Pass each child to the "writer". This line is wrong. You are losing nodes here, and switching to e.hasMoreElements() gave a StackOverflowError.
-                        //XMLTreeNode curr = (XMLTreeNode) e.nextElement(); // Get the next node.
+                    //curr = (XMLTreeNode)e.nextElement();
+                    while (e.hasMoreElements()) { // Pass each child to the "writer". This line is wrong. You are losing nodes here, and switching to e.hasMoreElements() gave a StackOverflowError.
+                        curr = (XMLTreeNode) e.nextElement(); // Get the next node.
                         System.out.println(curr.getData() + "HAS A CHILD!");
                         nodeCycle(w, curr); // Begin again.
+                        
                     
                     }
                 } catch (Exception ex) {System.out.println(ex.toString());
