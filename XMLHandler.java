@@ -21,9 +21,9 @@ public class XMLHandler extends DefaultHandler {
         text = "";
 
         // Make the root node, and add it to the stack.
-        Clause temp = new Clause("root", "Luke", "", "");
-        root = new XMLTreeNode(temp);
-        stack.add(root);
+        //Clause temp = new Clause("root", "Luke", "", "");
+        //root = new XMLTreeNode(temp);
+        //stack.add(root);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class XMLHandler extends DefaultHandler {
         // After it's all over, give the root to DAA. I would love to do this another way. A public static field isn't the best way to do this.
         DiscourseAnalysisApplet.root = root;
     }
-
+    
     @Override
     public void startElement(String uri, String localName, String qName,
             Attributes attributes) {
@@ -45,6 +45,11 @@ public class XMLHandler extends DefaultHandler {
             stack.peek().setChap(attributes.getValue("chapter").trim());
             stack.peek().setVrse(attributes.getValue("verse").trim());
             type = types.TEXT;
+        } else if (localName.equals("book")) {
+            // Make the root node, and add it to the stack.
+            Clause temp = new Clause("root", attributes.getValue("bookName"), "", "");
+            root = new XMLTreeNode(temp);
+            stack.add(root);
         }
     }
 
