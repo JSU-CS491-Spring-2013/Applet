@@ -30,15 +30,8 @@ public class XMLHandler extends DefaultHandler {
     public void endDocument() {
         // After it's all over, give the root to DAA. I would love to do this another way. A public static field isn't the best way to do this.
         DiscourseAnalysisApplet.root = root;
-        
-        System.out.println("Debug text to ensure my parser is working as I think.");
-        System.out.println("bookCount:  " + bookCount);
-        System.out.println("clauseCount:  " + clauseCount);
-        System.out.println();
     }
-
-    private static int bookCount = 0;
-    private static int clauseCount = 0;
+    
     @Override
     public void startElement(String uri, String localName, String qName,
             Attributes attributes) {
@@ -46,7 +39,6 @@ public class XMLHandler extends DefaultHandler {
         if (localName.equals("clause")) {
             stack.add(new XMLTreeNode(new Clause()));
             type = types.CLAUSE;
-            clauseCount++;
         } else if (localName.equals("conj")) { // If a Conj is found, make sure characters() knows to listen for it.
             type = types.CONJ;
         } else if (localName.contains("text")) { // If Text is found, get the chapter and verse.
@@ -58,7 +50,6 @@ public class XMLHandler extends DefaultHandler {
             Clause temp = new Clause("root", attributes.getValue("bookName"), "", "");
             root = new XMLTreeNode(temp);
             stack.add(root);
-            bookCount++;
         }
     }
 
