@@ -1,6 +1,7 @@
 
 import java.applet.Applet;
 import java.util.Calendar;
+import java.util.Enumeration;
 import javax.swing.JLayeredPane;
 import javax.swing.JScrollPane;
 import javax.xml.parsers.SAXParser;
