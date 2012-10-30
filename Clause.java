@@ -90,8 +90,78 @@ public class Clause extends JPanel {
 
                 // If a conjunction is found closer to the beginning, keep up with it instead.
                 if (temporaryConjunctionLocation >= 0 && temporaryConjunctionLocation < firstConjunction) {
-                    firstConjunction = temporaryConjunctionLocation;
-                    firstConjunctionText = tempConjunction;
+                    boolean wholeWord = true;
+
+                    try {
+                        char tempChar = temporaryData.toLowerCase().charAt(temporaryConjunctionLocation - 1);
+                        if (tempChar == 'a'
+                                || tempChar == 'b'
+                                || tempChar == 'c'
+                                || tempChar == 'd'
+                                || tempChar == 'e'
+                                || tempChar == 'f'
+                                || tempChar == 'g'
+                                || tempChar == 'h'
+                                || tempChar == 'i'
+                                || tempChar == 'j'
+                                || tempChar == 'k'
+                                || tempChar == 'l'
+                                || tempChar == 'm'
+                                || tempChar == 'n'
+                                || tempChar == 'o'
+                                || tempChar == 'p'
+                                || tempChar == 'q'
+                                || tempChar == 'r'
+                                || tempChar == 's'
+                                || tempChar == 't'
+                                || tempChar == 'u'
+                                || tempChar == 'v'
+                                || tempChar == 'w'
+                                || tempChar == 'x'
+                                || tempChar == 'y'
+                                || tempChar == 'z') {
+                            wholeWord = false;
+                        }
+                    } catch (Exception e) {
+                    }
+
+                    try {
+                        char tempChar = temporaryData.toLowerCase().charAt(temporaryConjunctionLocation + tempConjunction.length() + 1);
+                        if (tempChar == 'a'
+                                || tempChar == 'b'
+                                || tempChar == 'c'
+                                || tempChar == 'd'
+                                || tempChar == 'e'
+                                || tempChar == 'f'
+                                || tempChar == 'g'
+                                || tempChar == 'h'
+                                || tempChar == 'i'
+                                || tempChar == 'j'
+                                || tempChar == 'k'
+                                || tempChar == 'l'
+                                || tempChar == 'm'
+                                || tempChar == 'n'
+                                || tempChar == 'o'
+                                || tempChar == 'p'
+                                || tempChar == 'q'
+                                || tempChar == 'r'
+                                || tempChar == 's'
+                                || tempChar == 't'
+                                || tempChar == 'u'
+                                || tempChar == 'v'
+                                || tempChar == 'w'
+                                || tempChar == 'x'
+                                || tempChar == 'y'
+                                || tempChar == 'z') {
+                            wholeWord = false;
+                        }
+                    } catch (Exception e) {
+                    }
+
+                    if (wholeWord) {
+                        firstConjunction = temporaryConjunctionLocation;
+                        firstConjunctionText = tempConjunction;
+                    }
                 }
             }
 
@@ -99,7 +169,7 @@ public class Clause extends JPanel {
                 try {
                     document.insertString(document.getLength(), temporaryData.substring(0, firstConjunction), style);
                     temporaryData = temporaryData.substring(firstConjunction);
-                    
+
                     document.insertString(document.getLength(), temporaryData.substring(0, firstConjunctionText.length()), attributes);
                     temporaryData = temporaryData.substring(firstConjunctionText.length());
                 } catch (BadLocationException badLocationException) {
