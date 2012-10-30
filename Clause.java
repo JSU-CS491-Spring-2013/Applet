@@ -1,4 +1,5 @@
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -74,7 +75,8 @@ public class Clause extends JPanel {
         // Get a style for potential conjunctions.
         SimpleAttributeSet attributes = new SimpleAttributeSet();
         StyleConstants.setBold(attributes, true);
-        StyleConstants.setItalic(attributes, true);
+        StyleConstants.setBackground(attributes, Color.BLUE);
+        StyleConstants.setForeground(attributes, Color.WHITE);
 
         // While there is still text to be added...
         while (temporaryData.length() > 0) {
