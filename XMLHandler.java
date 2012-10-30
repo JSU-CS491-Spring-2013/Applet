@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.Stack;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
@@ -11,7 +12,7 @@ public class XMLHandler extends DefaultHandler {
 
     private enum types {
 
-        BLANK, CLAUSE, CONJ, TEXT
+        BLANK, CLAUSE, CONJ, TEXT, PCONJ
     };
 
     @Override
@@ -19,6 +20,8 @@ public class XMLHandler extends DefaultHandler {
         // Create a Stack that will be used to handle nested Clauses.
         stack = new Stack<XMLTreeNode>();
         text = "";
+        
+        DiscourseAnalysisApplet.conjunctions = new ArrayList<String>();
 
         // Make the root node, and add it to the stack.
         //Clause temp = new Clause("root", "Luke", "", "");
@@ -30,6 +33,21 @@ public class XMLHandler extends DefaultHandler {
     public void endDocument() {
         // After it's all over, give the root to DAA. I would love to do this another way. A public static field isn't the best way to do this.
         DiscourseAnalysisApplet.root = root;
+        
+        for (int i = 0; i < DiscourseAnalysisApplet.conjunctions.size(); i++) {
+            int bigPosition = -1;
+            int bigCount = -1;
+            for (int j = i; j < DiscourseAnalysisApplet.conjunctions.size(); j++) {
+                if (DiscourseAnalysisApplet.conjunctions.get(j).length() > bigCount) {
+                    bigCount = DiscourseAnalysisApplet.conjunctions.get(j).length();
+                    bigPosition = j;
+                }
+            }
+            
+            String temp = DiscourseAnalysisApplet.conjunctions.get(i);
+            DiscourseAnalysisApplet.conjunctions.set(i, DiscourseAnalysisApplet.conjunctions.get(bigPosition));
+            DiscourseAnalysisApplet.conjunctions.set(bigPosition, temp);
+        }
     }
     
     @Override
@@ -50,6 +68,8 @@ public class XMLHandler extends DefaultHandler {
             Clause temp = new Clause("root", attributes.getValue("bookName"), "", "");
             root = new XMLTreeNode(temp);
             stack.add(root);
+        } else if (localName.equals("pconj")) {
+            type = types.PCONJ;
         }
     }
 
@@ -65,12 +85,16 @@ public class XMLHandler extends DefaultHandler {
             stack.peek().getClause().setData(text.trim());
             text = "";
             type = types.BLANK;
+        } else if (localName.equals("pconj")) {
+            DiscourseAnalysisApplet.conjunctions.add(text);
+            text = "";
+            type = types.BLANK;
         }
     }
 
     @Override
     public void characters(char[] ch, int start, int length) {
-        if (type == types.TEXT) {
+        if (type == types.TEXT || type == types.PCONJ) {
             // If you find TEXT, add it to what we've found so far.
             text += new String(ch, start, length);
         } else if (type == types.CONJ) {
