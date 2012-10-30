@@ -108,9 +108,9 @@ public class Clause extends JPanel {
                 
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
                 
-                if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
+                /*if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
                     enableTextArea(); // enable and focus
-                }
+                }*/
             }
 
             /**

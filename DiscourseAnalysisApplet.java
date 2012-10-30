@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Enumeration;
 import javax.swing.JLayeredPane;
 import javax.swing.JScrollPane;
+import javax.swing.JFileChooser; 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.*;
@@ -18,10 +19,11 @@ public class DiscourseAnalysisApplet extends Applet {
 
     private JTreePanel jTreePanel;              // the panel on the left that does....what does that thing do?
     public static ButtonPanel buttonPanel;            // the panel on the right that contains the buttons
-    private XMLTreeModel treeModel;             // the tree that contains all data?
+    private static XMLTreeModel treeModel;             // the tree that contains all data?
     public static NodePanel nodePanel;          // the main panel (in the middle) that contains the tree
     private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
-
+    private static JFileChooser chooseFile;
+    
     // DEBUG INFORMATION - DELETE LATER
     Calendar before;
     
@@ -42,7 +44,7 @@ public class DiscourseAnalysisApplet extends Applet {
 
         // Make the panels.
         buttonPanel = new ButtonPanel();
-        buttonPanel.setBounds(10, 10, 249, 150);
+       //buttonPanel.setBounds(10, 10, 249, 183);
         buttonPanel.setEnabled(false);
         buttonPanel.setVisible(false);
         nodePanel = new NodePanel(root, treeModel.getXMax(), treeModel.getYMax());
@@ -90,7 +92,7 @@ public class DiscourseAnalysisApplet extends Applet {
     public XMLTreeModel makeTreeModel() {
         try {
             // Give the User the ability to choose which XML file he/she wants to use.
-            javax.swing.JFileChooser chooseFile = new javax.swing.JFileChooser();
+            chooseFile = new javax.swing.JFileChooser();
             chooseFile.showOpenDialog(null);
             
             // Create my JDialog that displays the progress bar.
@@ -117,15 +119,23 @@ public class DiscourseAnalysisApplet extends Applet {
 
             // DEBUG INFORMATION - DELETE LATER
             System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+            
+            /*
             String newFileName = chooseFile.getSelectedFile().toString();
             newFileName = newFileName.substring(0, newFileName.length() - 4);
             newFileName += " - Modified.xml";
             XMLConverter xml = new XMLConverter(newFileName, tree);
+            */
+            System.out.println(aabb());
             return tree;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    public static XMLTreeModel getTree(){
+        return treeModel;
     }
 
     /**
@@ -173,6 +183,10 @@ public class DiscourseAnalysisApplet extends Applet {
         }
 
         return new Clause(data, conj, chapter, verse);
+    }
+    
+    public static String aabb(){
+        return chooseFile.getSelectedFile().toString();        
     }
 
     /**

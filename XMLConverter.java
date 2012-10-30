@@ -75,7 +75,7 @@ public class XMLConverter {
                     //curr = (XMLTreeNode)e.nextElement();
                     while (e.hasMoreElements()) { // Pass each child to the "writer". This line is wrong. You are losing nodes here, and switching to e.hasMoreElements() gave a StackOverflowError.
                         curr = (XMLTreeNode) e.nextElement(); // Get the next node.
-                        System.out.println(curr.getData() + "HAS A CHILD!");
+                        System.out.println(curr.getData());
                         nodeCycle(w, curr); // Begin again.
                         
                     
