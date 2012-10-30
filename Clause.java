@@ -83,6 +83,7 @@ public class Clause extends JPanel {
             String tempConjunction = "";
             int temporaryConjunctionLocation = -1;
 
+            // Go through the list of conjunctions and find which one comes first.
             for (int j = 0; j < DiscourseAnalysisApplet.conjunctions.size(); j++) {
                 tempConjunction = DiscourseAnalysisApplet.conjunctions.get(j);
                 temporaryConjunctionLocation = temporaryData.toLowerCase().indexOf(tempConjunction.toLowerCase());
@@ -94,21 +95,24 @@ public class Clause extends JPanel {
                 }
             }
 
-            if (firstConjunction > 0 && firstConjunction < Integer.MAX_VALUE) {
+            if (firstConjunction > 0 && firstConjunction < Integer.MAX_VALUE) { // If the first conjunction appears after the beginning.
                 try {
                     document.insertString(document.getLength(), temporaryData.substring(0, firstConjunction), style);
                     temporaryData = temporaryData.substring(firstConjunction);
+                    
+                    document.insertString(document.getLength(), temporaryData.substring(0, firstConjunctionText.length()), attributes);
+                    temporaryData = temporaryData.substring(firstConjunctionText.length());
                 } catch (BadLocationException badLocationException) {
                     System.err.println("Oops");
                 }
-            } else if (firstConjunction == 0) {
+            } else if (firstConjunction == 0) { // If the first conjunction appears at the beginning.
                 try {
                     document.insertString(document.getLength(), temporaryData.substring(0, firstConjunctionText.length()), attributes);
                     temporaryData = temporaryData.substring(firstConjunctionText.length());
                 } catch (BadLocationException badLocationException) {
                     System.err.println("Oops");
                 }
-            } else {
+            } else { // If there are no conjunctions
                 try {
                     document.insertString(document.getLength(), temporaryData, style);
                     temporaryData = "";
