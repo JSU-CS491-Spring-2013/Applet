@@ -7,9 +7,12 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.*;
 
 /**
- * A Clause object is composed of text, conjunction, chapter, and verse. It is also a JPanel with a JTextArea in it.
+ * A Clause object is composed of text, conjunction, chapter, and verse. It is
+ * also a JPanel with a JTextArea in it.
  */
 public class Clause extends JPanel {
 
@@ -19,12 +22,13 @@ public class Clause extends JPanel {
     private String vrse;                // The verse number of the Clause
     private int x;                      // The starting x-value for drawing
     private int y;                      // The starting y-value for drawing
-    private JTextArea myTextArea;       // This is where I will show my data.
+    private JTextPane myTextArea;       // This is where I will show my data.
     private JScrollPane myScrollPane;   // This allows the User to scroll through the text area.
     private NodePanel myNodePanel;      // This is the NodePanel this Clause is on.
 
     /**
-     * This method is called whenever this Clause's text area needs to accept User input.
+     * This method is called whenever this Clause's text area needs to accept
+     * User input.
      */
     public void enableTextArea() {
         if (DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
@@ -52,14 +56,74 @@ public class Clause extends JPanel {
     }
 
     /**
-     * An empty constructor. This is used by XMLHandler to make a Clause even when it hasn't finished collecting all of the data.
+     * An empty constructor. This is used by XMLHandler to make a Clause even
+     * when it hasn't finished collecting all of the data.
      */
     public Clause() {
         super();
     }
 
+    private void highlightPotentialConjunctions() {
+        String temporaryData = data;
+
+        // Get a style for normal text.
+        StyleContext context = new StyleContext();
+        StyledDocument document = new DefaultStyledDocument(context);
+        Style style = context.getStyle(StyleContext.DEFAULT_STYLE);
+
+        // Get a style for potential conjunctions.
+        SimpleAttributeSet attributes = new SimpleAttributeSet();
+        StyleConstants.setBold(attributes, true);
+        StyleConstants.setItalic(attributes, true);
+
+        // While there is still text to be added...
+        while (temporaryData.length() > 0) {
+            int firstConjunction = Integer.MAX_VALUE; // Set this to the max so the calculation will work.
+            String firstConjunctionText = ""; // This will hold the found potential conj
+            String tempConjunction = "";
+            int temporaryConjunctionLocation = -1;
+
+            for (int j = 0; j < DiscourseAnalysisApplet.conjunctions.size(); j++) {
+                tempConjunction = DiscourseAnalysisApplet.conjunctions.get(j);
+                temporaryConjunctionLocation = temporaryData.toLowerCase().indexOf(tempConjunction.toLowerCase());
+
+                // If a conjunction is found closer to the beginning, keep up with it instead.
+                if (temporaryConjunctionLocation >= 0 && temporaryConjunctionLocation < firstConjunction) {
+                    firstConjunction = temporaryConjunctionLocation;
+                    firstConjunctionText = tempConjunction;
+                }
+            }
+
+            if (firstConjunction > 0 && firstConjunction < Integer.MAX_VALUE) {
+                try {
+                    document.insertString(document.getLength(), temporaryData.substring(0, firstConjunction), style);
+                    temporaryData = temporaryData.substring(firstConjunction);
+                } catch (BadLocationException badLocationException) {
+                    System.err.println("Oops");
+                }
+            } else if (firstConjunction == 0) {
+                try {
+                    document.insertString(document.getLength(), temporaryData.substring(0, firstConjunctionText.length()), attributes);
+                    temporaryData = temporaryData.substring(firstConjunctionText.length());
+                } catch (BadLocationException badLocationException) {
+                    System.err.println("Oops");
+                }
+            } else {
+                try {
+                    document.insertString(document.getLength(), temporaryData, style);
+                    temporaryData = "";
+                } catch (BadLocationException badLocationException) {
+                    System.err.println("Oops");
+                }
+            }
+        }
+
+        myTextArea.setDocument(document);
+    }
+
     /**
-     * This is the method that finishes the process of creating a Clause. This should only be called once all data has been filled in.
+     * This is the method that finishes the process of creating a Clause. This
+     * should only be called once all data has been filled in.
      */
     public final void finishStartup() {
         x = 0;
@@ -73,10 +137,11 @@ public class Clause extends JPanel {
         }
 
         // Set my text box up
-        myTextArea = new JTextArea();
-        myTextArea.setLineWrap(true);
-        myTextArea.setWrapStyleWord(true);
+        myTextArea = new JTextPane();
+        // myTextArea.setLineWrap(true);
+        // myTextArea.setWrapStyleWord(true);
         myTextArea.setText(data);
+        highlightPotentialConjunctions();
 
         // Add scroll abilities to the text box
         myScrollPane = new JScrollPane();
@@ -105,9 +170,9 @@ public class Clause extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
-                
+
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
-                
+
                 if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
                     enableTextArea(); // enable and focus
                 }
@@ -162,7 +227,8 @@ public class Clause extends JPanel {
     }
 
     /**
-     * This repositions the Clause in the NodePanel. This is called after updating.
+     * This repositions the Clause in the NodePanel. This is called after
+     * updating.
      */
     public void updateClauseBounds() {
         setBounds(x, y, 260, 95);
@@ -182,6 +248,7 @@ public class Clause extends JPanel {
 
     /**
      * This returns the string representation of the Clause.
+     *
      * @return a String representing the Clause
      */
     @Override
