@@ -57,6 +57,10 @@ public class XMLConverter {
                 
                 if (c.getData().equals("root")) { // This will only ever happen when the root node is passed in to set the book in XML
                     w.write("<book bookName=\"" + c.getConj() + "\">\n"); // Initial book XML tag
+                    
+                    for (int i = 0; i < DiscourseAnalysisApplet.conjunctions.size(); i++) {
+                        w.write("<pconj>" + DiscourseAnalysisApplet.conjunctions.get(i) + "</pconj>");
+                    }
                 } else {
                     // Write XML tags and data to the file.
                     w.write("<clause>\n");

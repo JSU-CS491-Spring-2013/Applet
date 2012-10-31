@@ -1,5 +1,6 @@
 
 import java.applet.Applet;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import javax.swing.JLayeredPane;
@@ -22,8 +23,13 @@ public class DiscourseAnalysisApplet extends Applet {
     private static XMLTreeModel treeModel;             // the tree that contains all data?
     public static NodePanel nodePanel;          // the main panel (in the middle) that contains the tree
     private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
+<<<<<<< HEAD
     private static JFileChooser chooseFile;
     
+=======
+    public static ArrayList<String> conjunctions;
+
+>>>>>>> 3288470dfb487212ee75cf701cc29017fcc12e6d
     // DEBUG INFORMATION - DELETE LATER
     Calendar before;
     
