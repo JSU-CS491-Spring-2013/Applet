@@ -128,7 +128,7 @@ public class Clause extends JPanel {
                     }
 
                     try {
-                        char tempChar = temporaryData.toLowerCase().charAt(temporaryConjunctionLocation + tempConjunction.length() + 1);
+                        char tempChar = temporaryData.toLowerCase().charAt(temporaryConjunctionLocation + tempConjunction.length());
                         if (tempChar == 'a'
                                 || tempChar == 'b'
                                 || tempChar == 'c'
