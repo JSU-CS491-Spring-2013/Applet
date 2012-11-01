@@ -128,7 +128,7 @@ public class Clause extends JPanel {
                     }
 
                     try {
-                        char tempChar = temporaryData.toLowerCase().charAt(temporaryConjunctionLocation + tempConjunction.length() + 1);
+                        char tempChar = temporaryData.toLowerCase().charAt(temporaryConjunctionLocation + tempConjunction.length());
                         if (tempChar == 'a'
                                 || tempChar == 'b'
                                 || tempChar == 'c'
@@ -246,19 +246,25 @@ public class Clause extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
-
+                
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
-<<<<<<< HEAD
                 
                 /*if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
-=======
-
-                if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
->>>>>>> 3288470dfb487212ee75cf701cc29017fcc12e6d
                     enableTextArea(); // enable and focus
                 }*/
-            }
+            }/*
+            
+            @Override
+            public void mousePressed(MouseEvent e) {
+                boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
 
+                DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
+
+                if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
+                    enableTextArea(); // enable and focus
+                }
+            }
+            */
             /**
              * Not needed, but must be present.
              */
