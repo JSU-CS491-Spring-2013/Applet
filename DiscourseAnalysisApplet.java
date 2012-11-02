@@ -87,7 +87,7 @@ public class DiscourseAnalysisApplet extends JApplet {
                 else
                     newFileName = chooseFile.getSelectedFile().toString();
                 if(!newFileName.contains(".xml"))
-                    newFileName += "- Modified.xml";
+                    newFileName += ".xml";
                 
                 XMLConverter xml = new XMLConverter(newFileName, tree);
             }
