@@ -80,7 +80,8 @@ public class DiscourseAnalysisApplet extends JApplet {
                 String newFileName = chooseFile.getSelectedFile().toString();
                 chooseFile = null;
                 chooseFile = new javax.swing.JFileChooser();
-                chooseFile.showOpenDialog(null);
+                chooseFile.showSaveDialog(null);
+                
                 if(chooseFile.getSelectedFile().toString().equals("")){
                     newFileName = "DiscourseAnalysisTempFile.xml";
                 }

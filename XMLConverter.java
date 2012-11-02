@@ -9,6 +9,7 @@
  */
 import java.io.*;
 import java.util.Enumeration;
+import javax.swing.JOptionPane;
 
 public class XMLConverter {
 
@@ -41,6 +42,8 @@ public class XMLConverter {
             nodeCycle(writer, root); // Magic? Also, overwritable method calls in constructors are a bad idea. nodeCycle needs to be final.
             writer.write("</book>"); // At the end, close the book tag.
             writer.close();
+            
+            JOptionPane.showMessageDialog(null, "The file has successfully been saved.", "Successfully saved!", JOptionPane.PLAIN_MESSAGE);
         } catch (IOException e) {
             e.printStackTrace(); // You will want to remove this now.
         }
@@ -58,8 +61,9 @@ public class XMLConverter {
                 if (c.getData().equals("root")) { // This will only ever happen when the root node is passed in to set the book in XML
                     w.write("<book bookName=\"" + c.getConj() + "\">\n"); // Initial book XML tag
                     
+                    // Add potential conjunctions to the beginning of the XML file.
                     for (int i = 0; i < DiscourseAnalysisApplet.conjunctions.size(); i++) {
-                        w.write("<pconj>" + DiscourseAnalysisApplet.conjunctions.get(i) + "</pconj>");
+                        w.write("<pconj>" + DiscourseAnalysisApplet.conjunctions.get(i) + "</pconj>\n");
                     }
                 } else {
                     // Write XML tags and data to the file.
@@ -100,6 +104,11 @@ public class XMLConverter {
                 // If the node passed in is the root of the tree, this will execute.
                 if (c.getData().equals("root")) {
                     w.write("<book bookName=\"" + c.getData() + "\">");
+                    
+                    // Add potential conjunctions to the beginning of the XML file.
+                    for (int i = 0; i < DiscourseAnalysisApplet.conjunctions.size(); i++) {
+                        w.write("<pconj>" + DiscourseAnalysisApplet.conjunctions.get(i) + "</pconj>\n");
+                    }
                 }
 
                 // Print to the XML file.
