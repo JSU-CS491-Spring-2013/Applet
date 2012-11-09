@@ -35,25 +35,29 @@ public class DiscourseAnalysisApplet extends JApplet {
     private JMenuBar bar;
     private XMLTreeModel tree;
     private JFileChooser chooseFile;
-    
-
     // DEBUG INFORMATION - DELETE LATER
     Calendar before;
-    
+
     @Override
     public void init() {
         /*try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
+        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+        if ("Nimbus".equals(info.getName())) {
+        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+        break;
+        }
+        }
         } catch (Exception e) {
         }*/
 
+        String xmlURL = getParameter("xmlURL");
+        if (xmlURL.isEmpty()) {
+            treeModel = makeTreeModel();
+        } else {
+            treeModel = makeTreeModel(xmlURL);
+        }
+
         this.setLayout(null); // This allows the setBounds method to work.
-        treeModel = makeTreeModel();
 
         // Make the panels.
         buttonPanel = new ButtonPanel();
@@ -71,25 +75,27 @@ public class DiscourseAnalysisApplet extends JApplet {
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
 
         nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
-        
+
         // Add the components to the window.
         item = new JMenuItem("Save");
         item.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
-                
+
                 String newFileName = chooseFile.getSelectedFile().toString();
                 chooseFile = null;
                 chooseFile = new javax.swing.JFileChooser();
                 chooseFile.showSaveDialog(null);
-                
-                if(chooseFile.getSelectedFile().toString().equals("")){
+
+                if (chooseFile.getSelectedFile().toString().equals("")) {
                     newFileName = "DiscourseAnalysisTempFile.xml";
-                }
-                else
+                } else {
                     newFileName = chooseFile.getSelectedFile().toString();
-                if(!newFileName.contains(".xml"))
+                }
+                if (!newFileName.contains(".xml")) {
                     newFileName += ".xml";
-                
+                }
+
                 XMLConverter xml = new XMLConverter(newFileName, tree);
             }
         });
@@ -100,8 +106,8 @@ public class DiscourseAnalysisApplet extends JApplet {
         bar = new JMenuBar();
         bar.add(menu);
         setJMenuBar(bar);
-        
-        
+
+
         // DEBUG INFORMATION - DELETE LATER
         Calendar after = Calendar.getInstance();
         System.out.println("Total number of milliseconds since XML file was given:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
@@ -123,17 +129,24 @@ public class DiscourseAnalysisApplet extends JApplet {
         return nodePanel;
     }
 
+    public XMLTreeModel makeTreeModel() {
+        // Give the User the ability to choose which XML file he/she wants to use.
+        chooseFile = new javax.swing.JFileChooser();
+        chooseFile.showOpenDialog(null);
+        return makeTreeModel(chooseFile.getSelectedFile().toString());
+    }
+
     /**
      * Sets up the parser, gets the root and builds the XMLTreeModel
      *
      * @return XMLTreeModel
      */
-    public XMLTreeModel makeTreeModel() {
+    public XMLTreeModel makeTreeModel(String path) {
         try {
             // Give the User the ability to choose which XML file he/she wants to use.
-            chooseFile = new javax.swing.JFileChooser();
-            chooseFile.showOpenDialog(null);
-            
+            // chooseFile = new javax.swing.JFileChooser();
+            // chooseFile.showOpenDialog(null);
+
             // Create my JDialog that displays the progress bar.
             myProgress = new ProgressBarDialogBox(null, false);
 
@@ -148,7 +161,7 @@ public class DiscourseAnalysisApplet extends JApplet {
             before = Calendar.getInstance();
 
             // After this method finishes, the static field, root, will contain the root node of the tree.
-            xmlReader.parse(chooseFile.getSelectedFile().toString());
+            xmlReader.parse(path);
 
             // DEBUG INFORMATION - DELETE LATER
             Calendar after = Calendar.getInstance();
@@ -158,19 +171,19 @@ public class DiscourseAnalysisApplet extends JApplet {
 
             // DEBUG INFORMATION - DELETE LATER
             System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
-            
+
             //String newFileName = chooseFile.getSelectedFile().toString();
             //newFileName = newFileName.substring(0, newFileName.length() - 4);
             //newFileName += " - Modified.xml";
             //XMLConverter xml = new XMLConverter(newFileName, tree);
-            
-            
+
+
             /*
             String newFileName = chooseFile.getSelectedFile().toString();
             newFileName = newFileName.substring(0, newFileName.length() - 4);
             newFileName += " - Modified.xml";
             XMLConverter xml = new XMLConverter(newFileName, tree);
-            */
+             */
             return tree;
         } catch (Exception e) {
             e.printStackTrace();
