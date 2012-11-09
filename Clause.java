@@ -253,17 +253,22 @@ public class Clause extends JPanel {
 
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
 
+                // Make an image.
                 BufferedImage img = new BufferedImage(1000, 700, BufferedImage.TYPE_INT_RGB);
                 
+                // Painstakingly put a pixel of a certain color into every position. Horribly inefficient, but working.
                 for (int i = 0; i < 1000; i++) {
                     for (int j = 0; j < 700; j++) {
                         img.setRGB(i, j, new Color(200, 200, 200).getRGB());
                     }
                 }
+                
+                // Paint the image into the BufferedImage
                 Graphics2D g2d = img.createGraphics();
                 DiscourseAnalysisApplet.nodePanel.printAll(g2d);
                 g2d.dispose();
                 
+                // Save it!
                 try {
                     ImageIO.write(img, "png", new File("PrintMe.png"));
                 } catch (IOException ex) {
