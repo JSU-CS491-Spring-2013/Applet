@@ -1,10 +1,15 @@
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -232,7 +237,6 @@ public class Clause extends JPanel {
 
         // Create the MouseListener that will be used to listen for User Input.
         MouseListener ml = new MouseListener() {
-
             /**
              * Not needed, but must be present.
              */
@@ -246,25 +250,45 @@ public class Clause extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
-                
+
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
+
+                BufferedImage img = new BufferedImage(1000, 700, BufferedImage.TYPE_INT_RGB);
                 
+                for (int i = 0; i < 1000; i++) {
+                    for (int j = 0; j < 700; j++) {
+                        img.setRGB(i, j, 200);
+                    }
+                }
+                Graphics2D g2d = img.createGraphics();
+                DiscourseAnalysisApplet.nodePanel.printAll(g2d);
+                g2d.dispose();
+                
+                try {
+                    ImageIO.write(img, "png", new File("PrintMe.png"));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
                 /*if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
-                    enableTextArea(); // enable and focus
-                }*/
+                 enableTextArea(); // enable and focus
+                 }*/
             }/*
             
-            @Override
-            public void mousePressed(MouseEvent e) {
-                boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
+             @Override
+             public void mousePressed(MouseEvent e) {
+             boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
 
-                DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
+             DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
 
-                if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
-                    enableTextArea(); // enable and focus
-                }
-            }
-            */
+             if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
+             enableTextArea(); // enable and focus
+             }
+             * 
+             }
+             */
+
+
             /**
              * Not needed, but must be present.
              */
@@ -293,7 +317,6 @@ public class Clause extends JPanel {
 
         // When focus is lost, disable the text area.
         myTextArea.addFocusListener(new FocusListener() {
-
             /**
              * Not needed, but must be present.
              */
