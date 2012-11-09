@@ -257,7 +257,7 @@ public class Clause extends JPanel {
                 
                 for (int i = 0; i < 1000; i++) {
                     for (int j = 0; j < 700; j++) {
-                        img.setRGB(i, j, 200);
+                        img.setRGB(i, j, new Color(200, 200, 200).getRGB());
                     }
                 }
                 Graphics2D g2d = img.createGraphics();
