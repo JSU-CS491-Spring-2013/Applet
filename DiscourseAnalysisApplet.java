@@ -12,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.*;
@@ -52,8 +53,14 @@ public class DiscourseAnalysisApplet extends JApplet {
         } catch (Exception e) {
         }*/
 
+        String xmlURL = getParameter("xmlURL");
+        if (xmlURL == null) {
+            treeModel = makeTreeModel();
+        } else {
+            treeModel = makeTreeModel(xmlURL);
+        }
+
         this.setLayout(null); // This allows the setBounds method to work.
-        treeModel = makeTreeModel();
 
         // Make the panels.
         buttonPanel = new ButtonPanel();
@@ -71,11 +78,12 @@ public class DiscourseAnalysisApplet extends JApplet {
         jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
 
         nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
-        
+
         // Making the Menu items and their functionality 
         item = new JMenuItem("Save");
         //Adding functionality to the "Save" selection
         item.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent e) {
                 //Gets the original File name
                 String newFileName = chooseFile.getSelectedFile().toString();
@@ -134,17 +142,24 @@ public class DiscourseAnalysisApplet extends JApplet {
         return nodePanel;
     }
 
+    public XMLTreeModel makeTreeModel() {
+        // Give the User the ability to choose which XML file he/she wants to use.
+        chooseFile = new javax.swing.JFileChooser();
+        chooseFile.showOpenDialog(null);
+        return makeTreeModel(chooseFile.getSelectedFile().toString());
+    }
+
     /**
      * Sets up the parser, gets the root and builds the XMLTreeModel
      *
      * @return XMLTreeModel
      */
-    public XMLTreeModel makeTreeModel() {
+    public XMLTreeModel makeTreeModel(String path) {
         try {
             // Give the User the ability to choose which XML file he/she wants to use.
-            chooseFile = new javax.swing.JFileChooser();
-            chooseFile.showOpenDialog(null);
-            
+            // chooseFile = new javax.swing.JFileChooser();
+            // chooseFile.showOpenDialog(null);
+
             // Create my JDialog that displays the progress bar.
             myProgress = new ProgressBarDialogBox(null, false);
 
@@ -159,7 +174,7 @@ public class DiscourseAnalysisApplet extends JApplet {
             before = Calendar.getInstance();
 
             // After this method finishes, the static field, root, will contain the root node of the tree.
-            xmlReader.parse(chooseFile.getSelectedFile().toString());
+            xmlReader.parse(path);
 
             // DEBUG INFORMATION - DELETE LATER
             Calendar after = Calendar.getInstance();
@@ -169,19 +184,19 @@ public class DiscourseAnalysisApplet extends JApplet {
 
             // DEBUG INFORMATION - DELETE LATER
             System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
-            
+
             //String newFileName = chooseFile.getSelectedFile().toString();
             //newFileName = newFileName.substring(0, newFileName.length() - 4);
             //newFileName += " - Modified.xml";
             //XMLConverter xml = new XMLConverter(newFileName, tree);
-            
-            
+
+
             /*
             String newFileName = chooseFile.getSelectedFile().toString();
             newFileName = newFileName.substring(0, newFileName.length() - 4);
             newFileName += " - Modified.xml";
             XMLConverter xml = new XMLConverter(newFileName, tree);
-            */
+             */
             return tree;
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,10 +1,15 @@
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -247,16 +252,44 @@ public class Clause extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
-              
+
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
                 DiscourseAnalysisApplet.buttonPanel.associateClauseAndNode(clickNode.getClause(), clickNode);
-                /*
-                if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
-                    enableTextArea(); // enable and focus
-                }*/
+
+                // Make an image.
+                BufferedImage img = new BufferedImage(DiscourseAnalysisApplet.nodePanel.getWidth(), DiscourseAnalysisApplet.nodePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+                // Painstakingly put a pixel of a certain color into every position. Horribly inefficient, but working.
+                for (int i = 0; i < DiscourseAnalysisApplet.nodePanel.getWidth(); i++) {
+                    for (int j = 0; j < DiscourseAnalysisApplet.nodePanel.getHeight(); j++) {
+                        img.setRGB(i, j, new Color(200, 200, 200).getRGB());
+                    }
+                }
+
+                // Paint the image into the BufferedImage
+                Graphics2D g2d = img.createGraphics();
+                DiscourseAnalysisApplet.nodePanel.paint(g2d);
+                g2d.dispose();
+
+                // Save it!
+                try {
+                    ImageIO.write(img, "png", new File("PrintMe.png"));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+
+             
+            
+                       
                 
             }
+                
             
+            
+            
+             
+
+
             /**
              * Not needed, but must be present.
              */

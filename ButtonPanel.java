@@ -8,7 +8,7 @@ public class ButtonPanel extends javax.swing.JPanel {
 
     private XMLTreeNode firstNodeSelection;     // Holds the Node used in the firstNodeSelection box
     private XMLTreeNode lastNodeSelection;      // Holds the Node used in the lastNodeSelection box
-    
+
     /**
      * Toggle the enabled property for the buttons.
      *
