@@ -12,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.*;
@@ -51,7 +52,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         }*/
 
         String xmlURL = getParameter("xmlURL");
-        if (xmlURL.isEmpty()) {
+        if (xmlURL == null) {
             treeModel = makeTreeModel();
         } else {
             treeModel = makeTreeModel(xmlURL);
