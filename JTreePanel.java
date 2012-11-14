@@ -23,7 +23,7 @@ public class JTreePanel extends JPanel {
         scrollPane = new JScrollPane(tree);
         this.add(scrollPane);
         this.setMaximumSize(new Dimension(200, 500));
-        scrollPane.setBounds(0, 0, 250, 720);  // Redundant? Which is correct?
+        scrollPane.setBounds(0, 0, 250, 700);  // Redundant? Which is correct?
 
         tree.addMouseListener(new MouseListener() {
 
