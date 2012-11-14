@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Enumeration;
+//import java.util.Enumeration;
 import javax.swing.JLayeredPane;
 import javax.swing.JScrollPane;
 import javax.swing.JApplet;
@@ -17,6 +17,12 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.*;
 import org.xml.sax.XMLReader;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.awt.image.BufferedImage;
 
 /**
  * DiscourseAnalysisApplet reads an XML file and builds an XMLTreeModel. The
@@ -31,7 +37,7 @@ public class DiscourseAnalysisApplet extends JApplet {
     public static NodePanel nodePanel;          // the main panel (in the middle) that contains the tree
     private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
     public static ArrayList<String> conjunctions;
-    private JMenuItem item;
+    private JMenuItem saveXML, saveImg;
     private JMenu menu;
     private JMenuBar bar;
     private XMLTreeModel tree;
@@ -80,37 +86,92 @@ public class DiscourseAnalysisApplet extends JApplet {
         nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
 
         // Making the Menu items and their functionality 
-        item = new JMenuItem("Save");
+        saveXML = new JMenuItem("Save XML");
+        saveImg = new JMenuItem("Save as Image");
         //Adding functionality to the "Save" selection
-        item.addActionListener(new ActionListener() {
+        saveXML.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
                 //Gets the original File name
-                String newFileName = chooseFile.getSelectedFile().toString();
+                String newFileName;
                 //This will create a new pop-up that will allow the user to specify a file name
                 chooseFile = null;
                 chooseFile = new JFileChooser();
 
                 //The filechooser doesn't allow you to leave it blank and save, but I put this in just in case
-                chooseFile.showSaveDialog(null);
-                
-
-                if(chooseFile.getSelectedFile().toString().equals("")){
-                    newFileName = "DiscourseAnalysisTempFile.xml";
+                //chooseFile.showSaveDialog(null);
+                int returnVal = chooseFile.showSaveDialog(null);
+                if(returnVal == JFileChooser.CANCEL_OPTION){}
+                else{
+                    if(chooseFile.getSelectedFile().toString().equals("")){
+                        newFileName = "DiscourseAnalysisTempFile.xml";
+                    }
+                    else
+                        //This will now check to see if the file name the user chose contains .xml tag, if not then it will add it
+                        newFileName = chooseFile.getSelectedFile().toString();
+                    if(!newFileName.contains(".xml"))
+                        newFileName += ".xml";
+                    //Calls the save class passing it the new filepath and the tree as it is.
+                    XMLConverter xml = new XMLConverter(newFileName, tree);
                 }
-                else
-                    //This will now check to see if the file name the user chose contains .xml tag, if not then it will add it
-                    newFileName = chooseFile.getSelectedFile().toString();
-                if(!newFileName.contains(".xml"))
-                    newFileName += ".xml";
-                //Calls the save class passing it the new filepath and the tree as it is.
-                XMLConverter xml = new XMLConverter(newFileName, tree);
             }
         });
+        
+        saveImg.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                //This will create a new pop-up that will allow the user to specify a file name
+                JOptionPane.showMessageDialog(null, "All Images are saved as .png", "Save Warning", JOptionPane.INFORMATION_MESSAGE);
+                chooseFile = null;
+                chooseFile = new JFileChooser();
+                String newFileName = "";
+                //The filechooser doesn't allow you to leave it blank and save, but I put this in just in case
+                //chooseFile.showSaveDialog(null);
+                
+                int returnVal = chooseFile.showSaveDialog(null);
+                if(returnVal == JFileChooser.CANCEL_OPTION){}
+                else{
+                    if(chooseFile.getSelectedFile().toString().equals("")){
+                        newFileName = "DiscourseAnalysisImage.png";
+                    }
+                    else
+                        //This will now check to see if the file name the user chose contains .xml tag, if not then it will add it
+                        newFileName = chooseFile.getSelectedFile().toString();
+                    if(!newFileName.contains(".png"))
+                        newFileName += ".png";
+
+                    // Make an image.
+                    BufferedImage img = new BufferedImage(DiscourseAnalysisApplet.nodePanel.getWidth(), DiscourseAnalysisApplet.nodePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+                    // Painstakingly put a pixel of a certain color into every position. Horribly inefficient, but working.
+                    for (int i = 0; i < DiscourseAnalysisApplet.nodePanel.getWidth(); i++) {
+                        for (int j = 0; j < DiscourseAnalysisApplet.nodePanel.getHeight(); j++) {
+                            img.setRGB(i, j, new Color(200, 200, 200).getRGB());
+                        }
+                    }
+
+                    // Paint the image into the BufferedImage
+                    Graphics2D g2d = img.createGraphics();
+                    DiscourseAnalysisApplet.nodePanel.paint(g2d);
+                    g2d.dispose();
+
+                    // Save it!
+                    try {
+                        ImageIO.write(img, "png", new File(newFileName));
+                        JOptionPane.showMessageDialog(null, "The image file has successfully been saved.", "Successfully saved!", JOptionPane.PLAIN_MESSAGE);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+                
+            }
+        });
+        
         //Creates a Menu with "Menu" as a selectable item.
         menu = new JMenu("Menu");
         //Adds the "Save" button to the Menu
-        menu.add(item);
+        menu.add(saveXML);
+        menu.add(saveImg);
         
         add(jTreePanel);
         add(s);
