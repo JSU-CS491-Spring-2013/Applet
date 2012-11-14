@@ -195,7 +195,11 @@ public class ButtonPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCancelActionPerformed
+        cmdOkay.setEnabled(false);
+        cmdEdit.setEnabled(true);
+        workingClause.chooseFocus(false);
         DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
+        
     }//GEN-LAST:event_cmdCancelActionPerformed
 
     private void cmdOkayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkayActionPerformed
@@ -219,10 +223,11 @@ public class ButtonPanel extends javax.swing.JPanel {
     private XMLTreeNode workingNode;
     
     private void cmdEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditActionPerformed
+      
       workingClause.chooseFocus(true);
       cmdOkay.setEnabled(true);
       cmdEdit.setEnabled(false);
-    
+      
     }//GEN-LAST:event_cmdEditActionPerformed
 
     private void cmdRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveActionPerformed

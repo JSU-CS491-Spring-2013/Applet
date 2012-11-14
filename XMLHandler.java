@@ -55,8 +55,21 @@ public class XMLHandler extends DefaultHandler {
             Attributes attributes) {
         // If a Clause is found, make a new Clause and add it to the stack.
         if (localName.equals("clause")) {
+            
+            Clause tempClause = new Clause();
+            XMLTreeNode parent = new XMLTreeNode(tempClause);
+            tempClause.clickNode = parent;
+            stack.add(parent);
+            type = types.CLAUSE;
+             
+             
+            /*
+            Clause tempClause = new Clause();
+            XMLTreeNode parent = new XMLTreeNode(tempClause);
+            tempClause.clickNode = parent;
             stack.add(new XMLTreeNode(new Clause()));
             type = types.CLAUSE;
+            */
         } else if (localName.equals("conj")) { // If a Conj is found, make sure characters() knows to listen for it.
             type = types.CONJ;
         } else if (localName.contains("text")) { // If Text is found, get the chapter and verse.

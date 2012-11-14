@@ -255,7 +255,7 @@ public class Clause extends JPanel {
 
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
                 DiscourseAnalysisApplet.buttonPanel.associateClauseAndNode(clickNode.getClause(), clickNode);
-
+		/*		
                 // Make an image.
                 BufferedImage img = new BufferedImage(DiscourseAnalysisApplet.nodePanel.getWidth(), DiscourseAnalysisApplet.nodePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
 
@@ -277,10 +277,7 @@ public class Clause extends JPanel {
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-
-             
-            
-                       
+                */
                 
             }
                 
