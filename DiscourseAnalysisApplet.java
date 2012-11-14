@@ -75,6 +75,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         s.getVerticalScrollBar().setUnitIncrement(64);
         s.getHorizontalScrollBar().setUnitIncrement(32);
         jTreePanel = new JTreePanel(treeModel, nodePanel);
+        jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
 
         nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
 
