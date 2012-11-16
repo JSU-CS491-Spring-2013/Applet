@@ -1,18 +1,12 @@
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.*;
 
@@ -31,7 +25,7 @@ public class Clause extends JPanel {
     private JTextPane myTextArea;       // This is where I will show my data.
     private JScrollPane myScrollPane;   // This allows the User to scroll through the text area.
     private NodePanel myNodePanel;      // This is the NodePanel this Clause is on.
-    public XMLTreeNode clickNode;
+    public XMLTreeNode clickNode;       // Information on the node for the button panel to use.
     //private XMLTreeNode selected;
     /**
      * This method is called whenever this Clause's text area needs to accept
@@ -220,9 +214,8 @@ public class Clause extends JPanel {
 
         // Set my text box up
         myTextArea = new JTextPane();
-        // myTextArea.setLineWrap(true);
-        // myTextArea.setWrapStyleWord(true);
         myTextArea.setText(data);
+        //Goes through the list of potential conjunctions and highlights them
         highlightPotentialConjunctions();
 
         // Add scroll abilities to the text box
@@ -254,37 +247,11 @@ public class Clause extends JPanel {
                 boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
 
                 DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
+                //This part will send the information on the node that was clicked.
                 DiscourseAnalysisApplet.buttonPanel.associateClauseAndNode(clickNode.getClause(), clickNode);
-		/*		
-                // Make an image.
-                BufferedImage img = new BufferedImage(DiscourseAnalysisApplet.nodePanel.getWidth(), DiscourseAnalysisApplet.nodePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
-
-                // Painstakingly put a pixel of a certain color into every position. Horribly inefficient, but working.
-                for (int i = 0; i < DiscourseAnalysisApplet.nodePanel.getWidth(); i++) {
-                    for (int j = 0; j < DiscourseAnalysisApplet.nodePanel.getHeight(); j++) {
-                        img.setRGB(i, j, new Color(200, 200, 200).getRGB());
-                    }
-                }
-
-                // Paint the image into the BufferedImage
-                Graphics2D g2d = img.createGraphics();
-                DiscourseAnalysisApplet.nodePanel.paint(g2d);
-                g2d.dispose();
-
-                // Save it!
-                try {
-                    ImageIO.write(img, "png", new File("PrintMe.png"));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                */
-                
+		                
             }
-                
-            
-            
-            
-             
+                  
 
 
             /**
@@ -321,7 +288,6 @@ public class Clause extends JPanel {
              */
             @Override
             public void focusGained(FocusEvent e) {
-                // DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it - redundant, but safe
                 myTextArea.setEnabled(true);
             }
 
@@ -344,10 +310,14 @@ public class Clause extends JPanel {
         setBounds(x, y, 260, 95);
     }
     
+    
+    //Will return the text area (used for when the user makes edits to the text area
     public String getTextArea(){
         return myTextArea.getText();        
     }
     
+    //This is only used when they hit cancel button, it will revert the changes (can be used for other 
+    //things but that is the only current used so far
     public void setTextArea(String c){
         myTextArea.setText(data);
     }
@@ -364,6 +334,9 @@ public class Clause extends JPanel {
         return result;
     }
     
+    //Function to enable or disable focus since it was requested that the area not be editable 
+    //until they hit the "Edit" button. So it will only be focused when edit is enabled or 
+    //cancel reverts it back to dormant state
     public void chooseFocus(boolean a){
         myTextArea.setEnabled(a);
     }

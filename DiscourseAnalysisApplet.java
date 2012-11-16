@@ -1,10 +1,8 @@
 
-//import java.applet.Applet;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
-//import java.util.Enumeration;
 import javax.swing.JLayeredPane;
 import javax.swing.JScrollPane;
 import javax.swing.JApplet;
@@ -50,6 +48,8 @@ public class DiscourseAnalysisApplet extends JApplet {
     
     @Override
     public void init() {
+        
+        //Look and feel change, we liked it but it was not able to be implemented well, and caused issues.
         /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -246,21 +246,10 @@ public class DiscourseAnalysisApplet extends JApplet {
             // Make the tree, and send it back.
             tree = new XMLTreeModel(root);
 
-            // DEBUG INFORMATION - DELETE LATER
-            System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+            // DEBUG INFORMATION - Uncomment if you wish
+            //System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
 
-            //String newFileName = chooseFile.getSelectedFile().toString();
-            //newFileName = newFileName.substring(0, newFileName.length() - 4);
-            //newFileName += " - Modified.xml";
-            //XMLConverter xml = new XMLConverter(newFileName, tree);
-
-
-            /*
-            String newFileName = chooseFile.getSelectedFile().toString();
-            newFileName = newFileName.substring(0, newFileName.length() - 4);
-            newFileName += " - Modified.xml";
-            XMLConverter xml = new XMLConverter(newFileName, tree);
-             */
+           
             return tree;
         } catch (Exception e) {
             e.printStackTrace();

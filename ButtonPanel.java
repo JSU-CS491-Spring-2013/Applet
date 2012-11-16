@@ -16,10 +16,9 @@ public class ButtonPanel extends javax.swing.JPanel {
      * buttons
      */
     public final void setButtonsEnabled(boolean enabled) {
-        //cmdEdit.setEnabled(enabled);
+        //Button setting to disabled (some of these are initially disabled because of no functionality
         cmdOkay.setEnabled(enabled);
         cmdGroup.setEnabled(enabled);
-        //cmdRemove.setEnabled(enabled);
         cmdSplit.setEnabled(enabled);
         cmdTreeModel.setEnabled(enabled);
     }
@@ -29,7 +28,6 @@ public class ButtonPanel extends javax.swing.JPanel {
      */
     public ButtonPanel() {
         initComponents();
-
         Clause temp = null;
         setButtonsEnabled(false);
     }
@@ -42,7 +40,8 @@ public class ButtonPanel extends javax.swing.JPanel {
      */
     public void populateComboBox() {
         comComboBox.removeAllItems(); // I added this. The previous would just keep adding them for forever.
-
+        
+        //Assigns a combobox to every node.
         try {
             XMLTreeNode parent = (XMLTreeNode) DiscourseAnalysisApplet.nodePanel.getSelected().getParent(); // Gets the parent. You read from left to right just like normal. Nodes to the right are child nodes.
             int currentI = parent.getIndex(DiscourseAnalysisApplet.nodePanel.getSelected()) + 1;
@@ -203,6 +202,8 @@ public class ButtonPanel extends javax.swing.JPanel {
         
     }//GEN-LAST:event_cmdCancelActionPerformed
 
+    
+    //Action performed on "Okay" button clicking.
     private void cmdOkayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkayActionPerformed
         //This will commit edits made by user in the text area to the actual node.
         //Note that this will change the node in the program but will not be saved permenantly
@@ -210,11 +211,16 @@ public class ButtonPanel extends javax.swing.JPanel {
         editedText = "";
         editedText = workingClause.getTextArea();
         XMLTreeModel.setNodeData(workingNode, editedText);
+        //This part will reset the node area to a "Dormant" state and reset the buttons.
         DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
         cmdOkay.setEnabled(false);
         cmdEdit.setEnabled(true);
+        workingClause.chooseFocus(false);
     }//GEN-LAST:event_cmdOkayActionPerformed
 
+    //This may need to be re-worked at some point, however, this allows the button panel actions
+    //to get the informatin on the clause and node.
+    //In Clause, when a area is clicked, it will send the information to this function
     public void associateClauseAndNode(Clause c, XMLTreeNode n) {
         workingClause = c;
         workingNode = n;
@@ -225,17 +231,18 @@ public class ButtonPanel extends javax.swing.JPanel {
     private Clause workingClause;
     private XMLTreeNode workingNode;
     
+    //Action performed when "Edit" button clicked.
     private void cmdEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditActionPerformed
-      
+      //Enable text area, disable the edit button, and enable the okay button.
       workingClause.chooseFocus(true);
       cmdOkay.setEnabled(true);
       cmdEdit.setEnabled(false);
       
     }//GEN-LAST:event_cmdEditActionPerformed
 
+    //Remove button, not currently working.
     private void cmdRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdRemoveActionPerformed
-        System.out.println(workingNode.getData() + " Node gotten");
-        XMLTreeModel.remove(workingNode);
+       
     }//GEN-LAST:event_cmdRemoveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

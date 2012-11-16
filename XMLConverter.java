@@ -121,7 +121,6 @@ public class XMLConverter {
                 //System.out.println("THis data: " + c.getData());
             }
         } catch (IOException e) {
-            System.out.println("WTF is this");
             e.printStackTrace(); // You will want to remove this now.
         }
 
