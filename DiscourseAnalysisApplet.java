@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.w3c.dom.*;
+import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -234,8 +235,9 @@ public class DiscourseAnalysisApplet extends JApplet {
             // DEBUG INFORMATION - DELETE LATER
             before = Calendar.getInstance();
 
-            // After this method finishes, the static field, root, will contain the root node of the tree.
-            xmlReader.parse(path);
+            // After this finishes, the static field, root, will contain the root node of the tree.
+            InputSource is = new InputSource(path);
+            xmlReader.parse(is);
 
             // DEBUG INFORMATION - DELETE LATER
             Calendar after = Calendar.getInstance();
