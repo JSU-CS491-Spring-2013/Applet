@@ -198,15 +198,17 @@ public class ButtonPanel extends javax.swing.JPanel {
         cmdOkay.setEnabled(false);
         cmdEdit.setEnabled(true);
         workingClause.chooseFocus(false);
+        workingClause.setTextArea(revertText);
         DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
         
     }//GEN-LAST:event_cmdCancelActionPerformed
 
     private void cmdOkayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdOkayActionPerformed
+        //This will commit edits made by user in the text area to the actual node.
+        //Note that this will change the node in the program but will not be saved permenantly
+        //until the saveXML is called.
         editedText = "";
         editedText = workingClause.getTextArea();
-        //System.out.println("EDITED TEXXXTTTTT:::: " + editedText);
-        //System.out.println(workingNode.getData() + " Node gotten");
         XMLTreeModel.setNodeData(workingNode, editedText);
         DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
         cmdOkay.setEnabled(false);
@@ -216,8 +218,9 @@ public class ButtonPanel extends javax.swing.JPanel {
     public void associateClauseAndNode(Clause c, XMLTreeNode n) {
         workingClause = c;
         workingNode = n;
+        revertText = workingClause.getTextArea();
     }
-    
+    private String revertText;
     private String editedText;
     private Clause workingClause;
     private XMLTreeNode workingNode;

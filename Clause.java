@@ -347,6 +347,10 @@ public class Clause extends JPanel {
     public String getTextArea(){
         return myTextArea.getText();        
     }
+    
+    public void setTextArea(String c){
+        myTextArea.setText(data);
+    }
 
     /**
      * Returns the XML of this Clause. Possible conjunctions are not yet taken
