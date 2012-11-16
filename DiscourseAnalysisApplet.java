@@ -61,6 +61,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         }*/
 
         String xmlURL = getParameter("xmlURL");
+        // xmlURL = "http://127.0.0.1/Luke 1 - Shorter.xml"; This has it pull from a local server. You need to have the file in the base directory of the server (LAMP, MAMP, or WAMP).
         if (xmlURL == null) {
             treeModel = makeTreeModel();
         } else {
