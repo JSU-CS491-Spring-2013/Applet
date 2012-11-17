@@ -30,12 +30,16 @@ import java.awt.image.BufferedImage;
  */
 public class DiscourseAnalysisApplet extends JApplet {
 
-    private JTreePanel jTreePanel;              // the panel on the left that does....what does that thing do?
-    public static ButtonPanel buttonPanel;            // the panel on the right that contains the buttons
-    private XMLTreeModel treeModel;             // the tree that contains all data?
-    public static NodePanel nodePanel;          // the main panel (in the middle) that contains the tree
-    private ProgressBarDialogBox myProgress;    // a dialog box that show the user that the data is loading
-    public static ArrayList<String> conjunctions;
+    private JTreePanel jTreePanel;                  // the panel on the left that does....what does that thing do?
+    public static ButtonPanel buttonPanel;          // the panel on the right that contains the buttons
+    private XMLTreeModel treeModel;                 // the tree that contains all data?
+    public static NodePanel nodePanel;              // the main panel (in the middle) that contains the tree
+    private ProgressBarDialogBox myProgress;        // a dialog box that show the user that the data is loading
+
+    // These need to be changed to something other than public static. Expeience won out, and we didn't have time to go back and change them.
+    public static ArrayList<String> conjunctions;   // The list of potential conjunctions that is listed at the top of the XML file. This is currently public static, and it should be changed to something better.
+    public static XMLTreeNode root;                 // This will always point to the root node of the tree. This is also public static, and that needs to be made into something more secure.
+    
     private JMenuItem saveXML, saveImg;
     private JMenu menu;
     private JMenuBar bar;
@@ -44,7 +48,7 @@ public class DiscourseAnalysisApplet extends JApplet {
     
 
     // DEBUG INFORMATION - DELETE LATER
-    Calendar before;
+    // Calendar before;
     
     @Override
     public void init() {
@@ -60,10 +64,11 @@ public class DiscourseAnalysisApplet extends JApplet {
         } catch (Exception e) {
         }*/
 
+        // This pulls out the URL that was passed as a parameter.
         String xmlURL = getParameter("xmlURL");
         // xmlURL = "http://127.0.0.1/Luke 1 - Shorter.xml"; This has it pull from a local server. You need to have the file in the base directory of the server (LAMP, MAMP, or WAMP).
         if (xmlURL == null) {
-            treeModel = makeTreeModel();
+            treeModel = makeTreeModel(); // If there was no xmlURL parameter passed, makeTreeModel() will open a dialog box that will browse the User's compuer.
         } else {
             treeModel = makeTreeModel(xmlURL);
         }
@@ -83,7 +88,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         s.getVerticalScrollBar().setUnitIncrement(64);
         s.getHorizontalScrollBar().setUnitIncrement(32);
         jTreePanel = new JTreePanel(treeModel, nodePanel);
-        jTreePanel.setBounds(0, 0, 250, 700); // Redundant? Why is this here, and which is correct?
+        jTreePanel.setBounds(0, 0, 250, 700);
 
         nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
 
@@ -93,6 +98,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         //Adding functionality to the "Save" selection
         saveXML.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 //Gets the original File name
                 String newFileName;
@@ -121,6 +127,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         
         saveImg.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
                 //This will create a new pop-up that will allow the user to specify a file name
                 JOptionPane.showMessageDialog(null, "All Images are saved as .png", "Save Warning", JOptionPane.INFORMATION_MESSAGE);
@@ -171,22 +178,25 @@ public class DiscourseAnalysisApplet extends JApplet {
         
         //Creates a Menu with "Menu" as a selectable item.
         menu = new JMenu("Menu");
+        
         //Adds the "Save" button to the Menu
         menu.add(saveXML);
         menu.add(saveImg);
         
+        // Add the panels to the applet.
         add(jTreePanel);
         add(s);
+        
         //Creates a new Menu Bar and adds Menu Items to the bar
         bar = new JMenuBar();
         bar.add(menu);
+        
         //Attaches the Menu to the applet
         setJMenuBar(bar);
         
-        
         // DEBUG INFORMATION - DELETE LATER
-        Calendar after = Calendar.getInstance();
-        System.out.println("Total number of milliseconds since XML file was given:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+        // Calendar after = Calendar.getInstance();
+        // System.out.println("Total number of milliseconds since XML file was given:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
 
         // If the dialog box is still there, get rid of it.
         if (myProgress != null) {
@@ -194,7 +204,6 @@ public class DiscourseAnalysisApplet extends JApplet {
             myProgress = null;
         }
     }
-    public static XMLTreeNode root;
 
     /**
      * Returns the panel that contains the tree.
@@ -205,6 +214,11 @@ public class DiscourseAnalysisApplet extends JApplet {
         return nodePanel;
     }
 
+    /**
+     * Sets up the parser, gets the root and builds the XMLTreeModel based on user input from the applet.
+     * 
+     * @return XMLTreeModel
+     */
     public XMLTreeModel makeTreeModel() {
         // Give the User the ability to choose which XML file he/she wants to use.
         chooseFile = new javax.swing.JFileChooser();
@@ -213,17 +227,13 @@ public class DiscourseAnalysisApplet extends JApplet {
     }
 
     /**
-     * Sets up the parser, gets the root and builds the XMLTreeModel
+     * Sets up the parser, gets the root and builds the XMLTreeModel based on information passed from the website.
      *
      * @return XMLTreeModel
      */
     public XMLTreeModel makeTreeModel(String path) {
         try {
-            // Give the User the ability to choose which XML file he/she wants to use.
-            // chooseFile = new javax.swing.JFileChooser();
-            // chooseFile.showOpenDialog(null);
-
-            // Create my JDialog that displays the progress bar.
+            // Create my JDialog that displays the progress bar. This just lets the User know the XML file is loading. If the User is only going to load small files, this can easily be removed.
             myProgress = new ProgressBarDialogBox(null, false);
 
             // Create a SAX parser, and parse the XML file the User provided.
@@ -234,22 +244,21 @@ public class DiscourseAnalysisApplet extends JApplet {
             xmlReader.setContentHandler(new XMLHandler());
 
             // DEBUG INFORMATION - DELETE LATER
-            before = Calendar.getInstance();
+            // before = Calendar.getInstance();
 
             // After this finishes, the static field, root, will contain the root node of the tree.
             InputSource is = new InputSource(path);
             xmlReader.parse(is);
 
             // DEBUG INFORMATION - DELETE LATER
-            Calendar after = Calendar.getInstance();
+            // Calendar after = Calendar.getInstance();
 
             // Make the tree, and send it back.
             tree = new XMLTreeModel(root);
 
             // DEBUG INFORMATION - Uncomment if you wish
-            //System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
+            // System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
 
-           
             return tree;
         } catch (Exception e) {
             e.printStackTrace();
@@ -335,65 +344,5 @@ public class DiscourseAnalysisApplet extends JApplet {
                 makeNodes(childTreeNode, child);
             }
         }
-    }
-
-    /**
-     * This method performs one of 5 functions. This method is a nightmare, and
-     * it should be split into the five separate functions if the rest of their
-     * code makes that possible.
-     *
-     * 0: remove selected node 1: merge the selected node with the node right
-     * below it 2: group starting at the selected node 3: split the selected
-     * node 4: set the data of the ClausePanel
-     *
-     * @param co
-     */
-    public void performFunction(int co) {
-        /*XMLTreeNode xtn = nodePanel.getSelected();
-        switch (co) {
-        case 0: // remove selected node
-        treeModel.remove(xtn);
-        break;
-        case 1: // merge the selected node with the node right below it
-        treeModel.merge(xtn, buttonPanel.n.getConj(), buttonPanel.n.getData(), true);
-        break;
-        case 2: // group starting at the selected node
-        XMLTreeNode parent = (XMLTreeNode) xtn.getParent();
-        int value = buttonPanel.getComboBoxSelectedIndex() + 1;
-        XMLTreeNode[] nArray = new XMLTreeNode[value + 1];
-        nArray[0] = xtn;
-        int startIndex = parent.getIndex(xtn);
-        for (int i = 1; i < nArray.length; i++) {
-        nArray[i] = (XMLTreeNode) treeModel.getChild(parent, startIndex + (i));
-        }
-        XMLTreeNode data = new XMLTreeNode(new Clause(buttonPanel.n.getData(), buttonPanel.n.getConj(), buttonPanel.n.getChap(), buttonPanel.n.getVrse()));
-        treeModel.groupNodes(data, nArray);
-        
-        break;
-        case 3: // split the selected node
-        treeModel.split(xtn, buttonPanel.sel.getData(), buttonPanel.n.getData(), buttonPanel.n.getConj());
-        break;
-        case 4: // set the data of the ClausePanel
-        xtn.setChap(buttonPanel.sel.getChap());
-        xtn.setVrse(buttonPanel.sel.getVrse());
-        xtn.setConj(buttonPanel.sel.getConj());
-        xtn.setData(buttonPanel.sel.getData());
-        break;
-        }
-        
-        // Refreshes the treeModel
-        treeModel.reload();
-        
-        // Reset the x and y values for the XMLTreeNodes
-        treeModel.resetXY();
-        
-        // Update the nodePanel
-        nodePanel.setRoot((XMLTreeNode) treeModel.getRoot(), treeModel.getXMax(), treeModel.getYMax());
-        
-        // Update the jTreePanel
-        jTreePanel.setTreeModel(treeModel);
-        
-        // Validate the GUI components in the JTreePanel
-        jTreePanel.validate();*/
     }
 }
