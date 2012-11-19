@@ -357,6 +357,7 @@ public class Clause extends JPanel {
         }
     }
     
+    //Function used to return the clicked node.
    public XMLTreeNode getClicked(){
         return clickNode;        
     }
