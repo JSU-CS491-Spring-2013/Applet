@@ -133,7 +133,7 @@ public class NodePanel extends JLayeredPane {
             XMLTreeNode curr = (XMLTreeNode) n.nextElement();
 
             // If the node has children
-            if (curr.getDepth() > 0) {
+            if (curr.getDepth() > 0){
                 g.drawLine(curr.getX() + 260, curr.getY() + 48, curr.getX() + 300, curr.getY() + 48);
 
                 // Get the first and last children.
@@ -144,11 +144,14 @@ public class NodePanel extends JLayeredPane {
                 if (first != last) {
                     g.drawLine(first.getX() - 40, first.getY() + 48, last.getX() - 40, last.getY() + 48);
                 }
-            }
+            }            
 
             // If the node is a child
-            if (!curr.isRoot()) {
+            if (!curr.isRoot() && curr.getBeingDragged() == false) {
                 g.drawLine(curr.getX(), curr.getY() + 48, curr.getX() - 40, curr.getY() + 48);
+            }
+            else{
+            	repaint();
             }
         }
     }

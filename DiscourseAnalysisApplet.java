@@ -18,9 +18,10 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import java.io.File;
+import java.io.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -90,7 +91,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         jTreePanel = new JTreePanel(treeModel, nodePanel);
         jTreePanel.setBounds(0, 0, 250, 700);
 
-        nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
+        nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);        
 
         // Making the Menu items and their functionality 
         saveXML = new JMenuItem("Save XML");
@@ -128,9 +129,9 @@ public class DiscourseAnalysisApplet extends JApplet {
         saveImg.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {            	
                 //This will create a new pop-up that will allow the user to specify a file name
-                JOptionPane.showMessageDialog(null, "All Images are saved as .png", "Save Warning", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "All Images are saved as .svg", "Save Warning", JOptionPane.INFORMATION_MESSAGE);
                 chooseFile = null;
                 chooseFile = new JFileChooser();
                 String newFileName = "";
@@ -141,37 +142,55 @@ public class DiscourseAnalysisApplet extends JApplet {
                 if(returnVal == JFileChooser.CANCEL_OPTION){}
                 else{
                     if(chooseFile.getSelectedFile().toString().equals("")){
-                        newFileName = "DiscourseAnalysisImage.png";
+                        newFileName = "DiscourseAnalysisImage.svg";
                     }
                     else
-                        //This will now check to see if the file name the user chose contains .xml tag, if not then it will add it
+                        //This will now check to see if the file name the user chose contains .xml or .svg tag
+                    	//if not then it will add it
                         newFileName = chooseFile.getSelectedFile().toString();
-                    if(!newFileName.contains(".png"))
-                        newFileName += ".png";
+                    if(!newFileName.contains(".svg"))
+                        newFileName += ".svg";
 
                     // Make an image.
-                    BufferedImage img = new BufferedImage(DiscourseAnalysisApplet.nodePanel.getWidth(), DiscourseAnalysisApplet.nodePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
-
+                    SVGExporter svgExport = new SVGExporter(root);
+                    Document svgDoc = svgExport.getDoc();
+                    
+                    try{
+            			OutputStream os = new FileOutputStream(newFileName);
+            			svgExport.write(svgDoc, os);
+            			System.out.println("I wrote to the SVG file.");
+            		}
+            		catch (FileNotFoundException exception){			
+            			System.out.println(exception);
+            		}
+            		catch (IOException ioEX){			
+            			System.out.println(ioEX);
+            		}
+                    //BufferedImage img = new BufferedImage(DiscourseAnalysisApplet.nodePanel.getWidth(), DiscourseAnalysisApplet.nodePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    
+                    /*
                     // Painstakingly put a pixel of a certain color into every position. Horribly inefficient, but working.
                     for (int i = 0; i < DiscourseAnalysisApplet.nodePanel.getWidth(); i++) {
                         for (int j = 0; j < DiscourseAnalysisApplet.nodePanel.getHeight(); j++) {
                             img.setRGB(i, j, new Color(200, 200, 200).getRGB());
                         }
                     }
+                    
 
                     // Paint the image into the BufferedImage
                     Graphics2D g2d = img.createGraphics();
                     DiscourseAnalysisApplet.nodePanel.paint(g2d);
                     g2d.dispose();
-
+					*/
                     // Save it!
+                    /*
                     try {
                         ImageIO.write(img, "png", new File(newFileName));
                         JOptionPane.showMessageDialog(null, "The image file has successfully been saved.", "Successfully saved!", JOptionPane.PLAIN_MESSAGE);
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                    }
-                }
+                    }*/
+                }	
                 
             }
         });
@@ -202,7 +221,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         if (myProgress != null) {
             myProgress.dispose();
             myProgress = null;
-        }
+        }        
     }
 
     /**
@@ -212,6 +231,9 @@ public class DiscourseAnalysisApplet extends JApplet {
      */
     public NodePanel getNodePanel() {
         return nodePanel;
+    }
+    public XMLTreeModel getXMLTreeModel() {
+        return tree;
     }
 
     /**

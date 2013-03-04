@@ -66,6 +66,9 @@ public class XMLTreeNode extends DefaultMutableTreeNode {
     public int getY() {
         return clause.getY();
     }
+    public boolean getBeingDragged(){
+    	return clause.getBeingDragged();
+    }
 
     //Setters
     /**

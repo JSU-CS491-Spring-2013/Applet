@@ -90,34 +90,30 @@ public class XMLTreeModel extends DefaultTreeModel {
      * @param newNode		the new parent node of all the nodes contained in groupNodes[]
      * @param groupNodes	an array of the nodes that are to grouped and made children of the newNode
      */
-    public void groupNodes(XMLTreeNode newNode, XMLTreeNode[] groupNodes) {
+    public static void groupNodes(XMLTreeNode newNode, XMLTreeNode groupNode) {
         //Still need to get the right attributes for the newNode,
-        //  have to pull out the right data from the groupNodes[]
+        //  have to pull out the right data from the groupNode
 
-        //Get the parent of the first node in the groupNodes[]
-        XMLTreeNode parent = (XMLTreeNode) groupNodes[0].getParent();
+        //Get the parent of the node to be grouped, groupNode
+        XMLTreeNode parent = (XMLTreeNode) groupNode.getParent();
 
-        //Get the index of the first node and number of children
-        int index = parent.getIndex(groupNodes[0]);
-        int numInGroup = groupNodes.length;
+        //Get the index of the node to group from the parent's child array
+        int index = parent.getIndex(groupNode);        
 
-        //Remove each node in groupNodes[] from parent
-        for (int i = 0; i < numInGroup; i++) {
-            ((DefaultMutableTreeNode) parent).remove(index);
-        }
+        //Remove the node, groupNode, from the parent        
+        ((DefaultMutableTreeNode) parent).remove(index);
 
-        //add all the nodes from groupNodes[] to newNode as children
-        for (int i = 0; i < numInGroup; i++) {
-            newNode.add(groupNodes[i]);
-        }
-
-        ((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
+        //add the node, groupNode, to newNode as child
+        newNode.add(groupNode); 
+        
+        //((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
+        System.out.println("We ran the group function.");
     }
 
     /**Splits a single node into two separate nodes by creating a new XMLTreeNode with the same chapter
      * and verse as the selectedNode, and inserting the new node into the selectedNode's parent.
      * @param selectedNode		original node that will be split
-     * @param dataSelected		the data for the selectedNode after the split has occured
+     * @param dataSelected		the data for the selectedNode after the split has occurred
      * @param newData			the data for the new XMLTreeNode
      * @param newConj			the conjunction for the new XMLTreeNode
      */
