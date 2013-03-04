@@ -1,3 +1,6 @@
+import javax.swing.text.JTextComponent;
+import org.w3c.dom.Node;
+
 
 /**
  * This is the new ButtonPanel. It no longer contains two ClausePanels. The UI
@@ -52,7 +55,7 @@ public class ButtonPanel extends javax.swing.JPanel {
         } catch (java.lang.NullPointerException npe) {
         }
     }
-
+    
     /**
      * Returns the Node represented in the top box.
      *
@@ -126,6 +129,11 @@ public class ButtonPanel extends javax.swing.JPanel {
         cmdSplit.setText("Split");
         cmdSplit.setFocusable(false);
         cmdSplit.setNextFocusableComponent(cmdEdit);
+        cmdSplit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmdSplitActionPerformed(evt);
+            }
+        });
 
         cmdEdit.setText("Edit");
         cmdEdit.setFocusable(false);
@@ -228,15 +236,23 @@ public class ButtonPanel extends javax.swing.JPanel {
     }
     private String revertText;
     private String editedText;
+    private String selectedText;
     private Clause workingClause;
     private XMLTreeNode workingNode;
     
+    public void editEnable(){
+      workingClause.chooseFocus(true);
+      cmdOkay.setEnabled(true);
+      cmdEdit.setEnabled(false);
+      cmdSplit.setEnabled(true);//AiDS
+    }
     //Action performed when "Edit" button clicked.
     private void cmdEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdEditActionPerformed
       //Enable text area, disable the edit button, and enable the okay button.
       workingClause.chooseFocus(true);
       cmdOkay.setEnabled(true);
       cmdEdit.setEnabled(false);
+      cmdSplit.setEnabled(true);//AiDS
       
     }//GEN-LAST:event_cmdEditActionPerformed
 
@@ -245,6 +261,31 @@ public class ButtonPanel extends javax.swing.JPanel {
        
     }//GEN-LAST:event_cmdRemoveActionPerformed
 
+    //AiDS
+    //Action Performed by split button
+    private void cmdSplitActionPerformed(java.awt.event.ActionEvent evt){
+        workingClause.chooseFocus(true);
+        selectedText = workingClause.toString();
+        //DiscourseAnalysisApplet.getXMLTreeModel().split(workingNode, selectedText);
+        //DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
+        cmdOkay.setEnabled(false);
+        cmdEdit.setEnabled(true);
+        cmdSplit.setEnabled(false);
+        workingClause.chooseFocus(false);
+        //DiscourseAnalysisApplet.makeNodes(DiscourseAnalysisApplet.root, parent.workingNode.getParent());
+        /*
+        XMLTreeModel newTree = new XMLTreeModel(DiscourseAnalysisApplet.root);
+        newTree.setRoot(DiscourseAnalysisApplet.root);
+        newTree.reload();
+        JTreePanel newJTreePanel = new JTreePanel(newTree ,DiscourseAnalysisApplet.nodePanel);
+        DiscourseAnalysisApplet.setJTreePanel(newJTreePanel);
+        newJTreePanel.setTreeModel(newTree);
+        newJTreePanel.update();
+        newTree.reload(workingNode);
+        */
+        
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cmdCancel;
     private javax.swing.JButton cmdEdit;
