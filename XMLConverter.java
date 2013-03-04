@@ -24,7 +24,7 @@ public class XMLConverter {
      * @param fp a String containing the filepath of the XML file.
      * @param temp the XMLTreeModel containing the tree
      */
-    public XMLConverter(String fp, XMLTreeModel temp) {
+    public XMLConverter(String fp, XMLTreeModel temp) {    	
         File xmlfile = new File(fp); // Open up a File object that will be written to later. Why is this a space in memory?
         XMLTreeNode root = (XMLTreeNode) temp.getRoot(); // Get the root node of the tree.
         BufferedWriter writer = null; // Why = null;?
@@ -52,7 +52,7 @@ public class XMLConverter {
 
     public void nodeCycle(BufferedWriter w, XMLTreeNode temp) { // Consider making me final.
         try {
-            if (temp.getChildCount() > 1) { // If the passed node has children
+            if (temp.getChildCount() >= 1) { // If the passed node has children
                 // Consider combining these two statements into Clause c = temp.getClause();
                 //System.out.println(temp.getData() + "'s child count is: " + temp.getChildCount());
                 Clause c = new Clause(); // Temporary clause to hold data from the node passed in.
