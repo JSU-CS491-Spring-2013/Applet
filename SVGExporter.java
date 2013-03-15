@@ -34,7 +34,7 @@ public class SVGExporter{
 		tree = root.preorderEnumeration();
 		svgNS = SVGDOMImplementation.SVG_NAMESPACE_URI;
 		svgDoc = generateSVG();
-		/*
+		/*        
 		try{
 			transcodeSVG(svgDoc);
 		}

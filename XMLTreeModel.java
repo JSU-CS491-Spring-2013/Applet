@@ -90,7 +90,7 @@ public class XMLTreeModel extends DefaultTreeModel {
      * @param newNode		the new parent node of all the nodes contained in groupNodes[]
      * @param groupNodes	an array of the nodes that are to grouped and made children of the newNode
      */
-    public static void groupNodes(XMLTreeNode newNode, XMLTreeNode groupNode) {
+    public void groupNodes(XMLTreeNode newNode, XMLTreeNode groupNode) {
         //Still need to get the right attributes for the newNode,
         //  have to pull out the right data from the groupNode
 
@@ -104,10 +104,11 @@ public class XMLTreeModel extends DefaultTreeModel {
         ((DefaultMutableTreeNode) parent).remove(index);
 
         //add the node, groupNode, to newNode as child
-        newNode.add(groupNode); 
+        newNode.add(groupNode);
+        //resetXY();
         
         //((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
-        System.out.println("We ran the group function.");
+        //System.out.println("We ran the group function.");
     }
 
     /**Splits a single node into two separate nodes by creating a new XMLTreeNode with the same chapter

@@ -27,18 +27,25 @@ public class Clause extends JPanel {
     private String vrse;                // The verse number of the Clause
     private int x;                  // The starting x-value for drawing
     private int y;					// The starting y-value for drawing
+    private int lastX;				//the last known correct x-value, see the resetNode function
+    private int lastY;				//the last known correct y-value, see the resetNode function
     private final int WIDTH = 260;
     private final int HEIGHT = 95;
     private final int BUFFER = 40;
     private int oldMouseX;
     private int oldMouseY;
+    private int dX;
+    private int dY;
     private JTextPane myTextArea;       // This is where I will show my data.
     private JScrollPane myScrollPane;   // This allows the User to scroll through the text area.
     private XMLTreeNode root;
     private NodePanel myNodePanel;      // This is the NodePanel this Clause is on.
     private XMLTreeNode myNode;         // This is the XMLTreeNode this clause belongs to
     public XMLTreeNode clickNode;       // Information on the node for the button panel to use.
+    private XMLTreeModel tree;
+    private boolean doneDragging;
     private boolean beingDragged;
+    private boolean lastStateSet;     	//for reseting children nodes if this node is being dragged without collision
     
     public String selected;//AiDS
     //private XMLTreeNode selected;
@@ -67,7 +74,9 @@ public class Clause extends JPanel {
         conj = c;
         chap = ch;
         vrse = v;
+        doneDragging = false;
         beingDragged = false;
+        lastStateSet = false;
         
         finishStartup();
     }
@@ -272,17 +281,17 @@ public class Clause extends JPanel {
              * When the text area is "pressed", enable it and give it focus.
              */
             @Override
-            public void mousePressed(MouseEvent e) {            	
+            public void mousePressed(MouseEvent e) {
+            	//getting the mouse coordinates when pressed
+            	//this is used to calculate the change in the x and y values
+            	//and the allow for repositioning of nodes based on the change in the values
             	oldMouseX = e.getX();
             	oldMouseY = e.getY();
-            	//System.out.println("Mouse x is: " + oldMouseX);
-            	//System.out.println("Mouse y is: " + oldMouseY);
-                /*boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
-
-                DiscourseAnalysisApplet.nodePanel.showButtonPanel(x, y); // show the buttonpanel next to it
-                //This part will send the information on the node that was clicked.
-                DiscourseAnalysisApplet.buttonPanel.1ateClauseAndNode(clickNode.getClause(), clickNode);
-		*/                
+            	
+            	//setting the last known correct coordinates for the node
+            	//this is used to reset the node
+            	lastX = x;
+            	lastY = y;
             }    
 
             /**
@@ -290,7 +299,10 @@ public class Clause extends JPanel {
              */
             @Override
             public void mouseReleased(MouseEvent e) {
-            	
+            	resetDrag();
+            	resetNode();
+            	updateClauseBounds();
+            	resetChildren(myNode);            	
             }
 
             /**
@@ -317,61 +329,114 @@ public class Clause extends JPanel {
         	@Override
         	public void mouseDragged(MouseEvent event) {
         		beingDragged = true;
-        		setRoot(DiscourseAnalysisApplet.root);	        		
+        		setRoot(DiscourseAnalysisApplet.root);
+        		tree = DiscourseAnalysisApplet.tree;
         		if(SwingUtilities.isLeftMouseButton(event)){
-        			int dX = event.getX() - oldMouseX;
-            		int dY = event.getY() - oldMouseY;            		
-            		x = x + dX;
-            		y = y + dY;            		           		
-        			updateClauseBounds();        			
+        			dX = event.getX() - oldMouseX;
+            		dY = event.getY() - oldMouseY;
+            		
+            		if(doneDragging == false){
+            			x = x + dX;
+            			y = y + dY;            		           		
+            			updateClauseBounds();            			
+            		}
         			//if there is a collision, group or merge the node
         			//and pop up the button panel
-        			Enumeration nodeList = root.preorderEnumeration(); // Get a list of Nodes.
-        			int i = 0; // for debug
+        			Enumeration nodeList = root.preorderEnumeration(); // Get a list of Nodes.        			
         			while (nodeList.hasMoreElements()){        				
         	    		XMLTreeNode currentNode = (XMLTreeNode) nodeList.nextElement();
         	    		//checking to see if the currentNode is the same one we are dragging
-        	    		sameClause(currentNode);
-        	    		//System.out.println("The current iteration is: " + i);        	    		
+        	    		if(sameClause(currentNode)){
+        	    			if(myNode.getChildCount() > 0 && doneDragging == false){        	    				
+        	    				//System.out.println("Trying to drag all my children. Not the soap opera.");
+        	    				followParent(myNode);        	    				
+                    			lastStateSet = true;
+        	    			}
+        	    		}
+                		        	    		       	    		
         	    		if(intersects(currentNode.getClause())){
-            				System.out.println("There was a collsion!");
+            				//System.out.println("There was a collision!");
+        	    			//trying to drag children nodes with        	    			
+        	    			
             				try{
-	            				XMLTreeModel.groupNodes(currentNode, myNode);
+	            				tree.groupNodes(currentNode, myNode);
 	            				//changing the dragged node's x and y
 	            				//if it is the only child, place it after the parent
-	            				if(currentNode.getChildCount() == 1){
+	            				//and preventing more dragging until the mouse is released
+	            				if(currentNode.getChildCount() == 1 && doneDragging == false){
+	            					//preventing more dragging until the mouse is released
+	            					doneDragging = true;	            					
 	            					myNode.setX(currentNode.getX()+ WIDTH + BUFFER);
 	            					myNode.setY(currentNode.getY());
-	            					//System.out.println("Current Node -" + currentNode.getData());
-	            					//System.out.println("Dragged Node -" + myNode.getData());
-	            					updateClauseBounds();
+	            					//used to reset the node
+	            					lastX = x;
+	            	            	lastY = y;	            	            	
 	            				}
 	            				//changing the dragged node's x and y
 	            				//if it is not the only child, get the last child's x and y
-	            				else{
-	            					//NO get child enumeration, and access the chilCount() - 2 index 
-	            					//NO this is the correct child's x and y to work off of
-	            					//YES, try to get parent of myNode and get the child at childCount() - 2 index
+	            				//and preventing more dragging until the mouse is released
+	            				
+	            				else if(currentNode.getChildCount() > 1 && doneDragging == false){	            					
+	            					doneDragging = true;
 	            					XMLTreeNode parentOfMyNode = (XMLTreeNode)myNode.getParent();
-	            					XMLTreeNode previousChild = (XMLTreeNode)parentOfMyNode.getChildAt(parentOfMyNode.getChildCount() - 2);	            					
-	            					myNode.setX(previousChild.getX());
-	            					myNode.setY(previousChild.getY() + HEIGHT + BUFFER);
-	            					System.out.println("Last Child X -" + previousChild.getX());
-	            					System.out.println("Last Child Y -" + previousChild.getY());
-	            					System.out.println("Last Child Y plus H and buffer -" + previousChild.getY() + HEIGHT + BUFFER);
-	            					updateClauseBounds();
+	            					Enumeration children =  parentOfMyNode.children();
+	            					while(children.hasMoreElements()){
+	            						XMLTreeNode currentChild = (XMLTreeNode) children.nextElement();	            						
+	            						int distanceFromParent = currentChild.getLevel() - parentOfMyNode.getLevel();
+	            						//System.out.println("Current child's distance from parent - "+ distanceFromParent);
+	            						if(currentChild != myNode && distanceFromParent == 1){
+	            							if(currentNode.getChildCount() <= 2){		            							
+		            							currentChild.setX(currentChild.getX() + 40);
+		            							currentChild.setY(currentChild.getY() - 59);
+		            							currentChild.getClause().updateClauseBounds();
+	            							}
+	            							else if(currentNode.getChildCount() == 3){	            								
+		            							currentChild.setX(currentChild.getX());
+		            							currentChild.setY(currentChild.getY() - 76);
+		            							currentChild.getClause().updateClauseBounds();
+	            							}
+	            							else{	            								
+		            							currentChild.setX(currentChild.getX());
+		            							currentChild.setY(currentChild.getY() - 68);
+		            							currentChild.getClause().updateClauseBounds();
+	            							}
+	            						}
+	            					}
+	            					if(parentOfMyNode.getChildCount() == 2){
+		            					XMLTreeNode previousChild = (XMLTreeNode)parentOfMyNode.getFirstChild();	            					
+		            					myNode.setX(previousChild.getX());
+		            					myNode.setY(previousChild.getY() + HEIGHT + BUFFER);
+		            					//used to reset the node
+		            					lastX = x;
+		            	            	lastY = y;
+		            					//System.out.println("Last Child X -" + previousChild.getX());
+		            					//System.out.println("Last Child Y -" + previousChild.getY());
+		            					//System.out.println("Last Child Y plus H and buffer -" + previousChild.getY() + HEIGHT + BUFFER);
+	            					}
+	            					else{
+	            						XMLTreeNode previousChild = (XMLTreeNode)parentOfMyNode.getChildAt(parentOfMyNode.getChildCount() - 2);	            					
+		            					myNode.setX(previousChild.getX());
+		            					myNode.setY(previousChild.getY() + HEIGHT + BUFFER);
+		            					//used to reset the node
+		            					lastX = x;
+		            	            	lastY = y;
+		            					//System.out.println("Last Child X -" + previousChild.getX());
+		            					//System.out.println("Last Child Y -" + previousChild.getY());
+		            					//System.out.println("Last Child Y plus H and buffer -" + previousChild.getY() + HEIGHT + BUFFER);
+	            					}
 	            				}
+	            				//updating the clause bounds after the x and y update
+	            				updateClauseBounds();	            				
             				}
             				catch(IllegalArgumentException ex){
             					//if the dragged node is an ancestor of the destination node
             					//reset the dragged node
             					System.out.println("There was a problem.");
-            				}
-            				//and preventing more dragging until re-click
-            				//updating the clause bounds after the x and y update
-            				//updateClauseBounds();            				
-            			}
-        	    		i++;        	    		        	    		
+            					doneDragging = true;
+            					resetNode();
+            					updateClauseBounds();            					
+            				}            				            				
+            			}        	    		       	    		        	    		
         	    	}
         		}        		
         	}
@@ -405,7 +470,7 @@ public class Clause extends JPanel {
                 myTextArea.setEnabled(false);
                 DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
             }
-        });     
+        });        
     }   
     /**
      * This checks to see if there is a collision between this clause
@@ -435,6 +500,34 @@ public class Clause extends JPanel {
     	else{
     		return false;
     	}
+    }
+    private void followParent(XMLTreeNode node){
+    	//makes all children of a dragged node be dragged also
+    	Enumeration children =  node.children();
+		while(children.hasMoreElements()){                    				
+			XMLTreeNode currentChild = (XMLTreeNode) children.nextElement();
+			//setting lastX and lastY, only once per mouse drag			
+			followParent(currentChild);
+			if(lastStateSet == false){
+				currentChild.setLastX(currentChild.getX());
+				currentChild.setLastY(currentChild.getY());
+			}			
+			currentChild.setX(currentChild.getX() + dX);
+			currentChild.setY(currentChild.getY() + dY);           		           		
+			currentChild.getClause().updateClauseBounds();
+		}
+    }
+    private void resetChildren(XMLTreeNode node){
+    	//this function resets all children nodes
+    	//of a dragged node
+    	Enumeration children =  node.children();
+		while(children.hasMoreElements()){                    				
+			XMLTreeNode currentChild = (XMLTreeNode) children.nextElement();
+			resetChildren(currentChild);					   				
+			currentChild.setX(currentChild.getLastX());
+			currentChild.setY(currentChild.getLastY());           		           		
+			currentChild.getClause().updateClauseBounds();
+		}
     }
     
     /**
@@ -538,6 +631,9 @@ public class Clause extends JPanel {
     public int getX() {
         return x;
     }
+    public int getLastX(){
+    	return lastX;
+    }
 
     /**
      * @return int y value of Clause
@@ -546,8 +642,24 @@ public class Clause extends JPanel {
     public int getY() {
         return y;
     }
+    public int getLastY(){
+    	return lastY;
+    }
+    public boolean getDoneDragging(){
+    	return doneDragging;
+    }
     public boolean getBeingDragged(){
     	return beingDragged;
+    }
+    
+    private void resetDrag(){
+    	doneDragging = false;
+    	beingDragged = false;
+    	lastStateSet = false;
+    }
+    private void resetNode(){
+    	x = lastX;
+    	y = lastY;
     }
 
     /**
@@ -584,12 +696,18 @@ public class Clause extends JPanel {
     public void setX(int i) {
         x = i;
     }
+    public void setLastX(int i){
+    	lastX = i;
+    }
 
     /**
      * @param i sets y equal to i
      */
     public void setY(int i) {
         y = i;
+    }
+    public void setLastY(int i){
+    	lastY = i;
     }
     
     //AiDS

@@ -44,7 +44,7 @@ public class DiscourseAnalysisApplet extends JApplet {
     private JMenuItem saveXML, saveImg;
     private JMenu menu;
     private JMenuBar bar;
-    private XMLTreeModel tree;
+    public static XMLTreeModel tree;
     private JFileChooser chooseFile;
     
 
