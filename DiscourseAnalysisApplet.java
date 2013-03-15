@@ -18,10 +18,9 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import java.io.*;
+import java.io.File;
 import java.awt.image.BufferedImage;
 
 /**
@@ -31,7 +30,7 @@ import java.awt.image.BufferedImage;
  */
 public class DiscourseAnalysisApplet extends JApplet {
 
-    private JTreePanel jTreePanel;                  // the panel on the left that does....what does that thing do?
+    public static JTreePanel jTreePanel;                  // the panel on the left that does....what does that thing do?
     public static ButtonPanel buttonPanel;          // the panel on the right that contains the buttons
     private XMLTreeModel treeModel;                 // the tree that contains all data?
     public static NodePanel nodePanel;              // the main panel (in the middle) that contains the tree
@@ -44,7 +43,7 @@ public class DiscourseAnalysisApplet extends JApplet {
     private JMenuItem saveXML, saveImg;
     private JMenu menu;
     private JMenuBar bar;
-    public static XMLTreeModel tree;
+    private static XMLTreeModel tree;
     private JFileChooser chooseFile;
     
 
@@ -91,7 +90,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         jTreePanel = new JTreePanel(treeModel, nodePanel);
         jTreePanel.setBounds(0, 0, 250, 700);
 
-        nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);        
+        nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
 
         // Making the Menu items and their functionality 
         saveXML = new JMenuItem("Save XML");
@@ -101,6 +100,7 @@ public class DiscourseAnalysisApplet extends JApplet {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+                
                 //Gets the original File name
                 String newFileName;
                 //This will create a new pop-up that will allow the user to specify a file name
@@ -129,9 +129,9 @@ public class DiscourseAnalysisApplet extends JApplet {
         saveImg.addActionListener(new ActionListener() {
 
             @Override
-            public void actionPerformed(ActionEvent e) {            	
+            public void actionPerformed(ActionEvent e) {
                 //This will create a new pop-up that will allow the user to specify a file name
-                JOptionPane.showMessageDialog(null, "All Images are saved as .svg", "Save Warning", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "All Images are saved as .png", "Save Warning", JOptionPane.INFORMATION_MESSAGE);
                 chooseFile = null;
                 chooseFile = new JFileChooser();
                 String newFileName = "";
@@ -142,55 +142,37 @@ public class DiscourseAnalysisApplet extends JApplet {
                 if(returnVal == JFileChooser.CANCEL_OPTION){}
                 else{
                     if(chooseFile.getSelectedFile().toString().equals("")){
-                        newFileName = "DiscourseAnalysisImage.svg";
+                        newFileName = "DiscourseAnalysisImage.png";
                     }
                     else
-                        //This will now check to see if the file name the user chose contains .xml or .svg tag
-                    	//if not then it will add it
+                        //This will now check to see if the file name the user chose contains .xml tag, if not then it will add it
                         newFileName = chooseFile.getSelectedFile().toString();
-                    if(!newFileName.contains(".svg"))
-                        newFileName += ".svg";
+                    if(!newFileName.contains(".png"))
+                        newFileName += ".png";
 
                     // Make an image.
-                    SVGExporter svgExport = new SVGExporter(root);
-                    Document svgDoc = svgExport.getDoc();
-                    
-                    try{
-            			OutputStream os = new FileOutputStream(newFileName);
-            			svgExport.write(svgDoc, os);
-            			System.out.println("I wrote to the SVG file.");
-            		}
-            		catch (FileNotFoundException exception){			
-            			System.out.println(exception);
-            		}
-            		catch (IOException ioEX){			
-            			System.out.println(ioEX);
-            		}
-                    //BufferedImage img = new BufferedImage(DiscourseAnalysisApplet.nodePanel.getWidth(), DiscourseAnalysisApplet.nodePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
-                    
-                    /*
+                    BufferedImage img = new BufferedImage(DiscourseAnalysisApplet.nodePanel.getWidth(), DiscourseAnalysisApplet.nodePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
+
                     // Painstakingly put a pixel of a certain color into every position. Horribly inefficient, but working.
                     for (int i = 0; i < DiscourseAnalysisApplet.nodePanel.getWidth(); i++) {
                         for (int j = 0; j < DiscourseAnalysisApplet.nodePanel.getHeight(); j++) {
                             img.setRGB(i, j, new Color(200, 200, 200).getRGB());
                         }
                     }
-                    
 
                     // Paint the image into the BufferedImage
                     Graphics2D g2d = img.createGraphics();
                     DiscourseAnalysisApplet.nodePanel.paint(g2d);
                     g2d.dispose();
-					*/
+
                     // Save it!
-                    /*
                     try {
                         ImageIO.write(img, "png", new File(newFileName));
                         JOptionPane.showMessageDialog(null, "The image file has successfully been saved.", "Successfully saved!", JOptionPane.PLAIN_MESSAGE);
                     } catch (IOException ex) {
                         ex.printStackTrace();
-                    }*/
-                }	
+                    }
+                }
                 
             }
         });
@@ -221,7 +203,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         if (myProgress != null) {
             myProgress.dispose();
             myProgress = null;
-        }        
+        }
     }
 
     /**
@@ -229,24 +211,61 @@ public class DiscourseAnalysisApplet extends JApplet {
      *
      * @return the NodePanel used
      */
-    public NodePanel getNodePanel() {
+    public static NodePanel getNodePanel() {
         return nodePanel;
     }
-    public XMLTreeModel getXMLTreeModel() {
-        return tree;
+    
+    //AiDS
+    //retrieves the XMLTreeModel
+    public static XMLTreeModel getXMLTreeModel(){return tree;}
+    //retrieves the JTreePanel
+    public static JTreePanel getJTreePanel(){return jTreePanel;}
+    //retrieves the root
+    public static XMLTreeNode getRoot(){return root;}
+    //removes existing tree and creates a new one
+    public void redrawTree(){
+        remove(jTreePanel);
+        jTreePanel = new JTreePanel(treeModel, nodePanel);
+        jTreePanel.setBounds(0, 0, 250, 700);
+        add(jTreePanel);
     }
-
+    
+    
     /**
      * Sets up the parser, gets the root and builds the XMLTreeModel based on user input from the applet.
      * 
      * @return XMLTreeModel
      */
     public XMLTreeModel makeTreeModel() {
-        // Give the User the ability to choose which XML file he/she wants to use.
-        chooseFile = new javax.swing.JFileChooser();
-        chooseFile.showOpenDialog(null);
-        return makeTreeModel(chooseFile.getSelectedFile().toString());
+        
+        try
+        {     
+            // Give the User the ability to choose which XML file he/she wants to use.
+            chooseFile = new javax.swing.JFileChooser();
+            chooseFile.showOpenDialog(null);
+            String newFileName = "";
+
+            newFileName = chooseFile.getSelectedFile().toString();
+
+            if(newFileName.contains(".xml"))
+            {
+                ;
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null,"The file selected must be an XML file.  Please try again.");
+                makeTreeModel();
+            }
+        }
+
+            catch (Exception m) 
+            {
+                System.exit(0);
+            }
+
+            return makeTreeModel(chooseFile.getSelectedFile().toString());
     }
+
 
     /**
      * Sets up the parser, gets the root and builds the XMLTreeModel based on information passed from the website.
@@ -277,6 +296,7 @@ public class DiscourseAnalysisApplet extends JApplet {
 
             // Make the tree, and send it back.
             tree = new XMLTreeModel(root);
+            myProgress.dispose();
 
             // DEBUG INFORMATION - Uncomment if you wish
             // System.out.println("Number of milliseconds needed to make tree using SAX parser:  " + (after.getTimeInMillis() - before.getTimeInMillis()));
@@ -293,7 +313,7 @@ public class DiscourseAnalysisApplet extends JApplet {
      *
      * @return Clause
      */
-    public Clause makeClause(Node childElement) {
+    public static Clause makeClause(Node childElement) {
         //get data, attributes, conjuntion
         String data, chapter, verse, conj;
         Element d, c;
@@ -338,7 +358,7 @@ public class DiscourseAnalysisApplet extends JApplet {
     /**
      * Navigates the Document and adds children to the
      */
-    public void makeNodes(XMLTreeNode r, Node parent) {
+    public static void makeNodes(XMLTreeNode r, Node parent) {
         // Get a list of all the children of the current Document Node
         NodeList childElements = parent.getChildNodes();
 

@@ -12,48 +12,39 @@ import java.util.Enumeration;
 import javax.swing.JOptionPane;
 
 public class XMLConverter {
-
-    /**
-     * Empty Constructor. Is this ever used?
-     */
+    
     public XMLConverter() {
     }
 
     /**
      * This is the Default Constructor. It sets up everything needed to write the tree to an XML file.
-     * @param fp a String containing the filepath of the XML file.
+     * @param fp a String containing the file path of the XML file.
      * @param temp the XMLTreeModel containing the tree
      */
-    public XMLConverter(String fp, XMLTreeModel temp) {    	
+    public XMLConverter(String fp, XMLTreeModel temp) {
         File xmlfile = new File(fp); // Open up a File object that will be written to later. Why is this a space in memory?
         XMLTreeNode root = (XMLTreeNode) temp.getRoot(); // Get the root node of the tree.
-        BufferedWriter writer = null; // Why = null;?
-        String xmlcode = "<?xml version=\"1.0\" ?>"; // Why is this a space in memory?
+        BufferedWriter writer = null; // Declaration and set of writer
+        String xmlcode = "<?xml version=\"1.0\" ?>"; 
         try {
             writer = new BufferedWriter(new FileWriter(xmlfile)); // Create our BufferedWriter using the File.
-            // Consider writing recursive function?                      
-        } catch (IOException e) {
-            e.printStackTrace(); // You will want to remove this now.
-        }
+        } catch (IOException e) { }//used to catch error.
 
         // This is the bit (a 1 or 0? Did you mean block?) where you write your XML to the file.
         try {
             writer.write(xmlcode); // This should contain the string literal "<?xml version=\"1.0\" ?>".
-            nodeCycle(writer, root); // Magic? Also, overwritable method calls in constructors are a bad idea. nodeCycle needs to be final.
+            nodeCycle(writer, root); // Begins the initial call. This will also be initialize a recursive call if needed.
             writer.write("</book>"); // At the end, close the book tag.
-            writer.close();
-            
-            JOptionPane.showMessageDialog(null, "The file has successfully been saved.", "Successfully saved!", JOptionPane.PLAIN_MESSAGE);
-        } catch (IOException e) {
-            e.printStackTrace(); // You will want to remove this now.
-        }
+            writer.close();//closing the writer after all writing is completed.
+            //Shows a message to the user to signify that the file has been saved.
+            JOptionPane.showMessageDialog(null, "The file has successfully been1 saved.", "Successfully saved!", JOptionPane.PLAIN_MESSAGE);
+        } catch (IOException e) { }
 
     }
-
-    public void nodeCycle(BufferedWriter w, XMLTreeNode temp) { // Consider making me final.
+    //The function that goes through every node of the tree
+    final public void nodeCycle(BufferedWriter w, XMLTreeNode temp) { 
         try {
-            if (temp.getChildCount() >= 1) { // If the passed node has children
-                // Consider combining these two statements into Clause c = temp.getClause();
+            if (temp.getChildCount() > 1) { // If the passed node has children
                 //System.out.println(temp.getData() + "'s child count is: " + temp.getChildCount());
                 Clause c = new Clause(); // Temporary clause to hold data from the node passed in.
                 c = temp.getClause(); // Assigning the values of the passed node to c

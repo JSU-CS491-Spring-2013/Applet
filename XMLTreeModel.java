@@ -1,6 +1,8 @@
 
+import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+
 
 /**
 XMLTreeModel extends DefaultTreeModel, it contains methods that allow
@@ -38,6 +40,7 @@ public class XMLTreeModel extends DefaultTreeModel {
      */
     public void resetXY() {
         yMax = 0;
+        xMax = 0;
         setX(r);
         setY(r);
     }
@@ -45,7 +48,7 @@ public class XMLTreeModel extends DefaultTreeModel {
     /**
      * Sets the X value for each XMLTreeNode in this TreeModel
      */
-    private void setX(XMLTreeNode ro) {
+    public void setX(XMLTreeNode ro) {
         //The root is set to 0
         if (ro.isRoot()) {
             ro.setX(0);
@@ -62,7 +65,7 @@ public class XMLTreeModel extends DefaultTreeModel {
     /**
      * Sets the y value for each leaf XMLTreeNode in this TreeModel
      */
-    private void setY(XMLTreeNode ro) {
+    public void setY(XMLTreeNode ro) {
         //go to children first
         if (!ro.isLeaf()) {
             for (int i = 0; i < ro.getChildCount(); i++) {
@@ -72,7 +75,7 @@ public class XMLTreeModel extends DefaultTreeModel {
         } else {
             //heigth of the clause plus, small box, plus conj space
             ro.setY(yMax + 40);
-            // yMax += ro.getClause().getH() + 18 + 10;
+            //yMax += ro.getClause().getH() + 18 + 10;
             yMax += 118;
         }
     }
@@ -90,27 +93,30 @@ public class XMLTreeModel extends DefaultTreeModel {
      * @param newNode		the new parent node of all the nodes contained in groupNodes[]
      * @param groupNodes	an array of the nodes that are to grouped and made children of the newNode
      */
-    public void groupNodes(XMLTreeNode newNode, XMLTreeNode groupNode) {
+    public void groupNodes(XMLTreeNode newNode, XMLTreeNode[] groupNodes) {
         //Still need to get the right attributes for the newNode,
-        //  have to pull out the right data from the groupNode
+        //  have to pull out the right data from the groupNodes[]
 
-        //Get the parent of the node to be grouped, groupNode
-        XMLTreeNode parent = (XMLTreeNode) groupNode.getParent();
+        //Get the parent of the first node in the groupNodes[]
+        XMLTreeNode parent = (XMLTreeNode) groupNodes[0].getParent();
 
-        //Get the index of the node to group from the parent's child array
-        int index = parent.getIndex(groupNode);        
+        //Get the index of the first node and number of children
+        int index = parent.getIndex(groupNodes[0]);
+        int numInGroup = groupNodes.length;
 
-        //Remove the node, groupNode, from the parent        
-        ((DefaultMutableTreeNode) parent).remove(index);
+        //Remove each node in groupNodes[] from parent
+        for (int i = 0; i < numInGroup; i++) {
+            ((DefaultMutableTreeNode) parent).remove(index);
+        }
 
-        //add the node, groupNode, to newNode as child
-        newNode.add(groupNode);
-        //resetXY();
-        
-        //((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
-        //System.out.println("We ran the group function.");
+        //add all the nodes from groupNodes[] to newNode as children
+        for (int i = 0; i < numInGroup; i++) {
+            newNode.add(groupNodes[i]);
+        }
+
+        ((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
     }
-
+    
     /**Splits a single node into two separate nodes by creating a new XMLTreeNode with the same chapter
      * and verse as the selectedNode, and inserting the new node into the selectedNode's parent.
      * @param selectedNode		original node that will be split
@@ -118,28 +124,55 @@ public class XMLTreeModel extends DefaultTreeModel {
      * @param newData			the data for the new XMLTreeNode
      * @param newConj			the conjunction for the new XMLTreeNode
      */
-    public void split(XMLTreeNode selectedNode, String dataSelected, String newData, String newConj) {
-        //make new node using the same chapter and verse as the selected node, but
-        //using the newData and newConj
-        XMLTreeNode newNode = new XMLTreeNode(new Clause(newData, newConj, selectedNode.getChap(), selectedNode.getVrse()));
+    public void split(XMLTreeNode selectedNode, String dataSelected){
+        
+        int modifier = dataSelected.lastIndexOf(":")+2;//manditory shift to correct for verse and conjunction
+        String newConj = "x";//selectedText.substring(0,selectedText.indexOf(' '));//AiDS
+        int tCurser = selectedNode.getClause().getJTextPane().getCaretPosition() + modifier;//finds the location of the Caret/cursor for split
 
-        //set the data for the selected node
-        selectedNode.setData(dataSelected);
+        if (dataSelected.substring(tCurser - 1, tCurser).equals(" ") || dataSelected.substring(tCurser, tCurser + 1).equals(" "))
+        {
+            String firstData = dataSelected.substring(modifier,tCurser);//AiDS
+            String secondData = dataSelected.substring(tCurser);//AiDS
+            //make new node using the same chapter and verse as the selected node, but using the newData and newConj
+            XMLTreeNode secondNode = new XMLTreeNode(new Clause(secondData, newConj, selectedNode.getChap(), selectedNode.getVrse()));
+            //set the data for the new node
+            secondNode.setData(secondData);
+            DiscourseAnalysisApplet.getXMLTreeModel().setNodeData(secondNode, secondData);
+            
+            //Set data of the original node
+            selectedNode.setData(firstData);
+            selectedNode.getClause().setTextArea(firstData);
+            DiscourseAnalysisApplet.getXMLTreeModel().setNodeData(selectedNode, firstData);
+            
+            //get the parent of the selected node
+            XMLTreeNode parent = (XMLTreeNode) selectedNode.getParent();
+            
+            //get the index for the selected node
+            int x = parent.getIndex(selectedNode);
+            //add the newNode right after the selectedNode
+            parent.insert(secondNode, x + 1);
+            NodePanel secondSplitNode = new NodePanel(secondNode, (parent.getX() + 40), parent.getY());
 
-        //get the parent of the selected node
-        XMLTreeNode parent = (XMLTreeNode) selectedNode.getParent();
-        //get the index for the selected node
-        int x = parent.getIndex(selectedNode);
+            System.out.println("first clause:   " + firstData);//AiDS stub
+            System.out.println("second clause:  " + secondData);//AiDS stub
 
-        //add the newNode right after the selectedNode
-        parent.insert(newNode, x + 1);
+            DiscourseAnalysisApplet.getXMLTreeModel().insertNodeInto(secondNode, DiscourseAnalysisApplet.getRoot(), x + 1);     
+
+            secondSplitNode.setBounds(1, 0 + 0, 2500, 2500);
+            DiscourseAnalysisApplet.getNodePanel().add(secondSplitNode);
+
+            resetXY(); 
+        }
+        else
+            JOptionPane.showMessageDialog(null,"You can not split this node in the middle of a word.");   
     }
 
     /**Removes the selected node only if it is not a leaf node without deleting the children of the selected node.
      * Note: If you want to delete a leaf node, use the merge method
      * @param selectedNode		the node that will be removed
      */
-    static public void remove(XMLTreeNode selectedNode) {
+    /*static public void remove(XMLTreeNode selectedNode) {
         //Not sure if we should allow the user to delete a leaf node
         // it will contain the raw data from the parsed file
 
@@ -166,7 +199,7 @@ public class XMLTreeModel extends DefaultTreeModel {
                 parent.insert(children[i], index + i);
             }
         }
-    }
+    }*/
 
     /**Based on the boolean flag 'mergeDown' this method will merge the selectedNode with the node right before or right after it.
      * Note: Chapter and verse of the merged node will be the same as the selectedNode

@@ -266,7 +266,7 @@ public class ButtonPanel extends javax.swing.JPanel {
     private void cmdSplitActionPerformed(java.awt.event.ActionEvent evt){
         workingClause.chooseFocus(true);
         selectedText = workingClause.toString();
-        //DiscourseAnalysisApplet.getXMLTreeModel().split(workingNode, selectedText);
+        DiscourseAnalysisApplet.getXMLTreeModel().split(workingNode, selectedText);
         //DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
         cmdOkay.setEnabled(false);
         cmdEdit.setEnabled(true);

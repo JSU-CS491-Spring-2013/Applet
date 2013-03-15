@@ -81,12 +81,13 @@ public class JTreePanel extends JPanel {
     public void setTreeModel(XMLTreeModel mod) {
         tree.setModel(mod);
     }
-
+    
     /**
      * Validates the GUI components in this panel.
      */
     public void update() {
-        tree.validate();
+        tree.revalidate();
+        tree.repaint();
     }
 
     /**

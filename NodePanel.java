@@ -19,7 +19,6 @@ public class NodePanel extends JLayeredPane {
     private final int nodeWidth = 200;  //Node width
     static private boolean hasChanged;         // I'm not sure why this is here.
     private boolean buttonPanelShown;   // hold whether a ButtonPanel is active on the panel
-    private XMLTreeModel tree;
     
     /**
      * Creates the NodePanel.
@@ -31,7 +30,6 @@ public class NodePanel extends JLayeredPane {
         rootNode = ro;
         buttonPanelShown = false;
         setPreferredSize(new Dimension(x, y));
-        tree = DiscourseAnalysisApplet.tree;
         
         hasChanged = false;
         setLayout(null);
@@ -120,6 +118,7 @@ public class NodePanel extends JLayeredPane {
         selectedNode = null;
         setPreferredSize(new Dimension(x, y));
         this.repaint();
+        DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
     }
 
     /**
@@ -128,13 +127,14 @@ public class NodePanel extends JLayeredPane {
      */
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);        
+        super.paintComponent(g);
+
         Enumeration n = rootNode.preorderEnumeration(); // Get a list of Nodes.
         while (n.hasMoreElements()) {
-            XMLTreeNode curr = (XMLTreeNode) n.nextElement();            
+            XMLTreeNode curr = (XMLTreeNode) n.nextElement();
 
             // If the node has children
-            if (curr.getDepth() > 0){
+            if (curr.getDepth() > 0) {
                 g.drawLine(curr.getX() + 260, curr.getY() + 48, curr.getX() + 300, curr.getY() + 48);
 
                 // Get the first and last children.
@@ -145,32 +145,39 @@ public class NodePanel extends JLayeredPane {
                 if (first != last) {
                     g.drawLine(first.getX() - 40, first.getY() + 48, last.getX() - 40, last.getY() + 48);
                 }
-            }            
+            }
 
             // If the node is a child
-            if (!curr.isRoot() && curr.getBeingDragged() == false) {
-                g.drawLine(curr.getX(), curr.getY() + 48, curr.getX() - 40, curr.getY() + 48);                
+            if (!curr.isRoot()) {
+                g.drawLine(curr.getX(), curr.getY() + 48, curr.getX() - 40, curr.getY() + 48);
             }
-            else{
-            	repaint();
-            }
-        }        
+        }
     }
 
     /**
      * This adds the Clauses to the NodePanel.
      */
-    private void updateComponents() {
+    public void updateComponents() {
         Enumeration n = rootNode.preorderEnumeration(); // Get a list of Nodes.
 
         while (n.hasMoreElements()) {
             XMLTreeNode curr = (XMLTreeNode) n.nextElement();
             Clause temp = curr.getClause();
+            //System.out.println(temp);
             temp.updateClauseBounds(); // Make sure to update its position.
             add(temp);
         }
     }
-
+    
+    //AiDS
+    /*public void shiftComponent(XMLTreeNode n, int indx){
+        n.getParent().getChildCount();
+        
+            XMLTreeNode curr = (XMLTreeNode) n.nextElement();
+            int newY = curr.getClause().getY() +95;
+            curr.getClause().setY(newY);
+        }
+    }*/
     /**
     Returns the Selected Node
     @return XMLTreeNode selectedNode
@@ -180,7 +187,7 @@ public class NodePanel extends JLayeredPane {
         hasChanged = false;
         return selectedNode;
     }
-
+   
     /**
     Resets the Selected Node and repaints the panel
     
@@ -198,4 +205,5 @@ public class NodePanel extends JLayeredPane {
     public boolean isChanged() {
         return hasChanged;
     }
+    
 }
