@@ -1,8 +1,6 @@
-
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-
 
 /**
 XMLTreeModel extends DefaultTreeModel, it contains methods that allow
@@ -93,28 +91,24 @@ public class XMLTreeModel extends DefaultTreeModel {
      * @param newNode		the new parent node of all the nodes contained in groupNodes[]
      * @param groupNodes	an array of the nodes that are to grouped and made children of the newNode
      */
-    public void groupNodes(XMLTreeNode newNode, XMLTreeNode[] groupNodes) {
+    public void groupNodes(XMLTreeNode newNode, XMLTreeNode groupNode) {
         //Still need to get the right attributes for the newNode,
-        //  have to pull out the right data from the groupNodes[]
+        //have to pull out the right data from the groupNode
 
-        //Get the parent of the first node in the groupNodes[]
-        XMLTreeNode parent = (XMLTreeNode) groupNodes[0].getParent();
+        //Get the parent of the node to be grouped, groupNode
+        XMLTreeNode parent = (XMLTreeNode) groupNode.getParent();
 
-        //Get the index of the first node and number of children
-        int index = parent.getIndex(groupNodes[0]);
-        int numInGroup = groupNodes.length;
+        //Get the index of the node to group from the parent's child array
+        int index = parent.getIndex(groupNode);        
 
-        //Remove each node in groupNodes[] from parent
-        for (int i = 0; i < numInGroup; i++) {
-            ((DefaultMutableTreeNode) parent).remove(index);
-        }
+        //Remove the node, groupNode, from the parent        
+        ((DefaultMutableTreeNode) parent).remove(index);
 
-        //add all the nodes from groupNodes[] to newNode as children
-        for (int i = 0; i < numInGroup; i++) {
-            newNode.add(groupNodes[i]);
-        }
-
-        ((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
+        //add the node, groupNode, to newNode as child
+        newNode.add(groupNode);
+        //resetXY();
+        
+        //((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
     }
     
     /**Splits a single node into two separate nodes by creating a new XMLTreeNode with the same chapter
@@ -125,7 +119,6 @@ public class XMLTreeModel extends DefaultTreeModel {
      * @param newConj			the conjunction for the new XMLTreeNode
      */
     public void split(XMLTreeNode selectedNode, String dataSelected){
-        
         int modifier = dataSelected.lastIndexOf(":")+2;//manditory shift to correct for verse and conjunction
         String newConj = "x";//selectedText.substring(0,selectedText.indexOf(' '));//AiDS
         int tCurser = selectedNode.getClause().getJTextPane().getCaretPosition() + modifier;//finds the location of the Caret/cursor for split
@@ -172,7 +165,8 @@ public class XMLTreeModel extends DefaultTreeModel {
      * Note: If you want to delete a leaf node, use the merge method
      * @param selectedNode		the node that will be removed
      */
-    /*static public void remove(XMLTreeNode selectedNode) {
+    /* 
+    static public void remove(XMLTreeNode selectedNode) {
         //Not sure if we should allow the user to delete a leaf node
         // it will contain the raw data from the parsed file
 
@@ -199,7 +193,8 @@ public class XMLTreeModel extends DefaultTreeModel {
                 parent.insert(children[i], index + i);
             }
         }
-    }*/
+    }
+    */
 
     /**Based on the boolean flag 'mergeDown' this method will merge the selectedNode with the node right before or right after it.
      * Note: Chapter and verse of the merged node will be the same as the selectedNode

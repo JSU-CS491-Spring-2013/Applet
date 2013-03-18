@@ -1,4 +1,3 @@
-
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -40,8 +39,8 @@ public class JTreePanel extends JPanel {
                     Clause temp = getSelectedNode().getClause();
 
                     boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
-
-                    DiscourseAnalysisApplet.nodePanel.showButtonPanel(temp.getX(), temp.getY()); // show the buttonpanel next to it
+                    // show the buttonpanel next to it
+                    DiscourseAnalysisApplet.nodePanel.showButtonPanel(temp.getX(), temp.getY());
 
                     if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
                         temp.enableTextArea(); // enable and focus

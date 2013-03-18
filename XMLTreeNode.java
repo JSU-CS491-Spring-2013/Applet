@@ -1,4 +1,3 @@
-
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -59,12 +58,24 @@ public class XMLTreeNode extends DefaultMutableTreeNode {
     public int getX() {
         return clause.getX();
     }
+    public int getLastX() {
+        return clause.getLastX();
+    }
 
     /**
      * @return int value of y in the Clause stored in this XMLTreeNode
      */
     public int getY() {
         return clause.getY();
+    }
+    public int getLastY() {
+        return clause.getLastY();
+    }
+    public boolean getDoneDragging(){
+    	return clause.getDoneDragging();
+    }
+    public boolean getBeingDragged(){
+    	return clause.getBeingDragged();
     }
 
     //Setters
@@ -109,12 +120,18 @@ public class XMLTreeNode extends DefaultMutableTreeNode {
     public void setX(int i) {
         clause.setX(i);
     }
+    public void setLastX(int i) {
+        clause.setLastX(i);
+    }
 
     /**
      * @param i sets the y value of the Clause stored in this XMLTreeNode equal to i
      */
     public void setY(int i) {
         clause.setY(i);
+    }
+    public void setLastY(int i) {
+        clause.setLastY(i);
     }
 
     /**
@@ -130,6 +147,4 @@ public class XMLTreeNode extends DefaultMutableTreeNode {
     public String toXML() {
         return clause.toXML();
     }
-    
-    
 }

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author DerekZul
@@ -18,7 +13,7 @@ public class XMLConverter {
 
     /**
      * This is the Default Constructor. It sets up everything needed to write the tree to an XML file.
-     * @param fp a String containing the file path of the XML file.
+     * @param fp a String containing the filepath of the XML file.
      * @param temp the XMLTreeModel containing the tree
      */
     public XMLConverter(String fp, XMLTreeModel temp) {
@@ -28,24 +23,22 @@ public class XMLConverter {
         String xmlcode = "<?xml version=\"1.0\" ?>"; 
         try {
             writer = new BufferedWriter(new FileWriter(xmlfile)); // Create our BufferedWriter using the File.
-        } catch (IOException e) { }//used to catch error.
+        } catch (IOException e){}//used to catch error.
 
         // This is the bit (a 1 or 0? Did you mean block?) where you write your XML to the file.
         try {
             writer.write(xmlcode); // This should contain the string literal "<?xml version=\"1.0\" ?>".
             nodeCycle(writer, root); // Begins the initial call. This will also be initialize a recursive call if needed.
             writer.write("</book>"); // At the end, close the book tag.
-            writer.close();//closing the writer after all writing is completed.
+            writer.close(); //closing the writer after all writing is completed.
             //Shows a message to the user to signify that the file has been saved.
-            JOptionPane.showMessageDialog(null, "The file has successfully been1 saved.", "Successfully saved!", JOptionPane.PLAIN_MESSAGE);
-        } catch (IOException e) { }
-
+            JOptionPane.showMessageDialog(null, "The file has successfully been saved.", "Successfully saved!", JOptionPane.PLAIN_MESSAGE);
+        } catch (IOException e){}
     }
     //The function that goes through every node of the tree
     final public void nodeCycle(BufferedWriter w, XMLTreeNode temp) { 
         try {
-            if (temp.getChildCount() > 1) { // If the passed node has children
-                //System.out.println(temp.getData() + "'s child count is: " + temp.getChildCount());
+            if (temp.getChildCount() >= 1) { // If the passed node has children
                 Clause c = new Clause(); // Temporary clause to hold data from the node passed in.
                 c = temp.getClause(); // Assigning the values of the passed node to c
                 
