@@ -1,6 +1,8 @@
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Enumeration;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -10,6 +12,7 @@ public class JTreePanel extends JPanel {
     JScrollPane scrollPane;
     JTree tree;
     NodePanel nodePanel;
+    Clause temp;
 
     /**
      * Create a panel and populate it with the given tree.
@@ -22,33 +25,51 @@ public class JTreePanel extends JPanel {
         scrollPane = new JScrollPane(tree);
         this.add(scrollPane);
         this.setMaximumSize(new Dimension(200, 500));
-        scrollPane.setBounds(0, 0, 250, 700);  // Redundant? Which is correct?
+        scrollPane.setBounds(0, 0, 250, 686);   //CD - Need these numbers for scroll bar
+        //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         tree.addMouseListener(new MouseListener() {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+        
             }
-
-            /**
-             * Pressing the mouse button displays the ButtonPanel next to the Clause.
-             */
+            
             @Override
             public void mousePressed(MouseEvent e) {
-                try {
-                    Clause temp = getSelectedNode().getClause();
-
+            try 
+            {
+                Clause temp = getSelectedNode().getClause();
+                
+                if (temp.getData().equals("root"))    //CD - This disables the root folder on the left list
+                {
+                    DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
+                }
+                
+                else
+                {
                     boolean before = DiscourseAnalysisApplet.nodePanel.isButtonPanelShown();
-                    // show the buttonpanel next to it
-                    DiscourseAnalysisApplet.nodePanel.showButtonPanel(temp.getX(), temp.getY());
 
-                    if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) {
-                        temp.enableTextArea(); // enable and focus
+                    DiscourseAnalysisApplet.nodePanel.showButtonPanel(temp.getX(), temp.getY()); // show the buttonpanel next to it
+                    DiscourseAnalysisApplet.buttonPanel.associateClauseAndNode(temp, getSelectedNode());
+
+                    if (!before && DiscourseAnalysisApplet.nodePanel.isButtonPanelShown()) 
+                    {
+                        temp.enableTextArea();
+                        //temp.updateClauseBounds();
+                        DiscourseAnalysisApplet.buttonPanel.editEnable();
                         nodePanel.scrollRectToVisible(temp.getBounds()); // scroll to the component
                     }
-                } catch (Exception ex) { // this will throw if you click a folder, so do nothing
-                }
+                    temp.getJTextPane().setCaretPosition(temp.getData().length());    //CD - Sets caret at end of text
+                } 
             }
+            catch (Exception ex) 
+            { 
+                DiscourseAnalysisApplet.buttonPanel.editEnable();    //CD
+                temp.enableTextArea();    //CD
+                System.out.println("Error in JTreePanel");
+            } 
+        }
 
             @Override
             public void mouseReleased(MouseEvent e) {

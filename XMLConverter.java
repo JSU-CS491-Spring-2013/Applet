@@ -69,8 +69,6 @@ public class XMLConverter {
                         curr = (XMLTreeNode) e.nextElement(); // Get the next node.
                         //System.out.println(curr.getData() + "HAS A CHILD!");
                         nodeCycle(w, curr); // Begin again.
-                        
-                    
                     }
                 } catch (Exception ex) {System.out.println(ex.toString());
                 }

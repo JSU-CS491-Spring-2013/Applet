@@ -147,4 +147,11 @@ public class XMLTreeNode extends DefaultMutableTreeNode {
     public String toXML() {
         return clause.toXML();
     }
+    
+    public void nullify(){
+        this.setChap(null);
+        this.setClause(null);
+        this.setConj(null);
+        this.setData(null);
+    }
 }

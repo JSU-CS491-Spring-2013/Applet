@@ -1,6 +1,12 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.util.Enumeration;
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import org.w3c.dom.Node;
 
 /**
 XMLTreeModel extends DefaultTreeModel, it contains methods that allow
@@ -111,6 +117,42 @@ public class XMLTreeModel extends DefaultTreeModel {
         //((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
     }
     
+    //AiDS
+    //Method for merging two nodes together
+    public static void mergeNodes(XMLTreeNode a, XMLTreeNode b){
+        String newTextData = "";//Used for resetting dragged node data to empty so it will not constantly add
+        XMLTreeNode parent = (XMLTreeNode) a.getParent();
+        if(a.getData() != ""){//Don't Do anything if the data is empty
+            if(a.getY() < b.getY()){//This is if the dragged node is being merged to a node below it
+                if(b.getConj().toString().charAt(0) == 'x'){
+                    newTextData = (a.getData().toString()) + " " + (b.getData().toString());
+                }
+                else{
+                    newTextData = (a.getData().toString()) + " " + (b.getConj()) + " " + (b.getData().toString());
+                }
+                b.setConj(a.getConj());
+            }
+            else{//this is if the dragged node is being merged to a node above it
+                if(a.getConj().toString().charAt(0) == 'x'){
+                    newTextData = (b.getData().toString()) + " " + (a.getData().toString());
+                }
+                else{
+                    newTextData = (b.getData().toString()) + " " + (a.getConj()) + " " + (a.getData().toString());
+                }
+            }
+            b.setData(newTextData);
+            b.getClause().setTextArea(newTextData);
+            a.setData("");
+        }
+        a.getClause().setTextArea("");
+        DiscourseAnalysisApplet.getXMLTreeModel().removeNodeFromParent(a);
+        parent.remove(a);
+        a.nullify();
+        //a = null;
+        //a.remove(a.getIndex(a));
+        DiscourseAnalysisApplet.jTreePanel.remove(a.getIndex(a));
+    }
+    
     /**Splits a single node into two separate nodes by creating a new XMLTreeNode with the same chapter
      * and verse as the selectedNode, and inserting the new node into the selectedNode's parent.
      * @param selectedNode		original node that will be split
@@ -119,46 +161,89 @@ public class XMLTreeModel extends DefaultTreeModel {
      * @param newConj			the conjunction for the new XMLTreeNode
      */
     public void split(XMLTreeNode selectedNode, String dataSelected){
-        int modifier = dataSelected.lastIndexOf(":")+2;//manditory shift to correct for verse and conjunction
-        String newConj = "x";//selectedText.substring(0,selectedText.indexOf(' '));//AiDS
-        int tCurser = selectedNode.getClause().getJTextPane().getCaretPosition() + modifier;//finds the location of the Caret/cursor for split
+        //CD - I did a lot of stuff here.  It checks to make sure the location the user wants to split is a
+        //     valid location.  It also does not allow them to split at the beginning or end of a node.  It
+        //     trims the data to remove unneeded space on both nodes.  I set the proper bounds to allow all 
+        //     the nodes to show up.  At the bottom I added a way to dynamically grow the nodePanel height.
+        //     The else's and catch handles the possible error messages.
+        try{
+            int modifier = dataSelected.lastIndexOf(":") + 2;//manditory shift to correct for verse and conjunction
+            String newConj = "x";//selectedText.substring(0,selectedText.indexOf(' '));//AiDS
+            int tCurser = selectedNode.getClause().getJTextPane().getCaretPosition() + modifier;//finds the location of the Caret/cursor for split
 
-        if (dataSelected.substring(tCurser - 1, tCurser).equals(" ") || dataSelected.substring(tCurser, tCurser + 1).equals(" "))
-        {
-            String firstData = dataSelected.substring(modifier,tCurser);//AiDS
-            String secondData = dataSelected.substring(tCurser);//AiDS
-            //make new node using the same chapter and verse as the selected node, but using the newData and newConj
-            XMLTreeNode secondNode = new XMLTreeNode(new Clause(secondData, newConj, selectedNode.getChap(), selectedNode.getVrse()));
-            //set the data for the new node
-            secondNode.setData(secondData);
-            DiscourseAnalysisApplet.getXMLTreeModel().setNodeData(secondNode, secondData);
-            
-            //Set data of the original node
-            selectedNode.setData(firstData);
-            selectedNode.getClause().setTextArea(firstData);
-            DiscourseAnalysisApplet.getXMLTreeModel().setNodeData(selectedNode, firstData);
-            
-            //get the parent of the selected node
-            XMLTreeNode parent = (XMLTreeNode) selectedNode.getParent();
-            
-            //get the index for the selected node
-            int x = parent.getIndex(selectedNode);
-            //add the newNode right after the selectedNode
-            parent.insert(secondNode, x + 1);
-            NodePanel secondSplitNode = new NodePanel(secondNode, (parent.getX() + 40), parent.getY());
+            if (dataSelected.substring(tCurser - 1, tCurser).equals(" ") || dataSelected.substring(tCurser, tCurser + 1).equals(" "))
+            {
+                String firstData;
+                String secondData;
+                
+                if (dataSelected.substring(tCurser - 1, tCurser).equals(" "))
+                {
+                    firstData = dataSelected.substring(modifier, tCurser - 1);
+                    secondData = dataSelected.substring(tCurser);
+                }
+                
+                else
+                {
+                    firstData = dataSelected.substring(modifier,tCurser);
+                    secondData = dataSelected.substring(tCurser);
+                }
+                
+                if (!firstData.trim().equals("") && !secondData.trim().equals(""))
+                {
+                    //make new node using the same chapter and verse as the selected node, but using the newData and newConj
+                    XMLTreeNode secondNode = new XMLTreeNode(new Clause(secondData, newConj, selectedNode.getChap(), selectedNode.getVrse()));
+                    //set the data for the new node
+                    secondNode.setData(secondData);
+                    DiscourseAnalysisApplet.getXMLTreeModel().setNodeData(secondNode, secondData);
 
-            System.out.println("first clause:   " + firstData);//AiDS stub
-            System.out.println("second clause:  " + secondData);//AiDS stub
+                    //Set data of the original node
+                    selectedNode.setData(firstData);
+                    selectedNode.getClause().setTextArea(firstData);
+                    DiscourseAnalysisApplet.getXMLTreeModel().setNodeData(selectedNode, firstData);
 
-            DiscourseAnalysisApplet.getXMLTreeModel().insertNodeInto(secondNode, DiscourseAnalysisApplet.getRoot(), x + 1);     
+                    //get the parent of the selected node
+                    XMLTreeNode parent = (XMLTreeNode) selectedNode.getParent();
 
-            secondSplitNode.setBounds(1, 0 + 0, 2500, 2500);
-            DiscourseAnalysisApplet.getNodePanel().add(secondSplitNode);
+                    //get the index for the selected node
+                    int x = parent.getIndex(selectedNode);
+                    //add the newNode right after the selectedNode
+                    parent.insert(secondNode, x + 1);
+                    NodePanel secondSplitNode = new NodePanel(secondNode, (parent.getX() + 40), parent.getY());
 
-            resetXY(); 
+                    DiscourseAnalysisApplet.getXMLTreeModel().insertNodeInto(secondNode, DiscourseAnalysisApplet.getRoot(), x + 1);     
+
+                    secondSplitNode.setBounds(0, 0, 2500, 30000);    //CD
+                    DiscourseAnalysisApplet.getNodePanel().add(secondSplitNode);
+                   
+                    resetXY();      //CD
+                    
+                    Enumeration n = r.preorderEnumeration();
+                    while(n.hasMoreElements())
+                    {
+                        XMLTreeNode curr = (XMLTreeNode) n.nextElement();
+                        curr.getClause().updateClauseBounds();
+                    }
+                    
+                    int treeHeight = DiscourseAnalysisApplet.nodePanel.getHeight();    //CD
+                    DiscourseAnalysisApplet.nodePanel.setPreferredSize(new Dimension(500, treeHeight + 118));    //CD
+                    
+                    DiscourseAnalysisApplet.nodePanel.hideButtonPanel();    //CD
+                }
+                    
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "You can not perform split here. Please try again.");  //CD
+                }
+            }
+            else 
+            {
+                JOptionPane.showMessageDialog(null, "You can not perform split here.  Please try again.");   //CD
+            }
+        }        
+        catch (Exception z) {
+            JOptionPane.showMessageDialog(null, "You can not perform split here.  Please try again.");   //CD
+            DiscourseAnalysisApplet.nodePanel.hideButtonPanel();    //CD
         }
-        else
-            JOptionPane.showMessageDialog(null,"You can not split this node in the middle of a word.");   
     }
 
     /**Removes the selected node only if it is not a leaf node without deleting the children of the selected node.

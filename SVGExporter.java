@@ -21,15 +21,57 @@ import org.apache.batik.transcoder.image.JPEGTranscoder;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 
+/**
+ * The SVGExporter class takes the XML tree and converts it into a scalable
+ * vector graphic, SVG.  This is accomplished by using an external java
+ * library called Batik.  Batik helps to create a SVG DOM, document object
+ * model, from the XML tree.  All nodes in the XML tree are represented 
+ * by a rectangle element in the SVG document.  All lines in the tree are 
+ * represented by a line element in the SVG document.  All text entries 
+ * in the XML tree are represented by a text node element, which may be 
+ * accompanied by text span elements.  The text span elements are needed 
+ * to simulate word wrap within the bounds of each rectangle element in 
+ * the graphic.  Batik offers no built in way to wrap text, so it is 
+ * accomplished by counting characters and assuming default font size.  
+ * Default font size meaning that the font size is never explicitly set 
+ * within the class.  Batik offers an option to transcode the SVG DOM 
+ * to a .jpeg image.  This is implemented, but it is not being used currently.
+ */
 public class SVGExporter{
+	/**
+     * The variable tree is used for traversing the XML tree.  It is a 
+     * preorder traversal enumeration.  This is set in the class constructor.
+     */
 	private Enumeration<XMLTreeNode> tree;
+	/**
+     * The variable svgDoc is the SVG DOM that the SVG elements are added to.
+     */
 	private Document svgDoc;
+	/**
+     * The variable svgNS is a string representing the SVG namespace.  
+     * This is set in the class constructor.
+     */
 	private String svgNS;
+	/**
+     * The following four variables are used for sizing rectangle elements in the SVG image.
+     * @param  NODE_WIDTH
+     * @param NODE_HEIGHT
+     * @param BORDER_WIDTH
+     * @param BORDER_HEIGHT
+     */
 	private final String NODE_WIDTH = "260";
 	private final String NODE_HEIGHT = "80";
 	private final String BORDER_WIDTH = "270";
 	private final String BORDER_HEIGHT = "90";
-
+	
+	/**
+	 * This is the constructor of the class.  The one parameter root is used to obtain the 
+	 * preorder enumeration of the XML tree.  The private variables tree and svgNS are 
+	 * initialized in this constructor.  This constructor also calls the generateSVG 
+	 * function, which builds the SVG DOM.
+	 * 
+	 * @param root the tree root
+	 */
 	public SVGExporter(XMLTreeNode root){
 		tree = root.preorderEnumeration();
 		svgNS = SVGDOMImplementation.SVG_NAMESPACE_URI;
@@ -43,6 +85,15 @@ public class SVGExporter{
 		}
 		*/	
 	}
+	
+	/**
+	 * This function generates the SVG DOM, which is held by the private variable svgDoc.  
+	 * It uses the private variable tree to traverse the entire tree and elements 
+	 * accordingly.  It returns the created document and places it into the svgDoc 
+	 * private variable.
+	 * 
+	 * @return Returns the document that is created.
+	 */
 	private Document generateSVG(){
 		DOMImplementation impl = SVGDOMImplementation.getDOMImplementation();		
 		Document svgDoc = impl.createDocument(svgNS, "svg", null);
@@ -91,10 +142,21 @@ public class SVGExporter{
 		return svgDoc;
 	}
 	
+	/**
+	 * @return the svgDoc private variable
+	 */
 	public Document getDoc(){
 		return svgDoc;
 	}
 	
+	/**
+	 * This function transcodes the SVG DOM into a .jpeg image.  This can only be used 
+	 * after the generateSVG() function has been called.  This functionality is 
+	 * not currently being used.
+	 * 
+	 * @param svgDoc
+	 * @throws Exception
+	 */
 	public void transcodeSVG(Document svgDoc)  throws Exception{
 		// Create a JPEGTranscoder and set its quality hint.
         JPEGTranscoder t = new JPEGTranscoder();
@@ -111,6 +173,14 @@ public class SVGExporter{
         ostream.close();
 	}
 	
+	/**
+	 * This function sends the information in the SVG DOM to an output stream.  
+	 * The output stream is used to stream the information to a .svg file.
+	 * 
+	 * @param doc
+	 * @param out
+	 * @throws IOException
+	 */
 	public void write(Document doc, OutputStream out) throws IOException {
 	    //this function writes the SVG document to a .svg file
 	    try {
@@ -136,6 +206,20 @@ public class SVGExporter{
 	    }
 	  }
 	
+	/**
+	 * This function takes parameters relating to x and y coordinates, 
+	 * rectangle color, rectangle border color, and if the rectangle is a border.  
+	 * The function uses these parameters to set the attributes of the 
+	 * rectangle element.  After creation the rectangle element is added 
+	 * to the svgDoc, the private variable.
+	 * 
+	 * @param svgDoc
+	 * @param nodeX
+	 * @param nodeY
+	 * @param color
+	 * @param borderColor
+	 * @param border
+	 */
 	private void placeRect(Document svgDoc, int nodeX, int nodeY, String color, String borderColor, boolean border){
 		//create a rectangle element and add it to the document root
 		Element rectangle = svgDoc.createElementNS(svgNS, "rect");
@@ -161,6 +245,19 @@ public class SVGExporter{
 		svgRoot.appendChild(rectangle);
 	}
 	
+	/**
+	 * This function takes two pairs of x and y coordinates, which are used to 
+	 * determine the path of the line.  The line color is also passed in.  
+	 * The function creates a line element with the coordinates and then 
+	 * adds it to the svgDoc, the private variable.
+	 * 
+	 * @param svgDoc
+	 * @param x1
+	 * @param x2
+	 * @param y1
+	 * @param y2
+	 * @param color
+	 */
 	private void placeLine(Document svgDoc, int x1, int x2, int y1, int y2, String color){
 		//create a line element and add it to the document root
 		Element line = svgDoc.createElementNS(svgNS, "line");
@@ -174,6 +271,23 @@ public class SVGExporter{
     	svgRoot.appendChild(line);
 	}
 	
+	/**
+	 * This function adds text elements to the svgDoc, the private variable.  
+	 * The function takes into account the nodes x and y coordinates to ensure 
+	 * the text is within the bounds of the rectangle element it belongs to.  
+	 * Text span, tspan, elements are also used to create a word wrap.  
+	 * This is to keep the text within the bounds of the rectangle element 
+	 * it belongs to.  The word wrap is accomplished by splitting up the text 
+	 * into a word array, where every index of the array represents a 
+	 * single word.  Next, character counting is used to prevent the text from 
+	 * leaving the rectangle element it belongs to.  This assumes default font 
+	 * size, meaning that the font size is never explicitly set within 
+	 * the class.  Text span elements are added to a parent text element.  
+	 * All text elements are then added to the svgDoc, the private variable.
+	 * 
+	 * @param node
+	 * @param svgDoc
+	 */
 	private void placeText(XMLTreeNode node, Document svgDoc){
 		//this function is needed to handle word wrap when creating the SVG document
 		int width = 42;		
@@ -224,6 +338,18 @@ public class SVGExporter{
         Element svgRoot = svgDoc.getDocumentElement();
         svgRoot.appendChild(text);
 	}
+	/**
+	 * This function work in a similar way as the placeText function.  It concatenates 
+	 * the node’s chapter, verse, and conjunction together and places it in a 
+	 * text node.  The x and y coordinates of the text node are based on the 
+	 * node’s x and y coordinates.  The text is placed slightly above the node’s y 
+	 * coordinate and keeps the same x coordinate.  The text node is added to the 
+	 * text elements after the text element’s attributes are set.  The text 
+	 * element is then added to the svgDoc, the private variable.
+	 * 
+	 * @param node
+	 * @param svgDoc
+	 */
 	private void placeConj(XMLTreeNode node, Document svgDoc){
 		int nodeX = node.getX() + 10;
 		String chapter = node.getClause().getChap();

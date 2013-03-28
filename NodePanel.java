@@ -18,6 +18,7 @@ public class NodePanel extends JLayeredPane {
     private final int nodeWidth = 200;  //Node width
     static private boolean hasChanged;         // I'm not sure why this is here.
     private boolean buttonPanelShown;   // hold whether a ButtonPanel is active on the panel
+    private boolean collisionButtonPanelShown;   // hold whether a collisionButtonPanel is active on the panel
     private XMLTreeModel tree;
     
     /**
@@ -29,6 +30,7 @@ public class NodePanel extends JLayeredPane {
     public NodePanel(XMLTreeNode ro, int x, int y) {
         rootNode = ro;
         buttonPanelShown = false;
+        collisionButtonPanelShown = false;
         setPreferredSize(new Dimension(x, y));
         tree = DiscourseAnalysisApplet.tree;
         
@@ -70,6 +72,9 @@ public class NodePanel extends JLayeredPane {
     public boolean isButtonPanelShown() {
         return buttonPanelShown;
     }
+    public boolean isCollisionButtonPanelShown() {
+        return collisionButtonPanelShown;
+    }
 
     /**
      * Displays the ButtonPanel next to the Clause.
@@ -100,6 +105,37 @@ public class NodePanel extends JLayeredPane {
         buttonPanelShown = false;
         requestFocus();
     }
+    
+    /**
+     * Displays the collisionButtonPanel next to the Clause.
+     * @param x the x-coordinate of where to display the collisionButtonPanel
+     * @param y the y-coordinate of where to display the collisionButtonPanel
+     */
+    public void showCollisionButtonPanel(int x, int y) {
+    	//System.out.println("In the showCollisionButtonPanel method.");
+        if (!isCollisionButtonPanelShown()) { // Only display it if it is currently hidden.
+            if (x + 260 + 249 <= 1000) { // If there is enough room on the right, display the ButtonPanel to the right of the Clause.
+                DiscourseAnalysisApplet.collisionButtonPanel.setBounds(x + 260, y, 249, 150);
+            } else { // If there isn't enough room on the right, display the ButtonPanel to the left of the Clause.
+                DiscourseAnalysisApplet.collisionButtonPanel.setBounds(x - 249, y, 249, 150);
+            }
+
+            DiscourseAnalysisApplet.collisionButtonPanel.setEnabled(true);
+            DiscourseAnalysisApplet.collisionButtonPanel.setVisible(true);
+
+            collisionButtonPanelShown = true;
+        }
+    }
+
+    /**
+     * Hides the collisionButtonPanel on the NodePanel.
+     */
+    public void hideCollisionButtonPanel() {
+        DiscourseAnalysisApplet.collisionButtonPanel.setEnabled(false);
+        DiscourseAnalysisApplet.collisionButtonPanel.setVisible(false);
+        collisionButtonPanelShown = false;
+        requestFocus();
+    }
 
     /**
     sets the rootNode for this panel
@@ -120,6 +156,7 @@ public class NodePanel extends JLayeredPane {
         setPreferredSize(new Dimension(x, y));
         this.repaint();
         DiscourseAnalysisApplet.nodePanel.hideButtonPanel();
+        DiscourseAnalysisApplet.nodePanel.hideCollisionButtonPanel();
     }
 
     /**

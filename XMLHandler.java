@@ -92,7 +92,7 @@ public class XMLHandler extends DefaultHandler {
             type = types.BLANK;
         }
     }
-
+    
     @Override
     public void characters(char[] ch, int start, int length) {
         if (type == types.TEXT || type == types.PCONJ) {

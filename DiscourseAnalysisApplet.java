@@ -16,12 +16,16 @@ import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import java.io.File;
 import java.io.*;
 import java.awt.image.BufferedImage;
+import javax.swing.JLabel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * DiscourseAnalysisApplet reads an XML file and builds an XMLTreeModel. The
@@ -32,6 +36,7 @@ public class DiscourseAnalysisApplet extends JApplet {
 
     public static JTreePanel jTreePanel;                  // the panel on the left that does....what does that thing do?
     public static ButtonPanel buttonPanel;          // the panel on the right that contains the buttons
+    public static CollisionButtonPanel collisionButtonPanel;
     private XMLTreeModel treeModel;                 // the tree that contains all data?
     public static NodePanel nodePanel;              // the main panel (in the middle) that contains the tree
     private ProgressBarDialogBox myProgress;        // a dialog box that show the user that the data is loading
@@ -65,6 +70,7 @@ public class DiscourseAnalysisApplet extends JApplet {
         }*/
 
         // This pulls out the URL that was passed as a parameter.
+        hideAppletMenuHack();   //CD - This is the hack to removeo the applet viewer's default menu
         String xmlURL = getParameter("xmlURL");
         // xmlURL = "http://127.0.0.1/Luke 1 - Shorter.xml"; This has it pull from a local server. You need to have the file in the base directory of the server (LAMP, MAMP, or WAMP).
         if (xmlURL == null) {
@@ -80,17 +86,23 @@ public class DiscourseAnalysisApplet extends JApplet {
         buttonPanel.setBounds(10, 10, 249, 150);
         buttonPanel.setEnabled(false);
         buttonPanel.setVisible(false);
+        collisionButtonPanel = new CollisionButtonPanel();
+        collisionButtonPanel.setBounds(10, 10, 249, 150);
+        collisionButtonPanel.setEnabled(false);
+        collisionButtonPanel.setVisible(false);
         nodePanel = new NodePanel(root, treeModel.getXMax(), treeModel.getYMax());
         JScrollPane s = new JScrollPane(nodePanel);
-        s.setBounds(250, 0, 1000, 700);
+        s.setBounds(250, 0, 1025, 686);
 
         // Make scrolling faster
         s.getVerticalScrollBar().setUnitIncrement(64);
         s.getHorizontalScrollBar().setUnitIncrement(32);
+        s.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jTreePanel = new JTreePanel(treeModel, nodePanel);
         jTreePanel.setBounds(0, 0, 250, 700);
 
         nodePanel.add(buttonPanel, JLayeredPane.POPUP_LAYER);
+        nodePanel.add(collisionButtonPanel, JLayeredPane.POPUP_LAYER);
 
         // Making the Menu items and their functionality 
         saveXML = new JMenuItem("Save XML");
@@ -228,19 +240,23 @@ public class DiscourseAnalysisApplet extends JApplet {
      * 
      * @return XMLTreeModel
      */
-    public XMLTreeModel makeTreeModel(){        
+    public XMLTreeModel makeTreeModel(){
+        //CD - This section creates a filter for only XML files, warns the user if something goes wrong, and
+        //     allows the user to cancel/close the file chooser without exceptions.
         try
         {     
-            // Give the User the ability to choose which XML file he/she wants to use.
             chooseFile = new javax.swing.JFileChooser();
+            FileNameExtensionFilter xmlFilter = new FileNameExtensionFilter("xml files (*xml)", "xml", "XML");
+            chooseFile.setFileFilter(xmlFilter);    //CD - Adds file filter to the chooser
             chooseFile.showOpenDialog(null);
-            String newFileName = "";
+            
+            String newFileName;
 
             newFileName = chooseFile.getSelectedFile().toString();
 
-            if(newFileName.contains(".xml"))
+            if(newFileName.contains(".xml") || newFileName.contains(".XML"))
             {
-                ;
+                //do nothing
             }
             else
             {
@@ -248,13 +264,12 @@ public class DiscourseAnalysisApplet extends JApplet {
                 makeTreeModel();
             }
         }
-
             catch (Exception m) 
             {
-                System.exit(0);
+                System.exit(0);     //CD - Allows user to close chooser without issue
             }
 
-            return makeTreeModel(chooseFile.getSelectedFile().toString());
+        return makeTreeModel(chooseFile.getSelectedFile().toString());
     }
 
     /**
@@ -375,6 +390,15 @@ public class DiscourseAnalysisApplet extends JApplet {
                 // Check to see if the current clause tag has any nested clause tags.
                 makeNodes(childTreeNode, child);
             }
+        }
+    }
+    public void hideAppletMenuHack(){ // CD
+        add(new JLabel(""));
+        Frame[] frames = Frame.getFrames();
+        for (Frame frame : frames)
+        {
+            frame.setMenuBar(null);
+            frame.pack();
         }
     }
 }
