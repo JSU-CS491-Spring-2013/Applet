@@ -1,3 +1,5 @@
+import java.awt.Dimension;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -16,6 +18,7 @@ public class CollisionButtonPanel extends javax.swing.JPanel {
         initComponents();
         XMLTreeNode selected = null;
         XMLTreeNode target = null;
+        setPreferredSize(new Dimension(80,200));
     }
 
     /**
@@ -82,35 +85,21 @@ public class CollisionButtonPanel extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try{
             DiscourseAnalysisApplet.getXMLTreeModel().groupNodes(target, selected);
-                //changing the dragged node's x and y
-	        //if it is the only child, place it after the parent
-	        if(target.getChildCount() == 1){
-	            selected.setX(target.getX()+ WIDTH + 40);//40 is the buffer
-	            selected.setY(target.getY());
-	            //System.out.println("Current Node -" + currentNode.getData());
-	            //System.out.println("Dragged Node -" + myNode.getData());
-	            target.getClause().updateClauseBounds();//??? Not sure if this will work
-	        }
-	        //changing the dragged node's x and y
-	        //if it is not the only child, get the last child's x and y
-	        else{
-	        //NO get child enumeration, and access the chilCount() - 2 index 
-	        //NO this is the correct child's x and y to work off of
-	        //YES, try to get parent of myNode and get the child at childCount() - 2 index
-	            XMLTreeNode parentOfMyNode = (XMLTreeNode)selected.getParent();
-	            XMLTreeNode previousChild = (XMLTreeNode)parentOfMyNode.getChildAt(parentOfMyNode.getChildCount() - 2);	            					
-	            selected.setX(previousChild.getX());
-	            selected.setY(previousChild.getY() + HEIGHT + 40);//40 is the buffer
-	            System.out.println("Last Child X -" + previousChild.getX());
-	            System.out.println("Last Child Y -" + previousChild.getY());
-	            System.out.println("Last Child Y plus H and buffer -" + previousChild.getY() + HEIGHT + 40);//40 is the buffer
-	            target.getClause().updateClauseBounds();
-	        }
+            selected.getClause().reposition(target);
+			selected.getClause().repositionChildren(selected);
+            DiscourseAnalysisApplet.tree.resetXY();
+            DiscourseAnalysisApplet.tree.updateNodes();
+            
+			selected.getClause().reset();
+			selected.getClause().changeVisibility(selected, true);
         }
         catch(IllegalArgumentException ex){
             //if the dragged node is an ancestor of the destination node
             //reset the dragged node
             System.out.println("There was a problem.");
+            DiscourseAnalysisApplet.tree.resetXY();
+            DiscourseAnalysisApplet.tree.updateNodes();
+            selected.getClause().reset();
         }
         DiscourseAnalysisApplet.nodePanel.hideCollisionButtonPanel();
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -123,13 +112,16 @@ public class CollisionButtonPanel extends javax.swing.JPanel {
             //if merge is not possible
         }
         target.getClause().updateClauseBounds();
+        selected.getClause().changeVisibility(selected, false);
+        selected.getClause().setEnabled(false);
         DiscourseAnalysisApplet.nodePanel.hideCollisionButtonPanel();
-        DiscourseAnalysisApplet.tree.resetXY();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         DiscourseAnalysisApplet.nodePanel.hideCollisionButtonPanel();
         DiscourseAnalysisApplet.tree.resetXY();
+        DiscourseAnalysisApplet.tree.updateNodes();
+        selected.getClause().changeVisibility(selected, true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

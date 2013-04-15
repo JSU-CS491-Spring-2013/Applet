@@ -77,7 +77,7 @@ public class XMLTreeModel extends DefaultTreeModel {
             }
             calY(ro);
         } else {
-            //heigth of the clause plus, small box, plus conj space
+            //height of the clause plus, small box, plus conj space
             ro.setY(yMax + 40);
             //yMax += ro.getClause().getH() + 18 + 10;
             yMax += 118;
@@ -112,16 +112,20 @@ public class XMLTreeModel extends DefaultTreeModel {
 
         //add the node, groupNode, to newNode as child
         newNode.add(groupNode);
-        //resetXY();
         
-        //((DefaultMutableTreeNode) parent).insert((DefaultMutableTreeNode) newNode, index);
+        int treeWidth = DiscourseAnalysisApplet.nodePanel.getWidth();   //CD2
+        DiscourseAnalysisApplet.nodePanel.setPreferredSize(new Dimension(treeWidth + 250, r.getChildCount() * 123 + 120));
+        
+        resetXY();            
+        updateNodes();
     }
     
     //AiDS
     //Method for merging two nodes together
-    public static void mergeNodes(XMLTreeNode a, XMLTreeNode b){
+    public void mergeNodes(XMLTreeNode a, XMLTreeNode b){
         String newTextData = "";//Used for resetting dragged node data to empty so it will not constantly add
         XMLTreeNode parent = (XMLTreeNode) a.getParent();
+        int delIndex = parent.getIndex(a);
         if(a.getData() != ""){//Don't Do anything if the data is empty
             if(a.getY() < b.getY()){//This is if the dragged node is being merged to a node below it
                 if(b.getConj().toString().charAt(0) == 'x'){
@@ -145,12 +149,13 @@ public class XMLTreeModel extends DefaultTreeModel {
             a.setData("");
         }
         a.getClause().setTextArea("");
-        DiscourseAnalysisApplet.getXMLTreeModel().removeNodeFromParent(a);
-        parent.remove(a);
-        a.nullify();
-        //a = null;
-        //a.remove(a.getIndex(a));
-        DiscourseAnalysisApplet.jTreePanel.remove(a.getIndex(a));
+        parent.remove(delIndex);
+        
+        resetXY();            
+        updateNodes();
+        
+        int treeWidth = DiscourseAnalysisApplet.nodePanel.getWidth();   //CD2
+        DiscourseAnalysisApplet.nodePanel.setPreferredSize(new Dimension(treeWidth - 250, r.getChildCount() * 118 + 80));   //CD
     }
     
     /**Splits a single node into two separate nodes by creating a new XMLTreeNode with the same chapter
@@ -167,7 +172,7 @@ public class XMLTreeModel extends DefaultTreeModel {
         //     the nodes to show up.  At the bottom I added a way to dynamically grow the nodePanel height.
         //     The else's and catch handles the possible error messages.
         try{
-            int modifier = dataSelected.lastIndexOf(":") + 2;//manditory shift to correct for verse and conjunction
+            int modifier = dataSelected.lastIndexOf(":") + 2;//mandatory shift to correct for verse and conjunction
             String newConj = "x";//selectedText.substring(0,selectedText.indexOf(' '));//AiDS
             int tCurser = selectedNode.getClause().getJTextPane().getCaretPosition() + modifier;//finds the location of the Caret/cursor for split
 
@@ -194,12 +199,12 @@ public class XMLTreeModel extends DefaultTreeModel {
                     XMLTreeNode secondNode = new XMLTreeNode(new Clause(secondData, newConj, selectedNode.getChap(), selectedNode.getVrse()));
                     //set the data for the new node
                     secondNode.setData(secondData);
-                    DiscourseAnalysisApplet.getXMLTreeModel().setNodeData(secondNode, secondData);
+                    setNodeData(secondNode, secondData);
 
                     //Set data of the original node
                     selectedNode.setData(firstData);
                     selectedNode.getClause().setTextArea(firstData);
-                    DiscourseAnalysisApplet.getXMLTreeModel().setNodeData(selectedNode, firstData);
+                    setNodeData(selectedNode, firstData);
 
                     //get the parent of the selected node
                     XMLTreeNode parent = (XMLTreeNode) selectedNode.getParent();
@@ -216,16 +221,10 @@ public class XMLTreeModel extends DefaultTreeModel {
                     DiscourseAnalysisApplet.getNodePanel().add(secondSplitNode);
                    
                     resetXY();      //CD
+                    updateNodes();
                     
-                    Enumeration n = r.preorderEnumeration();
-                    while(n.hasMoreElements())
-                    {
-                        XMLTreeNode curr = (XMLTreeNode) n.nextElement();
-                        curr.getClause().updateClauseBounds();
-                    }
-                    
-                    int treeHeight = DiscourseAnalysisApplet.nodePanel.getHeight();    //CD
-                    DiscourseAnalysisApplet.nodePanel.setPreferredSize(new Dimension(500, treeHeight + 118));    //CD
+                    int treeWidth = DiscourseAnalysisApplet.nodePanel.getWidth();   //CD2
+                    DiscourseAnalysisApplet.nodePanel.setPreferredSize(new Dimension(treeWidth, r.getChildCount() * 118 + 80));
                     
                     DiscourseAnalysisApplet.nodePanel.hideButtonPanel();    //CD
                 }
@@ -284,7 +283,7 @@ public class XMLTreeModel extends DefaultTreeModel {
     /**Based on the boolean flag 'mergeDown' this method will merge the selectedNode with the node right before or right after it.
      * Note: Chapter and verse of the merged node will be the same as the selectedNode
      * @param selectedNode		node to be merged
-     * @param conj				the desired conjuction of the merged nodes
+     * @param conj				the desired conjunction of the merged nodes
      * @param newData				the desired data of the merged nodes
      * @param mergeDown		if true: will merge the selectedNode with the one right below it, else: will merge with the one right above the selectedNode
      */
@@ -314,7 +313,7 @@ public class XMLTreeModel extends DefaultTreeModel {
             } catch (ArrayIndexOutOfBoundsException e) {
             }
         }
-    }
+    }  
 
     //Getters: for getting the information from the Clause object of the selected XMLTreeNode
     /**
@@ -420,5 +419,12 @@ public class XMLTreeModel extends DefaultTreeModel {
      */
     public void setNodeY(XMLTreeNode sNode, int info) {
         sNode.setY(info);
+    }
+    public void updateNodes(){
+    	Enumeration n = r.preorderEnumeration();
+        while(n.hasMoreElements()){
+            XMLTreeNode curr = (XMLTreeNode) n.nextElement();
+            curr.getClause().updateClauseBounds();
+        }
     }
 }

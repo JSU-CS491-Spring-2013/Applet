@@ -10,7 +10,7 @@ import javax.swing.JLayeredPane;
  * has been selected.
  */
 public class NodePanel extends JLayeredPane {
-    XMLTreeNode rootNode;
+    XMLTreeNode rootNode; 
     static XMLTreeNode selectedNode;
     XMLTreeNode otherSelectedNode;
     Rectangle tempRectangle;
@@ -151,7 +151,7 @@ public class NodePanel extends JLayeredPane {
      * @param y the y-coordinate of this Clause
      */
     public void setRoot(XMLTreeNode rootNode, int x, int y) {
-        this.rootNode = rootNode;
+        this.rootNode = rootNode;        
         selectedNode = null;
         setPreferredSize(new Dimension(x, y));
         this.repaint();
@@ -172,20 +172,57 @@ public class NodePanel extends JLayeredPane {
 
             // If the node has children
             if (curr.getDepth() > 0){
-                g.drawLine(curr.getX() + 260, curr.getY() + 48, curr.getX() + 300, curr.getY() + 48);
+            	if(curr == rootNode){
+            		g.drawLine(curr.getX() + 260, curr.getY() + 48, curr.getX() + 300, curr.getY() + 48);
+            	}
+            	else if(curr.getChildCount() == 1){
+            		XMLTreeNode child = (XMLTreeNode) curr.getFirstChild();
+            		if(child.getBeingDragged() == false && child.getClause().isVisible() == true){
+            			g.drawLine(curr.getX() + 260, curr.getY() + 48, curr.getX() + 300, curr.getY() + 48);
+            		}
+            	}
+                
+                try{
+	                // Get the first and last children.
+	                XMLTreeNode first = (XMLTreeNode) curr.getFirstChild();	                
+	                XMLTreeNode last = (XMLTreeNode) curr.getLastChild();               
 
-                // Get the first and last children.
-                XMLTreeNode first = (XMLTreeNode) curr.getFirstChild();
-                XMLTreeNode last = (XMLTreeNode) curr.getLastChild();
-
-                // If they aren't the same thing, draw a line between them.
-                if (first != last) {
-                    g.drawLine(first.getX() - 40, first.getY() + 48, last.getX() - 40, last.getY() + 48);
+	                // If they aren't the same thing, draw a line between them.
+	                if(first != last){
+	                	g.drawLine(curr.getX() + 260, curr.getY() + 48, curr.getX() + 300, curr.getY() + 48);
+		                if (first.getBeingDragged() == true || first.getClause().isVisible() == false) {
+		                	if(curr.getChildCount() > 2){
+			                	XMLTreeNode second = (XMLTreeNode)curr.getChildAt(1);			                
+				                g.drawLine(second.getX() - 40, second.getY() + 48, last.getX() - 40, last.getY() + 48);
+			                }
+		                	else{
+		                		g.drawLine(last.getX() - 40, curr.getY() + 48, last.getX() - 40, last.getY() + 48);
+		                	}
+		                }
+		                else if(last.getBeingDragged() == true || last.getClause().isVisible() == false){
+		                	if(curr.getChildCount() > 2){		                	
+				                XMLTreeNode nextToLast = (XMLTreeNode)curr.getChildAt(curr.getChildCount() - 2);
+				                g.drawLine(first.getX() - 40, first.getY() + 48, nextToLast.getX() - 40, nextToLast.getY() + 48);
+			                }
+		                	else{
+		                		g.drawLine(first.getX() - 40, first.getY() + 48, first.getX() - 40, curr.getY() + 48);
+		                	}
+		                }
+		                else{
+		                	//neither are being dragged, draw the line
+		                	g.drawLine(first.getX() - 40, first.getY() + 48, last.getX() - 40, last.getY() + 48);		                	
+		                }
+	                }	                
+                }
+                catch(Exception ex){
+                	//NoSuchElementException
+                	//ArrayIndexOutOfBoundsException
+                	System.out.println(ex);
                 }
             }
 
             // If the node is a child
-            if (!curr.isRoot() && curr.getBeingDragged() == false) {
+            if (!curr.isRoot() && curr.getBeingDragged() == false && curr.getClause().isVisible() == true) {
                 g.drawLine(curr.getX(), curr.getY() + 48, curr.getX() - 40, curr.getY() + 48);
             }
             else{
@@ -200,8 +237,8 @@ public class NodePanel extends JLayeredPane {
     public void updateComponents() {
         Enumeration n = rootNode.preorderEnumeration(); // Get a list of Nodes.
 
-        while (n.hasMoreElements()) {
-            XMLTreeNode curr = (XMLTreeNode) n.nextElement();
+        while (n.hasMoreElements()) {        	
+            XMLTreeNode curr = (XMLTreeNode) n.nextElement();            
             Clause temp = curr.getClause();
             temp.updateClauseBounds(); // Make sure to update its position.
             add(temp);
