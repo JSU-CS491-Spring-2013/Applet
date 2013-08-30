@@ -1,6 +1,6 @@
 import javax.swing.text.JTextComponent;
 import org.w3c.dom.Node;
-
+//this is a test
 
 /**
  * This is the new ButtonPanel. It no longer contains two ClausePanels. The UI
