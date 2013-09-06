@@ -340,11 +340,11 @@ public class SVGExporter{
 	}
 	/**
 	 * This function work in a similar way as the placeText function.  It concatenates 
-	 * the node’s chapter, verse, and conjunction together and places it in a 
+	 * the node's chapter, verse, and conjunction together and places it in a 
 	 * text node.  The x and y coordinates of the text node are based on the 
-	 * node’s x and y coordinates.  The text is placed slightly above the node’s y 
+	 * node;s x and y coordinates.  The text is placed slightly above the node's y 
 	 * coordinate and keeps the same x coordinate.  The text node is added to the 
-	 * text elements after the text element’s attributes are set.  The text 
+	 * text elements after the text element's attributes are set.  The text 
 	 * element is then added to the svgDoc, the private variable.
 	 * 
 	 * @param node
